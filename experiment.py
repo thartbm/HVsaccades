@@ -14,7 +14,7 @@ from datetime import datetime
 
 
 class DoubleSaccadeExperiment:
-    def __init__(self, participant_id, distance=10, repetitions=5):
+    def __init__(self, participant_id, distance=10, repetitions=5, random_seed=None):
         """
         Initialize the double saccade experiment.
         
@@ -22,10 +22,16 @@ class DoubleSaccadeExperiment:
             participant_id: Participant identifier
             distance: Distance from center to each target in degrees of visual angle
             repetitions: Number of repetitions per condition
+            random_seed: Optional random seed for reproducibility
         """
         self.participant_id = participant_id
         self.distance = distance  # distance from center to target
         self.repetitions = repetitions
+        self.random_seed = random_seed
+        
+        # Set random seed if provided
+        if random_seed is not None:
+            np.random.seed(random_seed)
         
         # Create window
         self.win = visual.Window(
@@ -54,8 +60,7 @@ class DoubleSaccadeExperiment:
         
         # Setup data directory
         self.data_dir = 'data'
-        if not os.path.exists(self.data_dir):
-            os.makedirs(self.data_dir)
+        os.makedirs(self.data_dir, exist_ok=True)
         
         # Setup trial list
         self.trials = self._create_trial_list()
@@ -179,7 +184,7 @@ Press SPACE to begin, or ESC to quit.""",
         keys = event.waitKeys(keyList=['space', 'escape'])
         if 'escape' in keys:
             self.cleanup()
-            core.quit()
+            core.quit()  # Exit program
     
     def run_trial(self, trial):
         """
@@ -261,11 +266,11 @@ Press SPACE to begin, or ESC to quit.""",
         event.waitKeys(keyList=['space'])
         
         self.cleanup()
+        core.quit()  # Exit program
     
     def cleanup(self):
         """Clean up resources."""
         self.win.close()
-        core.quit()
 
 
 def main():
@@ -278,9 +283,28 @@ def main():
     dlg.show()
     
     if dlg.OK:
-        participant_id = dlg.data[0]
-        distance = float(dlg.data[1])
-        repetitions = int(dlg.data[2])
+        participant_id = dlg.data[0].strip()
+        
+        # Validate participant ID
+        if not participant_id:
+            print("Error: Participant ID cannot be empty")
+            return
+        
+        # Validate and convert numeric inputs
+        try:
+            distance = float(dlg.data[1])
+            repetitions = int(dlg.data[2])
+            
+            if distance <= 0:
+                print("Error: Distance must be positive")
+                return
+            if repetitions <= 0:
+                print("Error: Repetitions must be positive")
+                return
+                
+        except ValueError as e:
+            print(f"Error: Invalid numeric input - {e}")
+            return
         
         # Create and run experiment
         exp = DoubleSaccadeExperiment(
@@ -295,3 +319,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
