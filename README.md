@@ -50,6 +50,20 @@ pip install -r requirements.txt
 
 ## Usage
 
+### Visualizing the Task
+
+To see a diagram of the task configuration:
+
+```bash
+python visualize_task.py
+```
+
+This generates `task_visualization.png` showing:
+- Left panel: First saccades (diagonal) from fixation to each corner
+- Right panel: Second saccades (horizontal/vertical) between corners
+
+![Task Visualization](task_visualization.png)
+
 ### Running the Experiment
 
 ```bash
