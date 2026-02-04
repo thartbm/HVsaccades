@@ -40,6 +40,8 @@ def runExperiment(ID          = None,
 
     cfg = setWindow(cfg, setup='livetrack')
 
+    cfg = getStimuli(cfg)
+
     if cfg['eyetracking']:
         cfg = setEyetracker(cfg)
     else:
