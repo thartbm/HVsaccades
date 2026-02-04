@@ -204,38 +204,60 @@ def setWindow(cfg, setup='livetrack'):
 def getStimuli(cfg):
 
 
-    cfg['hw']['fixation'] = visual.TargetStim(win = cfg['hw']['win'],
-                                              radius = 0.25,
-                                              fillColor = [-1,-1,-1],
-                                              borderColor = None,
-                                              lineWidth=0,
-                                              innerRadius=0.01,
-                                              innerFillColor=[1,1,1],
-                                              innerBorderColor=None,
-                                              innerLineWidth=None,
-                                              pos=[0,0])
+    # cfg['hw']['fixation'] = visual.TargetStim(win = cfg['hw']['win'],
+    #                                           radius = 0.25,
+    #                                           fillColor = [-1,-1,-1],
+    #                                           borderColor = None,
+    #                                           lineWidth=0,
+    #                                           innerRadius=0.01,
+    #                                           innerFillColor=[1,1,1],
+    #                                           innerBorderColor=None,
+    #                                           innerLineWidth=None,
+    #                                           pos=[0,0])
 
-    cfg['hw']['first'] = visual.TargetStim(win = cfg['hw']['win'],
-                                              radius = 0.25,
-                                              fillColor = [-1,-1,1],
-                                              borderColor = None,
-                                              lineWidth=0,
-                                              innerRadius=0.01,
-                                              innerFillColor=[1,1,1],
-                                              innerBorderColor=None,
-                                              innerLineWidth=None,
-                                              pos=[0,0])
+    cfg['hw']['fixation'] = visual.ShapeStim(cfg['hw']['win'], 
+                                pos = [0,0],
+                                vertices = ((.1,.1),(.5,.1),(.5,-.1), (.1,-.1), (.1,-.5),(-.1,-.5),(-.1,-.1),(-.5,-.1),(-.5,.1),(-.1,.1),(-.1,.5),(.1,.5),(.1,.1)), 
+                                lineWidth = 0, 
+                                units = 'deg', 
+                                size = (1, 1), # might be too small?
+                                closeShape = True, 
+                                lineColor = None,
+                                fillColor=[-1,-1,-1]) # close to col_both?
 
-    cfg['hw']['second'] = visual.TargetStim(win = cfg['hw']['win'],
-                                              radius = 0.25,
-                                              fillColor = [1,-1,-1],
-                                              borderColor = None,
-                                              lineWidth=0,
-                                              innerRadius=0.01,
-                                              innerFillColor=[1,1,1],
-                                              innerBorderColor=None,
-                                              innerLineWidth=None,
-                                              pos=[0,0])
+    # cfg['hw']['first'] = visual.TargetStim(win = cfg['hw']['win'],
+    #                                           radius = 0.25,
+    #                                           fillColor = [-1,-1,1],
+    #                                           borderColor = None,
+    #                                           lineWidth=0,
+    #                                           innerRadius=0.01,
+    #                                           innerFillColor=[1,1,1],
+    #                                           innerBorderColor=None,
+    #                                           innerLineWidth=None,
+    #                                           pos=[0,0])
+
+    # cfg['hw']['second'] = visual.TargetStim(win = cfg['hw']['win'],
+    #                                           radius = 0.25,
+    #                                           fillColor = [1,-1,-1],
+    #                                           borderColor = None,
+    #                                           lineWidth=0,
+    #                                           innerRadius=0.01,
+    #                                           innerFillColor=[1,1,1],
+    #                                           innerBorderColor=None,
+    #                                           innerLineWidth=None,
+    #                                           pos=[0,0])
+
+    cfg['hw']['first'] =  visual.Circle(win = cfg['hw']['win'],
+                                        radius = .5,
+                                        edges=100,
+                                        lineWidth=0,
+                                        fillColor=[-1,-1,1])
+
+    cfg['hw']['second'] = visual.Circle(win = cfg['hw']['win'],
+                                        radius = .5,
+                                        edges=100,
+                                        lineWidth=0,
+                                        fillColor=[1,-1,-1])
 
     cfg['hw']['text'] = visual.TextStim(win=cfg['hw']['win'],
                                         text='',
