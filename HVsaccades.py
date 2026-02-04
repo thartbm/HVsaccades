@@ -282,6 +282,7 @@ def getTasks(cfg):
 
                          {'test':'right-q4',   'first':[  5, -5], 'second':[ 15, -5]},
                          {'test':'down-q4',    'first':[  5, -5], 'second':[  5,-15]},
+                         
 
                          ]
 
