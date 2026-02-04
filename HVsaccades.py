@@ -25,7 +25,9 @@ from psychopy.tools.coordinatetools import pol2cart, cart2pol
 
 
 
-def runExperiment(ID = None, expno = 1, eyetracking=False):
+def runExperiment(ID          = None, 
+                  expno       = 1,
+                  eyetracking = False):
 
 
     cfg = {}
@@ -40,6 +42,8 @@ def runExperiment(ID = None, expno = 1, eyetracking=False):
 
     if cfg['eyetracking']:
         cfg = setEyetracker(cfg)
+    else:
+        print('what are you even doing?')
 
     cfg = getTasks(cfg)
 
@@ -194,6 +198,50 @@ def setWindow(cfg, setup='livetrack'):
     return(cfg)
 
 
+def getStimuli(cfg):
+
+
+    cfg['hw']['fixation'] = visual.TargetStim(win = cfg['hw']['win'],
+                                              radius = 0.25,
+                                              fillColor = [-1,-1,-1],
+                                              borderColor = None,
+                                              lineWidth=0,
+                                              innerRadius=0.01,
+                                              innerFillColor=[1,1,1],
+                                              innerBorderColor=None,
+                                              innerLineWidth=None,
+                                              pos=[0,0])
+
+    cfg['hw']['first'] = visual.TargetStim(win = cfg['hw']['win'],
+                                              radius = 0.25,
+                                              fillColor = [-1,-1,1],
+                                              borderColor = None,
+                                              lineWidth=0,
+                                              innerRadius=0.01,
+                                              innerFillColor=[1,1,1],
+                                              innerBorderColor=None,
+                                              innerLineWidth=None,
+                                              pos=[0,0])
+
+    cfg['hw']['second'] = visual.TargetStim(win = cfg['hw']['win'],
+                                              radius = 0.25,
+                                              fillColor = [1,-1,-1],
+                                              borderColor = None,
+                                              lineWidth=0,
+                                              innerRadius=0.01,
+                                              innerFillColor=[1,1,1],
+                                              innerBorderColor=None,
+                                              innerLineWidth=None,
+                                              pos=[0,0])
+
+    cfg['hw']['text'] = visual.TextStim(win=cfg['hw']['win'],
+                                        text='',
+                                        pos=[0,0]
+                                        )
+
+    return(cfg)
+
+
 def getTasks(cfg):
 
     if cfg['expno']==1:
@@ -293,7 +341,7 @@ def runTasks(cfg):
             trialdict = cfg['conditions'][trialtype]
 
             cfg = doTrial(cfg)
-            # saveCfg(cfg)
+            saveCfg(cfg)
 
             cfg['currenttrial'] += 1
 
@@ -304,6 +352,27 @@ def runTasks(cfg):
     return(cfg)
 
 
+def showInstruction(cfg):
+
+    cfg['hw']['text'].text = cfg['blocks'][cfg['currentblock']]['instruction']
+
+    waiting_for_response = True
+
+    while waiting_for_response:
+
+        cfg['hw']['text'].draw()
+        cfg['hw']['win'].flip()
+
+        keys = event.getKeys(keyList=['enter', 'return', 'escape'])
+        if len(keys):
+            if 'enter' in keys:
+                waiting_for_response = False
+            if 'return' in keys:
+                waiting_for_response = False
+            if 'escape' in keys:
+                cleanExit(cfg)
+
+
 
 def setEyetracker(cfg):
 
@@ -312,8 +381,8 @@ def setEyetracker(cfg):
     trackEyes = [True,True]
 
     # do not store any files anywhere:
-    filefolder = None
-    filename = None
+    filefolder = cfg['datadir']
+    filename = '%s_exp%d.csv'%(cfg['ID'],cfg['expno'])
 
     colors = {'back' : [ 0, 0, 0],
               'both' : [-1,-1,-1]} # only for EyeLink
@@ -389,5 +458,23 @@ def doTrial(cfg):
 
 
 
+def cleanExit(cfg):
 
+    cfg['expfinish'] = time.time()
+
+    saveCfg(cfg)
+
+    print('cfg stored as json')
+
+    cfg['hw']['win'].close()
+
+    return(cfg)
+
+def saveCfg(cfg):
+
+    scfg = copy.copy(cfg)
+    del scfg['hw']
+
+    with open('%scfg.json'%(cfg['datadir']), 'w') as fp:
+        json.dump(scfg, fp,  indent=4)
 
