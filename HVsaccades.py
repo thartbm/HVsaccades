@@ -63,21 +63,21 @@ def setParticipant(cfg, ID):
 
 
     # set up folder's for groups and participants to store the data
-    if check_path:
+    # if check_path: # always check paths!
         # print('checking paths:')
-        for thisPath in ['../data', '../data/%s'%(cfg['ID'])]:
-            # print(' - %s'%(thisPath))
-            if os.path.exists(thisPath):
-                if not(os.path.isdir(thisPath)):
-                    # os.makedirs
-                    raise('"%s" is not a folder'%(thisPath))
-                else:
-                    if (thisPath == '../data/%s'%(cfg['ID'])):
-                        raise('participant already exists')
-
+    for thisPath in ['../data', '../data/%s'%(cfg['ID'])]:
+        # print(' - %s'%(thisPath))
+        if os.path.exists(thisPath):
+            if not(os.path.isdir(thisPath)):
+                # os.makedirs
+                raise('"%s" is not a folder'%(thisPath))
             else:
-                # print('making folder: "%s"', thisPath)
-                os.mkdir(thisPath)
+                if (thisPath == '../data/%s'%(cfg['ID'])):
+                    raise('participant already exists')
+
+        else:
+            # print('making folder: "%s"', thisPath)
+            os.mkdir(thisPath)
 
     
     # store data in folder for task / exp no / participant:
@@ -282,7 +282,7 @@ def getTasks(cfg):
 
                          {'test':'right-q4',   'first':[  5, -5], 'second':[ 15, -5]},
                          {'test':'down-q4',    'first':[  5, -5], 'second':[  5,-15]},
-                         
+
 
                          ]
 
