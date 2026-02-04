@@ -267,7 +267,7 @@ def getTasks(cfg):
                          {'test':'down-mid',   'first':[  0,  5], 'second':[  0, -5]},
                          {'test':'up-mid',     'first':[  0, -5], 'second':[  0,  5]},
                          {'test':'left-mid',   'first':[  5,  0], 'second':[ -5,  0]}, 
-                         {'test':'right-mid',  'first':[ -5,  0], 'second':[  5,  0]}
+                         {'test':'right-mid',  'first':[ -5,  0], 'second':[  5,  0]},
 
                          # no meridians:
 
@@ -275,13 +275,13 @@ def getTasks(cfg):
                          {'test':'up-q1',      'first':[  5,  5], 'second':[  5, 15]},
 
                          {'test':'left-q2',    'first':[ -5,  5], 'second':[-15,  5]},
-                         {'test':'up,q2',      'first':[ -5,  5], 'second':[ -5, 15]}
+                         {'test':'up,q2',      'first':[ -5,  5], 'second':[ -5, 15]},
                          
                          {'test':'left-q3',    'first':[ -5, -5], 'second':[-15, -5]},
                          {'test':'down-q3',    'first':[ -5, -5], 'second':[ -5,-15]},
 
                          {'test':'right-q4',   'first':[  5, -5], 'second':[ 15, -5]},
-                         {'test':'down-q4',    'first':[  5, -5], 'second':[  5,-15]}
+                         {'test':'down-q4',    'first':[  5, -5], 'second':[  5,-15]},
 
                          ]
 
