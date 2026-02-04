@@ -56,10 +56,11 @@ def runExperiment(ID          = None,
 def setParticipant(cfg, ID):
 
     if ID == None:
-        if not(isinstance(ID, str)):
-            raise('participant ID can not be None')
-        else:
-            cfg['ID'] = ID
+        raise('participant ID can not be None')
+    elif isinstance(ID, str):
+        cfg['ID'] = ID
+    else:
+        raise('participant ID should be a string')
 
 
     # set up folder's for groups and participants to store the data
