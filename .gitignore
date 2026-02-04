@@ -205,3 +205,25 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+
+# manually added / added later:
+
+# data formats:
+*.csv
+*.tsv
+*.txt
+*.zip
+
+# output documents:
+*.doc
+*.docx
+*.html
+*.pdf
+
+# output graphics
+*.png
+*.tiff
+*.jpg
+*.svg
