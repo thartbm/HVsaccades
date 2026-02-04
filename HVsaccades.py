@@ -267,7 +267,7 @@ def getTasks(cfg):
                          {'test':'down-mid',   'first':[  0,  5], 'second':[  0, -5]},
                          {'test':'up-mid',     'first':[  0, -5], 'second':[  0,  5]},
                          {'test':'left-mid',   'first':[  5,  0], 'second':[ -5,  0]}, 
-                         {'test':'right-mid',  'first':[ -5,  0], 'second':[  5,  0]}
+                         {'test':'right-mid',  'first':[ -5,  0], 'second':[  5,  0]},
 
                          # no meridians:
 
