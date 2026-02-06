@@ -289,29 +289,29 @@ def getTasks(cfg):
 
                          # along a meridian:
 
-                         {'test':'down-mid',   'first':[  0,  5], 'second':[  0, -5]},
-                         {'test':'up-mid',     'first':[  0, -5], 'second':[  0,  5]},
-                         {'test':'left-mid',   'first':[  5,  0], 'second':[ -5,  0]}, 
-                         {'test':'right-mid',  'first':[ -5,  0], 'second':[  5,  0]},
+                        #  {'test':'down-mid',   'first':[  0,  5], 'second':[  0, -5]},
+                        #  {'test':'up-mid',     'first':[  0, -5], 'second':[  0,  5]},
+                        #  {'test':'left-mid',   'first':[  5,  0], 'second':[ -5,  0]}, 
+                        #  {'test':'right-mid',  'first':[ -5,  0], 'second':[  5,  0]},
 
-                         # no meridians:
+                        #  # no meridians:
 
-                         {'test':'right-q1',   'first':[  5,  5], 'second':[ 15,  5]},
-                         {'test':'up-q1',      'first':[  5,  5], 'second':[  5, 15]},
+                        #  {'test':'right-q1',   'first':[  5,  5], 'second':[ 15,  5]},
+                        #  {'test':'up-q1',      'first':[  5,  5], 'second':[  5, 15]},
 
-                         {'test':'left-q2',    'first':[ -5,  5], 'second':[-15,  5]},
-                         {'test':'up,q2',      'first':[ -5,  5], 'second':[ -5, 15]},
+                        #  {'test':'left-q2',    'first':[ -5,  5], 'second':[-15,  5]},
+                        #  {'test':'up,q2',      'first':[ -5,  5], 'second':[ -5, 15]},
                          
-                         {'test':'left-q3',    'first':[ -5, -5], 'second':[-15, -5]},
-                         {'test':'down-q3',    'first':[ -5, -5], 'second':[ -5,-15]},
+                        #  {'test':'left-q3',    'first':[ -5, -5], 'second':[-15, -5]},
+                        #  {'test':'down-q3',    'first':[ -5, -5], 'second':[ -5,-15]},
 
-                         {'test':'right-q4',   'first':[  5, -5], 'second':[ 15, -5]},
-                         {'test':'down-q4',    'first':[  5, -5], 'second':[  5,-15]},
+                        #  {'test':'right-q4',   'first':[  5, -5], 'second':[ 15, -5]},
+                        #  {'test':'down-q4',    'first':[  5, -5], 'second':[  5,-15]},
 
 
                          ]
 
-        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=1, nrepetitions=5, shuffle=True) )
+        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=2, nrepetitions=6, shuffle=True) )
 
 
 def dictToBlockTrials(cfg, condictionary, nblocks, nrepetitions, shuffle=True):
@@ -435,7 +435,7 @@ def setEyetracker(cfg):
 
 def doTrial(cfg):
 
-    trialtype = cfg['blocks'][cfg['currentblock']]['trialtypes'][cfg['currenttrial']]
+    trialtype = cfg['blocks'][cfg['currentblock']][cfg['currenttrial']]
     # trialdict = cfg['conditions'][trialtype]
     trialdict = copy.deepcopy(cfg['conditions'][trialtype])
 
@@ -455,18 +455,48 @@ def doTrial(cfg):
     else:
         raise('second fixation not set for trial type %d')%(trialtype)
 
-
-
     cfg['hw']['first'].pos  = first
     cfg['hw']['second'].pos = second
 
-    # put 'test' label into eyetracker data as comment
-    # put first and second fixation positions in eyetracker data as well
+    
+    # first phase:
 
-    # wait for fixation
-    #     if this fails:
-    #     - recalibrate
-    #     - keep doing this
+    # fixate
+
+    cfg['hw']['tracker'].waitForFixation() # this is still at the default (0,0) location
+
+    # if fixation is broken:
+    # - allow recalibration
+    # - stick the trial at the end of the block
+    # - move on to the next trial
+
+    abort = False
+    stimulus_start = time.time()
+
+    while time.time() - stimulus_start < .5 and not abort:
+
+        if cfg['hw']['tracker'].gazeInFixationWindow():
+            pass
+        else:
+            abort = True
+
+        cfg['hw']['first'].draw()
+        cfg['hw']['second'].draw()
+        cfg['hw']['win'].flip()
+
+
+    if abort:
+
+        # handle abort
+
+        # show abort thing
+        # allow recalibration
+        # stick trial at the end of the trial list for this block
+
+
+    else:
+
+        # record eye-movements for ~1.5 seconds? maybe less
 
     # show both locations for X ms
     # check fixation again... if it fails durding a... (200 ms?) interval:
