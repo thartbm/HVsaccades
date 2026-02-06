@@ -204,16 +204,6 @@ def setWindow(cfg, setup='livetrack'):
 def getStimuli(cfg):
 
 
-    # cfg['hw']['fixation'] = visual.TargetStim(win = cfg['hw']['win'],
-    #                                           radius = 0.25,
-    #                                           fillColor = [-1,-1,-1],
-    #                                           borderColor = None,
-    #                                           lineWidth=0,
-    #                                           innerRadius=0.01,
-    #                                           innerFillColor=[1,1,1],
-    #                                           innerBorderColor=None,
-    #                                           innerLineWidth=None,
-    #                                           pos=[0,0])
 
     cfg['hw']['fixation'] = visual.ShapeStim(cfg['hw']['win'], 
                                 pos = [0,0],
@@ -225,27 +215,7 @@ def getStimuli(cfg):
                                 lineColor = None,
                                 fillColor=[-1,-1,-1]) # close to col_both?
 
-    # cfg['hw']['first'] = visual.TargetStim(win = cfg['hw']['win'],
-    #                                           radius = 0.25,
-    #                                           fillColor = [-1,-1,1],
-    #                                           borderColor = None,
-    #                                           lineWidth=0,
-    #                                           innerRadius=0.01,
-    #                                           innerFillColor=[1,1,1],
-    #                                           innerBorderColor=None,
-    #                                           innerLineWidth=None,
-    #                                           pos=[0,0])
 
-    # cfg['hw']['second'] = visual.TargetStim(win = cfg['hw']['win'],
-    #                                           radius = 0.25,
-    #                                           fillColor = [1,-1,-1],
-    #                                           borderColor = None,
-    #                                           lineWidth=0,
-    #                                           innerRadius=0.01,
-    #                                           innerFillColor=[1,1,1],
-    #                                           innerBorderColor=None,
-    #                                           innerLineWidth=None,
-    #                                           pos=[0,0])
 
     cfg['hw']['first'] =  visual.Circle(win = cfg['hw']['win'],
                                         radius = .5,
@@ -258,6 +228,13 @@ def getStimuli(cfg):
                                         edges=100,
                                         lineWidth=0,
                                         fillColor=[1,-1,-1])
+
+    cfg['hw']['abort'] = visual.Rect(win = cfg['hw']['win'],
+                                     size = [1,1],
+                                     lineWidth=5,
+                                     lineColor=[1,-1,1],
+                                     fillColor=None,
+                                     ori=45)
 
     cfg['hw']['text'] = visual.TextStim(win=cfg['hw']['win'],
                                         text='',
@@ -493,6 +470,18 @@ def doTrial(cfg):
         # show abort thing
         # allow recalibration
         # stick trial at the end of the trial list for this block
+
+        # redo the trial:
+        cfg['blocks'][cfg['currentblock']]['trialtypes'] += [copy.deepcopy(trialtype)]
+
+
+        # in a while loop, waiting for a key-press:
+        # - recalibrate [r]
+        # - next trial [space]
+        # - quit experiment [q]
+
+        cfg['hw']['abort'].draw()
+        cfg['hw']['win'].flip()
 
 
     else:
