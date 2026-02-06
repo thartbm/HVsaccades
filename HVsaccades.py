@@ -311,7 +311,7 @@ def getTasks(cfg):
 
                          ]
 
-        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=2, nrepetitions=6, shuffle=True) )
+        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=3, nrepetitions=5, shuffle=True) )
 
 
 def dictToBlockTrials(cfg, condictionary, nblocks, nrepetitions, shuffle=True):
@@ -480,6 +480,7 @@ def doTrial(cfg):
         else:
             abort = True
 
+        cfg['hw']['fixation'].draw()
         cfg['hw']['first'].draw()
         cfg['hw']['second'].draw()
         cfg['hw']['win'].flip()
