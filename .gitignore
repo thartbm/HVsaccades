@@ -212,6 +212,7 @@ __marimo__/
 
 # data formats:
 *.csv
+*.json
 *.tsv
 *.txt
 *.zip
