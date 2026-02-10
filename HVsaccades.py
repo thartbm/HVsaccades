@@ -350,10 +350,10 @@ def runTasks(cfg):
 
         while cfg['currenttrial'] < len(cfg['blocks'][cfg['currentblock']]['trialtypes']):
 
-            print([cfg['currenttrial'], len(cfg['blocks'][cfg['currentblock']]['trialtypes'])])
+            # print([cfg['currenttrial'], len(cfg['blocks'][cfg['currentblock']]['trialtypes'])])
 
-            trialtype = cfg['blocks'][cfg['currentblock']]['trialtypes'][cfg['currenttrial']]
-            trialdict = cfg['conditions'][trialtype]
+            # trialtype = cfg['blocks'][cfg['currentblock']]['trialtypes'][cfg['currenttrial']]
+            # trialdict = cfg['conditions'][trialtype]
 
             cfg = doTrial(cfg)
             saveCfg(cfg)
@@ -424,7 +424,7 @@ def setEyetracker(cfg):
 
 def doTrial(cfg):
 
-    trialtype = cfg['blocks'][cfg['currentblock']][cfg['currenttrial']]
+    trialtype = cfg['blocks'][cfg['currentblock']]['trialtypes'][cfg['currenttrial']]
     # trialdict = cfg['conditions'][trialtype]
     trialdict = copy.deepcopy(cfg['conditions'][trialtype])
 
