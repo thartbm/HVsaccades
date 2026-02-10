@@ -225,27 +225,7 @@ def getStimuli(cfg):
                                 lineColor = None,
                                 fillColor=[-1,-1,-1]) # close to col_both?
 
-    # cfg['hw']['first'] = visual.TargetStim(win = cfg['hw']['win'],
-    #                                           radius = 0.25,
-    #                                           fillColor = [-1,-1,1],
-    #                                           borderColor = None,
-    #                                           lineWidth=0,
-    #                                           innerRadius=0.01,
-    #                                           innerFillColor=[1,1,1],
-    #                                           innerBorderColor=None,
-    #                                           innerLineWidth=None,
-    #                                           pos=[0,0])
 
-    # cfg['hw']['second'] = visual.TargetStim(win = cfg['hw']['win'],
-    #                                           radius = 0.25,
-    #                                           fillColor = [1,-1,-1],
-    #                                           borderColor = None,
-    #                                           lineWidth=0,
-    #                                           innerRadius=0.01,
-    #                                           innerFillColor=[1,1,1],
-    #                                           innerBorderColor=None,
-    #                                           innerLineWidth=None,
-    #                                           pos=[0,0])
 
     cfg['hw']['first'] =  visual.Circle(win = cfg['hw']['win'],
                                         radius = .5,
@@ -263,6 +243,18 @@ def getStimuli(cfg):
                                         text='',
                                         pos=[0,0]
                                         )
+
+
+    cfg['hw']['diamond'] = visual.ShapeStim(cfg['hw']['win'], 
+                                pos = [0,0],
+                                vertices=[[[0,.6],[.6,0],[0,-.6],[-.6,0],[0,.6]],[[0,.4],[.4,0],[0,-.4],[-.4,0],[0,.4]]], 
+                                lineWidth = 0, 
+                                units = 'deg', 
+                                size = (1, 1), # might be too small?
+                                closeShape = True, 
+                                lineColor = None,
+                                fillColor=[1,-1,1]) # close to col_both?
+
 
     return(cfg)
 
@@ -463,7 +455,7 @@ def doTrial(cfg):
 
     # fixate
 
-    cfg['hw']['tracker'].waitForFixation() # this is still at the default (0,0) location
+    cfg['hw']['tracker'].waitForFixation() # this is still at the default (0,0) location: which is fine
 
     # if fixation is broken:
     # - allow recalibration
@@ -490,12 +482,50 @@ def doTrial(cfg):
 
         # handle abort
 
+        cfg['hw']['diamond'].draw()
+        cfg['hw']['win'].flip()
+
+        k = ['wait']
+        #! empty buffer?
+        while k[0] not in ['q','r','space']:
+            cfg['hw']['diamond'].draw()
+            cfg['hw']['win'].flip()
+            k = event.waitKeys()
+
+            # space: next trial
+
+            # q: quit experiment
+
+            # r: recalibrate eye-tracker
+
         # show abort thing
         # allow recalibration
         # stick trial at the end of the trial list for this block
 
 
     else:
+
+        EMstart = time.time()
+
+        while (time.time() - EMstart < 0.5):
+
+            cfg['hw']['fixation'].draw()
+            cfg['hw']['win'].flip()
+
+        while not(cfg['hw']['tracker'].gazeInFixationWindow()):
+
+            cfg['hw']['fixation'].draw()
+            cfg['hw']['win'].flip()
+
+            k = event.waitKeys()
+            if len(k) > 0:
+                if k[0] in ['q', 'r', 'space']:
+
+                    pass
+                    # handle same as above
+                
+
+
 
         # record eye-movements for ~1.5 seconds? maybe less
 
