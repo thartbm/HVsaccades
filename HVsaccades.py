@@ -565,6 +565,8 @@ def doTrial(cfg):
             if (time.time() - EMstart > 2):
                 recording = False
 
+        if cfg['eyetracking']:
+            cfg['hw']['tracker'].comment('stop recording')
 
 
         # record eye-movements for ~1.5 seconds? maybe less
