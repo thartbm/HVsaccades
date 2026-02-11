@@ -1116,7 +1116,7 @@ class EyeTracker:
         self.LiveTrack.StartTracking()
 
     def __DM_startcollecting(self):
-        print('not implemented: startcollecting dummy mouse data')
+        print('not implemented: startcollecting() for dummy mouse data')
 
     # endregion
 
@@ -1472,395 +1472,395 @@ class EyeTracker:
 
 
 
-def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG', colors=None, task=None, ID=None, noEyeTracker=False, offset=[0,0] ):
+# def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG', colors=None, task=None, ID=None, noEyeTracker=False, offset=[0,0] ):
     
-    # sanity checks on trackEyes, filefolder and filename are done by the eyetracker object
+#     # sanity checks on trackEyes, filefolder and filename are done by the eyetracker object
 
-    # sanity check on location argument
-    if location == None:
-        raise Warning("set location to a string: Glasgow or Toronto")
-    if isinstance(location, str):
-        if location in ['Toronto', 'toronto', 'tor', 'TOR', 't', 'T', 'YYZ']:
-            location = 'toronto'
-        if location in ['Glasgow', 'glasgow', 'gla', 'GLA', 'g', 'G', 'EGPF']:
-            location = 'glasgow'
-    else:
-        raise Warning("set location to a string: Glasgow or Toronto")
-
-
-
-    # RED/GREEN COLORS
-
-    if colors == None:
-        colors = {}
-
-    # sanity check on glasses argument, and picking back-ground color
-    if isinstance(glasses, str):
-        if glasses in ['RG', 'RB']:
-            if glasses == 'RG':
-                if location == 'glasgow':
-                    colors['back']   = [ 0.55,  0.45, -1.00] 
-                    colors['red']    = [ 0.55, -1.00, -1.00]
-                    colors['blue']   = [-1.00,  0.45, -1.00]
-                if location == 'toronto':
-                    colors['back']   = [ 0.5,  0.5, -1.0 ]
-                    colors['red']    = [ 0.5, -1.0, -1.0 ]
-                    colors['blue']   = [-1.0,  0.5, -1.0 ]
-            if glasses == 'RB':
-                # this should no longer be used:
-                print('are you sure about using RED/BLUE glasses?')
-                colors['back']   = [ 0.5, -1.0,  0.5]
-                colors['red']    = [ 0.5, -1.0, -1.0]
-                colors['blue']   = [-1.0, -1.0,  0.5] 
-        else:
-            raise Warning('glasses should be RG (default) or RB')
-    else:
-        raise Warning('glasses should be a string')
-
-    # CALIBRATED COLORS:
-
-    # for blind spot mapping, task == None, but it still needs the calibrated colors...
-    # handle this in the function?
-
-    colors = getColors(colors=colors, 
-                       task=task, 
-                       ID=ID)
-
-
-    # WINDOW OBJECT
-
-    if location == 'glasgow':
-        # not a calibrated monitor?
-        gammaGrid = np.array([ [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ],
-                               [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ],
-                               [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ],
-                               [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ]  ], dtype=np.float32)
-
-        resolution = [1920, 1080] # in pixels
-        size       = [60, 33.75] # in cm
-        distance   = 57 # in cm
-        screen     = 1 # index on the system: 0 = first monitor, 1 = second monitor, and so on
-
-        tracker = 'eyelink'
-
-    if location == 'toronto':
-        # color calibrated monitor:
-        gammaGrid = np.array([ [  0., 135.44739,  2.4203537, np.nan, np.nan, np.nan  ],
-                               [  0.,  27.722954, 2.4203537, np.nan, np.nan, np.nan  ],
-                               [  0.,  97.999275, 2.4203537, np.nan, np.nan, np.nan  ],
-                               [  0.,   9.235623, 2.4203537, np.nan, np.nan, np.nan  ]  ], dtype=np.float32)
-
-        resolution = [1920, 1080] # in pixels
-        size       = [59.8, 33.6] # in cm
-        distance   = 49.53 # in cm
-        screen     = 1  # index on the system: 0 = first monitor, 1 = second monitor, and so on
-
-        tracker = 'livetrack'
-        # with this, the width of the screen in DVA is:
-        # 2 * (np.arctan(29.4/49.53)/np.pi)*180
-        # = 2 * 30.69 degrees.... 61.385 degrees
-
-    mymonitor = monitors.Monitor(name='temp',
-                                 distance=distance,
-                                 width=size[0])
-    if location == 'toronto':
-        mymonitor.setGammaGrid(gammaGrid)
-    mymonitor.setSizePix(resolution)
-
-    #win = visual.Window([1000, 500], allowGUI=True, monitor='ccni', units='deg', fullscr=True, color = back_col, colorSpace = 'rgb')
-    win = visual.Window(resolution, monitor=mymonitor, allowGUI=True, units='deg', fullscr=True, color=colors['back'], colorSpace = 'rgb', screen=screen)
-            # size = [34.5, 19.5]filefolder,
-
-    fixation = visual.ShapeStim(win, 
-                                vertices = ((0, -1), (0, 1), (0,0), (-1, 0), (1, 0)), 
-                                lineWidth = 5, 
-                                units = 'deg', 
-                                size = (1, 1), # might be too small?
-                                closeShape = False, 
-                                lineColor = [-1.0, -1.0, -1.0]) # close to col_both?
-
-    fixation_x = visual.ShapeStim(win, 
-                                  vertices = ((0, -1), (0, 1), (0,0), (-1, 0), (1, 0)), 
-                                  lineWidth = 5, 
-                                  units = 'deg', 
-                                  size = (1, 1), # might be too small?
-                                  closeShape = False, 
-                                  lineColor = [-1.0, -1.0, -1.0], # close to col_both?
-                                  ori = 45)
-
-    if 'both' in colors.keys():
-        fixation.lineColor = colors['both']
-        fixation_x.lineColor = colors['both']
-
-
-    if not any(trackEyes):
-        tracker = 'mouse'
-        trackEyes = [True, False]
-
-    print(filefolder)
-
-    if noEyeTracker:
-        ET = None
-    else:
-        ET = EyeTracker(tracker           = tracker,
-                        trackEyes         = trackEyes,
-                        fixationWindow    = 2.0,
-                        minFixDur         = 0.2,
-                        fixTimeout        = 3.0,
-                        psychopyWindow    = win,
-                        filefolder        = filefolder,
-                        filename          = filename,
-                        samplemode        = 'average',
-                        calibrationpoints = 5,
-                        colors            = colors )
-
-        if location == 'toronto':
-            if not tracker == 'mouse':
-                ET.initialize(calibrationPoints = np.array([[0,0],   [-10.437,0],[0,5.916],[10.437,0],[0,-5.916]                                 ]) )
-            else:
-                ET.initialize()
-        else:
-            if location == 'glasgow':
-                ET.initialize(calibrationScale=(0.35, 0.35))
-            else:
-                ET.initialize()
-
-    fcols = [[-1,-1,-1],[1,1,1]]
-    if 'both' in colors.keys():
-        fcols[0] = colors['both']
-    if 'back' in colors.keys():
-        fcols[1] = colors['back']
-
-    if task in ['area', 'curvature', 'orientation', 'distCentred']:
-        fusion = {'hi': fusionStim(win    = win,
-                                   rows    = 9,
-                                   columns = 2,
-                                   pos    = [0,15],
-                                   colors = fcols),
-                  'lo': fusionStim(win    = win,
-                                   rows    = 2,
-                                   columns = 9,
-                                   pos    = [0,-15],
-                                   colors = fcols)}
-
-    if task in ['distRotated','distUpturned','distUpshifted']:
-        print('rotated fusion stims')
-        fusion = {'hi': fusionStim(win    = win,
-                                   rows    = 11,
-                                   columns = 2,
-                                   pos    = [0,15],
-                                   colors = fcols),
-                  'lo': fusionStim(win    = win,
-                                   rows    = 3,
-                                   columns = 2,
-                                   pos    = [0,-5],
-                                   colors = fcols)}
-
-    if task in ['distHorizontal','distBinocular','distance', 'distScaled', 'distAsynchronous', 'distScaledAsynchronous', 'distScaledAsynchronousOFS', 'distUpScaledAsynchronous', 'distAsynchronousNAM', 'distBinocHorizontal']:
-
-        fusion = {'hi': fusionStim(win    = win,
-                                   pos    = [0,7],
-                                   colors = fcols),
-                  'lo': fusionStim(win    = win,
-                                   pos    = [0,-7],
-                                   colors = fcols)}
+#     # sanity check on location argument
+#     if location == None:
+#         raise Warning("set location to a string: Glasgow or Toronto")
+#     if isinstance(location, str):
+#         if location in ['Toronto', 'toronto', 'tor', 'TOR', 't', 'T', 'YYZ']:
+#             location = 'toronto'
+#         if location in ['Glasgow', 'glasgow', 'gla', 'GLA', 'g', 'G', 'EGPF']:
+#             location = 'glasgow'
+#     else:
+#         raise Warning("set location to a string: Glasgow or Toronto")
 
 
 
-    # color calibration doesn't use any of this (except the window object?)
-    # for either calibration task, the task should not be set
-    # which returns an empty dictionary
-    blindspotmarkers = makeBlindSpotMarkers(win=win, task=task, ID=ID, colors=colors)
+#     # RED/GREEN COLORS
 
-    paths = {} # worst case, we return an empty dictionary?
-    if not task == None:
-        paths['data']         = os.path.join('..', 'data', task )
-        paths['color']        = os.path.join('..', 'data', task, 'color' )
-        paths['mapping']      = os.path.join('..', 'data', task, 'mapping' )
-        paths['eyetracking']  = os.path.join('..', 'data', task, 'eyetracking', ID )
-        for p in paths.keys():
-            if not os.path.exists(paths[p]):
-                os.makedirs(paths[p], exist_ok = True)
+#     if colors == None:
+#         colors = {}
 
-    
+#     # sanity check on glasses argument, and picking back-ground color
+#     if isinstance(glasses, str):
+#         if glasses in ['RG', 'RB']:
+#             if glasses == 'RG':
+#                 if location == 'glasgow':
+#                     colors['back']   = [ 0.55,  0.45, -1.00] 
+#                     colors['red']    = [ 0.55, -1.00, -1.00]
+#                     colors['blue']   = [-1.00,  0.45, -1.00]
+#                 if location == 'toronto':
+#                     colors['back']   = [ 0.5,  0.5, -1.0 ]
+#                     colors['red']    = [ 0.5, -1.0, -1.0 ]
+#                     colors['blue']   = [-1.0,  0.5, -1.0 ]
+#             if glasses == 'RB':
+#                 # this should no longer be used:
+#                 print('are you sure about using RED/BLUE glasses?')
+#                 colors['back']   = [ 0.5, -1.0,  0.5]
+#                 colors['red']    = [ 0.5, -1.0, -1.0]
+#                 colors['blue']   = [-1.0, -1.0,  0.5] 
+#         else:
+#             raise Warning('glasses should be RG (default) or RB')
+#     else:
+#         raise Warning('glasses should be a string')
+
+#     # CALIBRATED COLORS:
+
+#     # for blind spot mapping, task == None, but it still needs the calibrated colors...
+#     # handle this in the function?
+
+#     colors = getColors(colors=colors, 
+#                        task=task, 
+#                        ID=ID)
 
 
-    return( {'win'              : win,
-             'tracker'          : ET,
-             'colors'           : colors,
-             'fusion'           : fusion,
-             'fixation'         : fixation,
-             'fixation_x'       : fixation_x,
-             'blindspotmarkers' : blindspotmarkers,
-             'paths'            : paths } )
+#     # WINDOW OBJECT
 
-def getColors(colors={}, task=None, ID=None):
+#     if location == 'glasgow':
+#         # not a calibrated monitor?
+#         gammaGrid = np.array([ [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ],
+#                                [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ],
+#                                [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ],
+#                                [  0., 1.0, 1.0, np.nan, np.nan, np.nan  ]  ], dtype=np.float32)
 
-    if task == None:
-        print('warning: task must be specified to read calibrated colors, skipping')
-        return(colors)
+#         resolution = [1920, 1080] # in pixels
+#         size       = [60, 33.75] # in cm
+#         distance   = 57 # in cm
+#         screen     = 1 # index on the system: 0 = first monitor, 1 = second monitor, and so on
 
-    if ID == None:
-        print('warning: ID must be specified to read calibrated colors, skipping')
-        return(colors)
+#         tracker = 'eyelink'
 
-    ## colour (eye) parameters
-    all_files = glob('../data/' + task + '/color/' + ID + '_col_cal*.txt')
-    if len(all_files) == 0:
-        # no color calibration done, skip
-        print('NO color calibration founc:')
-        print('../data/' + task + '/color/' + ID + '_col_cal*.txt')
-        return(colors)
+#     if location == 'toronto':
+#         # color calibrated monitor:
+#         gammaGrid = np.array([ [  0., 135.44739,  2.4203537, np.nan, np.nan, np.nan  ],
+#                                [  0.,  27.722954, 2.4203537, np.nan, np.nan, np.nan  ],
+#                                [  0.,  97.999275, 2.4203537, np.nan, np.nan, np.nan  ],
+#                                [  0.,   9.235623, 2.4203537, np.nan, np.nan, np.nan  ]  ], dtype=np.float32)
 
-    # find the largest color calibration file index:
-    idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in all_files])
-    
-    col_file = open(all_files[idx],'r')
-    col_param = col_file.read().replace('\t','\n').split('\n')
-    col_file.close()
-    # print(col_param)
-    # let's flip this depending on the task run, in each of the experiments?
-    # col_ipsi = eval(col_param[3]) if hemifield == 'left' else eval(col_param[5]) # left or right
-    # col_cont = eval(col_param[5]) if hemifield == 'left' else eval(col_param[3]) # right or left
-    
-    # so use the left / right things for now
-    colors['left']  = eval(col_param[3])
-    colors['right'] = eval(col_param[5])
+#         resolution = [1920, 1080] # in pixels
+#         size       = [59.8, 33.6] # in cm
+#         distance   = 49.53 # in cm
+#         screen     = 1  # index on the system: 0 = first monitor, 1 = second monitor, and so on
 
-    # 'both' should be defined in 1 way... up for grabs how, afaic
-    # colors['both']  = [-0.7, -0.7, -0.7] # from 2nd FBE version of the distance task
+#         tracker = 'livetrack'
+#         # with this, the width of the screen in DVA is:
+#         # 2 * (np.arctan(29.4/49.53)/np.pi)*180
+#         # = 2 * 30.69 degrees.... 61.385 degrees
 
-    # this comes down to black in ALL cases:
-    colors['both']  = [eval(col_param[3])[1], eval(col_param[5])[0], -1]
-    # print(colors)
-    return(colors)
+#     mymonitor = monitors.Monitor(name='temp',
+#                                  distance=distance,
+#                                  width=size[0])
+#     if location == 'toronto':
+#         mymonitor.setGammaGrid(gammaGrid)
+#     mymonitor.setSizePix(resolution)
+
+#     #win = visual.Window([1000, 500], allowGUI=True, monitor='ccni', units='deg', fullscr=True, color = back_col, colorSpace = 'rgb')
+#     win = visual.Window(resolution, monitor=mymonitor, allowGUI=True, units='deg', fullscr=True, color=colors['back'], colorSpace = 'rgb', screen=screen)
+#             # size = [34.5, 19.5]filefolder,
+
+#     fixation = visual.ShapeStim(win, 
+#                                 vertices = ((0, -1), (0, 1), (0,0), (-1, 0), (1, 0)), 
+#                                 lineWidth = 5, 
+#                                 units = 'deg', 
+#                                 size = (1, 1), # might be too small?
+#                                 closeShape = False, 
+#                                 lineColor = [-1.0, -1.0, -1.0]) # close to col_both?
+
+#     fixation_x = visual.ShapeStim(win, 
+#                                   vertices = ((0, -1), (0, 1), (0,0), (-1, 0), (1, 0)), 
+#                                   lineWidth = 5, 
+#                                   units = 'deg', 
+#                                   size = (1, 1), # might be too small?
+#                                   closeShape = False, 
+#                                   lineColor = [-1.0, -1.0, -1.0], # close to col_both?
+#                                   ori = 45)
+
+#     if 'both' in colors.keys():
+#         fixation.lineColor = colors['both']
+#         fixation_x.lineColor = colors['both']
+
+
+#     if not any(trackEyes):
+#         tracker = 'mouse'
+#         trackEyes = [True, False]
+
+#     print(filefolder)
+
+#     if noEyeTracker:
+#         ET = None
+#     else:
+#         ET = EyeTracker(tracker           = tracker,
+#                         trackEyes         = trackEyes,
+#                         fixationWindow    = 2.0,
+#                         minFixDur         = 0.2,
+#                         fixTimeout        = 3.0,
+#                         psychopyWindow    = win,
+#                         filefolder        = filefolder,
+#                         filename          = filename,
+#                         samplemode        = 'average',
+#                         calibrationpoints = 5,
+#                         colors            = colors )
+
+#         if location == 'toronto':
+#             if not tracker == 'mouse':
+#                 ET.initialize(calibrationPoints = np.array([[0,0],   [-10.437,0],[0,5.916],[10.437,0],[0,-5.916]                                 ]) )
+#             else:
+#                 ET.initialize()
+#         else:
+#             if location == 'glasgow':
+#                 ET.initialize(calibrationScale=(0.35, 0.35))
+#             else:
+#                 ET.initialize()
+
+#     fcols = [[-1,-1,-1],[1,1,1]]
+#     if 'both' in colors.keys():
+#         fcols[0] = colors['both']
+#     if 'back' in colors.keys():
+#         fcols[1] = colors['back']
+
+#     if task in ['area', 'curvature', 'orientation', 'distCentred']:
+#         fusion = {'hi': fusionStim(win    = win,
+#                                    rows    = 9,
+#                                    columns = 2,
+#                                    pos    = [0,15],
+#                                    colors = fcols),
+#                   'lo': fusionStim(win    = win,
+#                                    rows    = 2,
+#                                    columns = 9,
+#                                    pos    = [0,-15],
+#                                    colors = fcols)}
+
+#     if task in ['distRotated','distUpturned','distUpshifted']:
+#         print('rotated fusion stims')
+#         fusion = {'hi': fusionStim(win    = win,
+#                                    rows    = 11,
+#                                    columns = 2,
+#                                    pos    = [0,15],
+#                                    colors = fcols),
+#                   'lo': fusionStim(win    = win,
+#                                    rows    = 3,
+#                                    columns = 2,
+#                                    pos    = [0,-5],
+#                                    colors = fcols)}
+
+#     if task in ['distHorizontal','distBinocular','distance', 'distScaled', 'distAsynchronous', 'distScaledAsynchronous', 'distScaledAsynchronousOFS', 'distUpScaledAsynchronous', 'distAsynchronousNAM', 'distBinocHorizontal']:
+
+#         fusion = {'hi': fusionStim(win    = win,
+#                                    pos    = [0,7],
+#                                    colors = fcols),
+#                   'lo': fusionStim(win    = win,
+#                                    pos    = [0,-7],
+#                                    colors = fcols)}
+
+
+
+#     # color calibration doesn't use any of this (except the window object?)
+#     # for either calibration task, the task should not be set
+#     # which returns an empty dictionary
+#     blindspotmarkers = makeBlindSpotMarkers(win=win, task=task, ID=ID, colors=colors)
+
+#     paths = {} # worst case, we return an empty dictionary?
+#     if not task == None:
+#         paths['data']         = os.path.join('..', 'data', task )
+#         paths['color']        = os.path.join('..', 'data', task, 'color' )
+#         paths['mapping']      = os.path.join('..', 'data', task, 'mapping' )
+#         paths['eyetracking']  = os.path.join('..', 'data', task, 'eyetracking', ID )
+#         for p in paths.keys():
+#             if not os.path.exists(paths[p]):
+#                 os.makedirs(paths[p], exist_ok = True)
 
     
 
-def makeBlindSpotMarkers(win, task, ID, colors):
 
-    if task == None:
-        return({})
+#     return( {'win'              : win,
+#              'tracker'          : ET,
+#              'colors'           : colors,
+#              'fusion'           : fusion,
+#              'fixation'         : fixation,
+#              'fixation_x'       : fixation_x,
+#              'blindspotmarkers' : blindspotmarkers,
+#              'paths'            : paths } )
 
-    if ID == None:
-        return({})
+# def getColors(colors={}, task=None, ID=None):
 
-    main_path = '../data/' + task + '/'
+#     if task == None:
+#         print('warning: task must be specified to read calibrated colors, skipping')
+#         return(colors)
+
+#     if ID == None:
+#         print('warning: ID must be specified to read calibrated colors, skipping')
+#         return(colors)
+
+#     ## colour (eye) parameters
+#     all_files = glob('../data/' + task + '/color/' + ID + '_col_cal*.txt')
+#     if len(all_files) == 0:
+#         # no color calibration done, skip
+#         print('NO color calibration founc:')
+#         print('../data/' + task + '/color/' + ID + '_col_cal*.txt')
+#         return(colors)
+
+#     # find the largest color calibration file index:
+#     idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in all_files])
     
-    hemifields = []
-
-    ## read blindspot parameters... if any...
-    left_files = glob(os.path.join('..', 'data', task, 'mapping', ID + '_LH_blindspot*.txt' ) )
-    if len(left_files):
-        idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in left_files])
-        bs_file = open(left_files[idx], 'r')
-        bs_param = bs_file.read().replace('\t','\n').split('\n')
-        bs_file.close()
-        spot_left_cart = eval(bs_param[1])
-        spot_left = cart2pol(spot_left_cart[0], spot_left_cart[1])
-        spot_left_size = eval(bs_param[3])
-        hemifields.append('left')
-
-    right_files = glob(os.path.join('..', 'data', task, 'mapping', ID + '_RH_blindspot*.txt' ) )
-    if len(right_files):
-        idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in right_files])
-        bs_file = open(right_files[idx],'r')
-        bs_param = bs_file.read().replace('\t','\n').split('\n')
-        bs_file.close()
-        spot_righ_cart = eval(bs_param[1])
-        spot_righ = cart2pol(spot_righ_cart[0], spot_righ_cart[1])
-        spot_righ_size = eval(bs_param[3])
-        hemifields.append('right')
-
-    print(hemifields)
-
-    blindspotmarkers = {}
+#     col_file = open(all_files[idx],'r')
+#     col_param = col_file.read().replace('\t','\n').split('\n')
+#     col_file.close()
+#     # print(col_param)
+#     # let's flip this depending on the task run, in each of the experiments?
+#     # col_ipsi = eval(col_param[3]) if hemifield == 'left' else eval(col_param[5]) # left or right
+#     # col_cont = eval(col_param[5]) if hemifield == 'left' else eval(col_param[3]) # right or left
     
-    for hemifield in hemifields:
+#     # so use the left / right things for now
+#     colors['left']  = eval(col_param[3])
+#     colors['right'] = eval(col_param[5])
 
-        if hemifield == 'left':
-            spot_cart = spot_left_cart
-            spot      = spot_left
-            spot_size = spot_left_size
-            tar       = spot_size[0] + 2 + 2
-        if hemifield == 'right':
-            spot_cart = spot_righ_cart
-            spot      = spot_righ
-            spot_size = spot_righ_size
-            tar       = spot_size[0] + 2 + 2
+#     # 'both' should be defined in 1 way... up for grabs how, afaic
+#     # colors['both']  = [-0.7, -0.7, -0.7] # from 2nd FBE version of the distance task
 
-        # size of blind spot + 2 (dot width, padding)
-        if hemifield == 'left' and spot_cart[1] < 0:
-            ang_up = (cart2pol(spot_cart[0], spot_cart[1] - spot_size[1])[0] - spot[0]) + 2
-        else:
-            ang_up = (cart2pol(spot_cart[0], spot_cart[1] + spot_size[1])[0] - spot[0]) + 2
+#     # this comes down to black in ALL cases:
+#     colors['both']  = [eval(col_param[3])[1], eval(col_param[5])[0], -1]
+#     # print(colors)
+#     return(colors)
+
+    
+
+# def makeBlindSpotMarkers(win, task, ID, colors):
+
+#     if task == None:
+#         return({})
+
+#     if ID == None:
+#         return({})
+
+#     main_path = '../data/' + task + '/'
+    
+#     hemifields = []
+
+#     ## read blindspot parameters... if any...
+#     left_files = glob(os.path.join('..', 'data', task, 'mapping', ID + '_LH_blindspot*.txt' ) )
+#     if len(left_files):
+#         idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in left_files])
+#         bs_file = open(left_files[idx], 'r')
+#         bs_param = bs_file.read().replace('\t','\n').split('\n')
+#         bs_file.close()
+#         spot_left_cart = eval(bs_param[1])
+#         spot_left = cart2pol(spot_left_cart[0], spot_left_cart[1])
+#         spot_left_size = eval(bs_param[3])
+#         hemifields.append('left')
+
+#     right_files = glob(os.path.join('..', 'data', task, 'mapping', ID + '_RH_blindspot*.txt' ) )
+#     if len(right_files):
+#         idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in right_files])
+#         bs_file = open(right_files[idx],'r')
+#         bs_param = bs_file.read().replace('\t','\n').split('\n')
+#         bs_file.close()
+#         spot_righ_cart = eval(bs_param[1])
+#         spot_righ = cart2pol(spot_righ_cart[0], spot_righ_cart[1])
+#         spot_righ_size = eval(bs_param[3])
+#         hemifields.append('right')
+
+#     print(hemifields)
+
+#     blindspotmarkers = {}
+    
+#     for hemifield in hemifields:
+
+#         if hemifield == 'left':
+#             spot_cart = spot_left_cart
+#             spot      = spot_left
+#             spot_size = spot_left_size
+#             tar       = spot_size[0] + 2 + 2
+#         if hemifield == 'right':
+#             spot_cart = spot_righ_cart
+#             spot      = spot_righ
+#             spot_size = spot_righ_size
+#             tar       = spot_size[0] + 2 + 2
+
+#         # size of blind spot + 2 (dot width, padding)
+#         if hemifield == 'left' and spot_cart[1] < 0:
+#             ang_up = (cart2pol(spot_cart[0], spot_cart[1] - spot_size[1])[0] - spot[0]) + 2
+#         else:
+#             ang_up = (cart2pol(spot_cart[0], spot_cart[1] + spot_size[1])[0] - spot[0]) + 2
         
-        blindspotmarkers[hemifield+'_prop'] = { 'cart'   : spot_cart,
-                                                'spot'   : spot,
-                                                'size'   : spot_size,
-                                                'tar'    : tar,
-                                                'ang_up' : ang_up       }
+#         blindspotmarkers[hemifield+'_prop'] = { 'cart'   : spot_cart,
+#                                                 'spot'   : spot,
+#                                                 'size'   : spot_size,
+#                                                 'tar'    : tar,
+#                                                 'ang_up' : ang_up       }
 
-        print(spot_size)
-        spot_size = [max(min(1,x),x-1.5) for x in spot_size]
-        print(spot_size)
-
-
-        blindspotmarkers[hemifield] = visual.Circle(win, radius = .5, pos = [7,0], units = 'deg', fillColor=colors[hemifield], lineColor = None, interpolate = True)
-        blindspotmarkers[hemifield].pos = spot_cart
-        blindspotmarkers[hemifield].size = spot_size
-
-    # print(len(blindspotmarkers))
-
-    return(blindspotmarkers)
+#         print(spot_size)
+#         spot_size = [max(min(1,x),x-1.5) for x in spot_size]
+#         print(spot_size)
 
 
+#         blindspotmarkers[hemifield] = visual.Circle(win, radius = .5, pos = [7,0], units = 'deg', fillColor=colors[hemifield], lineColor = None, interpolate = True)
+#         blindspotmarkers[hemifield].pos = spot_cart
+#         blindspotmarkers[hemifield].size = spot_size
 
-class fusionStim:
+#     # print(len(blindspotmarkers))
 
-    def __init__(self, 
-                 win, 
-                 pos     = [0,0],
-                 colors  = [[-1,-1,-1],[1,1,1]],
-                 rows    = 7,
-                 columns = 3,
-                 square  = 0.5,
-                 units   = 'deg'):
+#     return(blindspotmarkers)
 
-        self.win     = win
-        self.pos     = pos
-        self.colors  = colors
-        self.rows    = rows
-        self.columns = columns
-        self.square  = square
-        self.units   = units
 
-        self.resetProperties()
 
-    def resetProperties(self):
-        self.nElements = (self.columns*2 + 1) * (self.rows*2 + 1)
+# class fusionStim:
 
-        self.setColorArray()
-        self.setPositions()
-        self.createElementArray()
+#     def __init__(self, 
+#                  win, 
+#                  pos     = [0,0],
+#                  colors  = [[-1,-1,-1],[1,1,1]],
+#                  rows    = 7,
+#                  columns = 3,
+#                  square  = 0.5,
+#                  units   = 'deg'):
 
-    def setColorArray(self):
-        self.colorArray = (self.colors * int(np.ceil(((self.columns*2 + 1) * (self.rows*2 + 1))/len(self.colors))))
-        random.shuffle(self.colorArray)
-        self.colorArray = self.colorArray[:self.nElements]
+#         self.win     = win
+#         self.pos     = pos
+#         self.colors  = colors
+#         self.rows    = rows
+#         self.columns = columns
+#         self.square  = square
+#         self.units   = units
 
-    def setPositions(self):
-        self.xys = [[(i*self.square)+self.pos[0], (j*self.square)+self.pos[1]] for i in range(-self.columns, self.columns+1) for j in range(-self.rows, self.rows+1)]
+#         self.resetProperties()
 
-    def createElementArray(self):
-        self.elementArray = visual.ElementArrayStim( win         = self.win, 
-                                                     nElements   = self.nElements,
-                                                     sizes       = self.square, 
-                                                     xys         = self.xys, 
-                                                     colors      = self.colorArray, 
-                                                     units       = self.units, 
-                                                     elementMask = 'none', 
-                                                     sfs         = 0)
+#     def resetProperties(self):
+#         self.nElements = (self.columns*2 + 1) * (self.rows*2 + 1)
 
-    def draw(self):
-        self.elementArray.draw()
+#         self.setColorArray()
+#         self.setPositions()
+#         self.createElementArray()
+
+#     def setColorArray(self):
+#         self.colorArray = (self.colors * int(np.ceil(((self.columns*2 + 1) * (self.rows*2 + 1))/len(self.colors))))
+#         random.shuffle(self.colorArray)
+#         self.colorArray = self.colorArray[:self.nElements]
+
+#     def setPositions(self):
+#         self.xys = [[(i*self.square)+self.pos[0], (j*self.square)+self.pos[1]] for i in range(-self.columns, self.columns+1) for j in range(-self.rows, self.rows+1)]
+
+#     def createElementArray(self):
+#         self.elementArray = visual.ElementArrayStim( win         = self.win, 
+#                                                      nElements   = self.nElements,
+#                                                      sizes       = self.square, 
+#                                                      xys         = self.xys, 
+#                                                      colors      = self.colorArray, 
+#                                                      units       = self.units, 
+#                                                      elementMask = 'none', 
+#                                                      sfs         = 0)
+
+#     def draw(self):
+#         self.elementArray.draw()
