@@ -335,8 +335,9 @@ def runTasks(cfg):
         cfg['currenttrial'] = 0
 
     if cfg['eyetracking']:
+        cfg['hw']['tracker'].openfile()
         cfg['hw']['tracker'].startcollecting()
-
+        
     while cfg['currentblock'] < len(cfg['blocks']):
 
         # do the trials:
@@ -344,11 +345,18 @@ def runTasks(cfg):
 
         showInstruction(cfg)
 
+        if cfg['eyetracking']:
+            cfg['hw']['tracker'].comment('block %d/%d'%(cfg['currentblock']+1, len(cfg['blocks'])))
+
         # after instructions, calibrate:
         if cfg['eyetracking']:
             cfg['hw']['tracker'].calibrate()
 
         while cfg['currenttrial'] < len(cfg['blocks'][cfg['currentblock']]['trialtypes']):
+            
+            if cfg['eyetracking']:
+                cfg['hw']['tracker'].comment('trial %d'%(cfg['currenttrial']))
+
 
             # print([cfg['currenttrial'], len(cfg['blocks'][cfg['currentblock']]['trialtypes'])])
 
@@ -362,8 +370,9 @@ def runTasks(cfg):
 
         cfg['currentblock'] += 1
 
-
-
+    if cfg['eyetracking']:
+        cfg['hw']['tracker'].closefile()
+    
     return(cfg)
 
 
@@ -433,6 +442,9 @@ def doTrial(cfg):
     else:
         test = 'untrial'
         trialdict['test'] = test
+
+    if cfg['eyetracking']:
+        cfg['hw']['tracker'].comment(test)
     
     if 'first' in trialdict.keys():
         first = trialdict['first']
@@ -447,6 +459,9 @@ def doTrial(cfg):
     cfg['hw']['first'].pos  = first
     cfg['hw']['second'].pos = second
 
+    if cfg['eyetracking']:
+        cfg['hw']['tracker'].comment('first %s'%(str(first)))
+        cfg['hw']['tracker'].comment('second %s'%(str(second)))
     
     # first phase:
 
@@ -462,11 +477,17 @@ def doTrial(cfg):
     abort = False
     stimulus_start = time.time()
 
+    if cfg['eyetracking']:
+        cfg['hw']['tracker'].comment('stimulus on')
+
     while time.time() - stimulus_start < .5 and not abort:
 
         if cfg['hw']['tracker'].gazeInFixationWindow():
             pass
         else:
+            if cfg['eyetracking']:
+                cfg['hw']['tracker'].comment('fixation broken')
+
             abort = True
 
         cfg['hw']['fixation'].draw()
@@ -514,14 +535,22 @@ def doTrial(cfg):
 
     else:
 
+        if cfg['eyetracking']:
+            cfg['hw']['tracker'].comment('stimulus off')
+
+
         EMstart = time.time()
 
-        while (time.time() - EMstart < 0.5):
+        leftFix = False
+        recording = True
 
-            cfg['hw']['fixation'].draw()
-            cfg['hw']['win'].flip()
+        while recording:
 
-        while not(cfg['hw']['tracker'].gazeInFixationWindow()):
+            if not(leftFix) and not(cfg['hw']['tracker'].gazeInFixationWindow()):
+                leftFix = True
+
+            if leftFix and cfg['hw']['tracker'].gazeInFixationWindow():
+                recording = False  #?
 
             cfg['hw']['fixation'].draw()
             cfg['hw']['win'].flip()
@@ -531,8 +560,10 @@ def doTrial(cfg):
                 if k[0] in ['q', 'r', 'space']:
 
                     pass
-                    # handle same as above
+                    # handle same as above?
                 
+            if (time.time() - EMstart > 2):
+                recording = False
 
 
 
