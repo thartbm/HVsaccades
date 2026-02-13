@@ -513,8 +513,8 @@ def doTrial(cfg):
         else:
             if cfg['eyetracking']:
                 cfg['hw']['tracker'].comment('fixation broken')
-
             abort = True
+        
         cfg['hw']['fixation'].draw()
 
         if (time.time() - stimulus_start) > .1:
@@ -595,7 +595,7 @@ def doTrial(cfg):
                 recording = False
 
         if cfg['eyetracking']:
-            cfg['hw']['tracker'].comment('stop recording')
+            cfg['hw']['tracker'].comment('stop recording') # not a good comment...
 
 
         # record eye-movements for ~1.5 seconds? maybe less
