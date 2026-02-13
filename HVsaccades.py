@@ -264,30 +264,44 @@ def getTasks(cfg):
 
                          # crossing a meridian:
 
-                         {'test':'down-right', 'first':[  5,  5], 'second':[  5, -5]},
-                         {'test':'down-left',  'first':[ -5,  5], 'second':[ -5, -5]},
+                         # 10 degree saccades
+                         {'test':'down-right-10', 'first':[  5,  5], 'second':[  5, -5]},
+                         {'test':'down-left-10',  'first':[ -5,  5], 'second':[ -5, -5]},
 
-                         {'test':'up-right',   'first':[  5, -5], 'second':[  5,  5]},
-                         {'test':'up-left',    'first':[ -5, -5], 'second':[ -5,  5]},
+                         {'test':'up-right-10',   'first':[  5, -5], 'second':[  5,  5]},
+                         {'test':'up-left-10',    'first':[ -5, -5], 'second':[ -5,  5]},
 
-                         {'test':'left-hi',    'first':[  5,  5], 'second':[ -5,  5]},
-                         {'test':'left-lo',    'first':[  5, -5], 'second':[ -5, -5]},
+                         {'test':'left-hi-10',    'first':[  5,  5], 'second':[ -5,  5]},
+                         {'test':'left-lo-10',    'first':[  5, -5], 'second':[ -5, -5]},
 
-                         {'test':'right-hi',   'first':[ -5,  5], 'second':[  5,  5]},
-                         {'test':'right-lo',   'first':[ -5, -5], 'second':[  5, -5]},
+                         {'test':'right-hi-10',   'first':[ -5,  5], 'second':[  5,  5]},
+                         {'test':'right-lo-10',   'first':[ -5, -5], 'second':[  5, -5]},
 
+                         # 15 degree saccades
+                         {'test':'down-right-15', 'first':[  7.5,  7.5], 'second':[  7.5, -7.5]},
+                         {'test':'down-left-15',  'first':[ -7.5,  7.5], 'second':[ -7.5, -7.5]},
 
-                         {'test':'down-right', 'first':[  10,  10], 'second':[  10, -10]},
-                         {'test':'down-left',  'first':[ -10,  10], 'second':[ -10, -10]},
+                         {'test':'up-right-15',   'first':[  7.5, -7.5], 'second':[  7.5,  7.5]},
+                         {'test':'up-left-15',    'first':[ -7.5, -7.5], 'second':[ -7.5,  7.5]},
 
-                         {'test':'up-right',   'first':[  10, -10], 'second':[  10,  10]},
-                         {'test':'up-left',    'first':[ -10, -10], 'second':[ -10,  10]},
+                         {'test':'left-hi-15',    'first':[  7.5,  7.5], 'second':[ -7.5,  7.5]},
+                         {'test':'left-lo-15',    'first':[  7.5, -7.5], 'second':[ -7.5, -7.5]},
 
-                         {'test':'left-hi',    'first':[  10,  10], 'second':[ -10,  10]},
-                         {'test':'left-lo',    'first':[  10, -10], 'second':[ -10, -10]},
+                         {'test':'right-hi-15',   'first':[ -7.5,  7.5], 'second':[  7.5,  7.5]},
+                         {'test':'right-lo-15',   'first':[ -7.5, -7.5], 'second':[  7.5, -7.5]},
 
-                         {'test':'right-hi',   'first':[ -10,  10], 'second':[  10,  10]},
-                         {'test':'right-lo',   'first':[ -10, -10], 'second':[  10, -10]},
+                         # 20 degree saccades
+                         {'test':'down-right-20', 'first':[  10,  10], 'second':[  10, -10]},
+                         {'test':'down-left-20',  'first':[ -10,  10], 'second':[ -10, -10]},
+
+                         {'test':'up-right-20',   'first':[  10, -10], 'second':[  10,  10]},
+                         {'test':'up-left-20',    'first':[ -10, -10], 'second':[ -10,  10]},
+
+                         {'test':'left-hi-20',    'first':[  10,  10], 'second':[ -10,  10]},
+                         {'test':'left-lo-20',    'first':[  10, -10], 'second':[ -10, -10]},
+
+                         {'test':'right-hi-20',   'first':[ -10,  10], 'second':[  10,  10]},
+                         {'test':'right-lo-20',   'first':[ -10, -10], 'second':[  10, -10]},
                          # along a meridian:
 
                         #  {'test':'down-mid',   'first':[  0,  5], 'second':[  0, -5]},
@@ -492,7 +506,7 @@ def doTrial(cfg):
     if cfg['eyetracking']:
         cfg['hw']['tracker'].comment('stimulus on')
 
-    while time.time() - stimulus_start < .5 and not abort:
+    while (time.time() - stimulus_start) < .5 and not abort:
 
         if cfg['hw']['tracker'].gazeInFixationWindow():
             pass
@@ -501,10 +515,13 @@ def doTrial(cfg):
                 cfg['hw']['tracker'].comment('fixation broken')
 
             abort = True
-
         cfg['hw']['fixation'].draw()
-        cfg['hw']['first'].draw()
-        cfg['hw']['second'].draw()
+        
+        if (time.time() - stimulus_start) > .1:
+            cfg['hw']['first'].draw()
+        if (time.time() - stimulus_start) > .3:
+            cfg['hw']['second'].draw()
+        
         cfg['hw']['win'].flip()
 
 
