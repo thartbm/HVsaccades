@@ -276,6 +276,18 @@ def getTasks(cfg):
                          {'test':'right-hi',   'first':[ -5,  5], 'second':[  5,  5]},
                          {'test':'right-lo',   'first':[ -5, -5], 'second':[  5, -5]},
 
+
+                         {'test':'down-right', 'first':[  10,  10], 'second':[  10, -10]},
+                         {'test':'down-left',  'first':[ -10,  10], 'second':[ -10, -10]},
+
+                         {'test':'up-right',   'first':[  10, -10], 'second':[  10,  10]},
+                         {'test':'up-left',    'first':[ -10, -10], 'second':[ -10,  10]},
+
+                         {'test':'left-hi',    'first':[  10,  10], 'second':[ -10,  10]},
+                         {'test':'left-lo',    'first':[  10, -10], 'second':[ -10, -10]},
+
+                         {'test':'right-hi',   'first':[ -10,  10], 'second':[  10,  10]},
+                         {'test':'right-lo',   'first':[ -10, -10], 'second':[  10, -10]},
                          # along a meridian:
 
                         #  {'test':'down-mid',   'first':[  0,  5], 'second':[  0, -5]},
@@ -300,7 +312,7 @@ def getTasks(cfg):
 
                          ]
 
-        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=3, nrepetitions=5, shuffle=True) )
+        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=2, nrepetitions=3, shuffle=True) )
 
 
 def dictToBlockTrials(cfg, condictionary, nblocks, nrepetitions, shuffle=True):
@@ -423,7 +435,7 @@ def setEyetracker(cfg):
                      calibrationpoints = 9,
                      colors            = colors ) # only for EyeLink
 
-    ET.initialize(calibrationPoints = np.array([[0,0],   [10,0],[0,10],[-10,0],[0,-10],  [15,15],[-15,15],[-15,-15],[15,-15]  ]) )
+    ET.initialize(calibrationPoints = np.array([[0,0],   [6,0],[0,6],[-6,0],[0,-6],  [12,12],[-12,12],[-12,-12],[12,-12]  ]) )
 
     cfg['hw']['tracker'] = ET
 
