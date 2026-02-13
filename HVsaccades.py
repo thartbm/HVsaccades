@@ -326,7 +326,7 @@ def getTasks(cfg):
 
                          ]
 
-        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=2, nrepetitions=3, shuffle=True) )
+        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=3, nrepetitions=2, shuffle=True) )
 
 
 def dictToBlockTrials(cfg, condictionary, nblocks, nrepetitions, shuffle=True):
@@ -516,7 +516,7 @@ def doTrial(cfg):
 
             abort = True
         cfg['hw']['fixation'].draw()
-        
+
         if (time.time() - stimulus_start) > .1:
             cfg['hw']['first'].draw()
         if (time.time() - stimulus_start) > .3:
