@@ -587,7 +587,7 @@ def doTrial(cfg):
 
         while recording:
 
-            print(recording)
+            print([time.time()-EMstart, recording, leftFix])
 
             gazeCheck = cfg['hw']['tracker'].gazeInFixationWindow() 
 
@@ -631,12 +631,13 @@ def doTrial(cfg):
             #             recording = False
 
 
-            k = event.waitKeys()
-            if len(k) > 0:
-                if k[0] in ['space']:
-                    cfg['hw']['tracker'].comment('self ended')
+            # k = event.waitKeys()
+            # if len(k) > 0:
+            #     if k[0] in ['space']:
+            #         cfg['hw']['tracker'].comment('self ended')
                     # print('self ended')
                     # recording = False
+
                     # handle same as above?
                     # no: no recalibrating or quitting here, only skip to the next trial
 
@@ -647,6 +648,8 @@ def doTrial(cfg):
             
             cfg['hw']['fixation'].draw()
             cfg['hw']['win'].flip()
+
+        print('out of loop')
 
         if cfg['eyetracking']:
             cfg['hw']['tracker'].comment('stop recording') # not a good comment...
