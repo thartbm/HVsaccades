@@ -228,4 +228,7 @@ __marimo__/
 *.tiff
 *.jpg
 *.svg
+
+# R stuff:
+.Rhistory
 .Rproj.user
