@@ -677,7 +677,7 @@ def doTrial(cfg):
             cfg['hw']['fixation'].draw()
             cfg['hw']['win'].flip()
         
-        cfg['hw']['fixation'].ori=o
+        cfg['hw']['fixation'].ori=0
 
 
 
