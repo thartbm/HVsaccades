@@ -486,8 +486,8 @@ def doTrial(cfg):
     cfg['hw']['second'].pos = second
 
     if cfg['eyetracking']:
-        cfg['hw']['tracker'].comment('first %s'%(str(first)))
-        cfg['hw']['tracker'].comment('second %s'%(str(second)))
+        cfg['hw']['tracker'].comment('first [%0.1f:%0.1f]'%(first[0], first[1]))
+        cfg['hw']['tracker'].comment('second [%0.1f:%0.1f]'%(second[1], second[1]))
     
     # first phase:
 
