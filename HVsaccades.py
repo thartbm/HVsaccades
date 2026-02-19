@@ -656,17 +656,29 @@ def doTrial(cfg):
                     # no: no recalibrating or quitting here, only skip to the next trial
 
                 
-            if (time.time() - EMstart > 1.5):
-                print('eye movement recording interval over')
-                # recording = False
+            # if (time.time() - EMstart > 1.5):
+            #     print('eye movement recording interval over')
+            #     # recording = False
             
             cfg['hw']['fixation'].draw()
             cfg['hw']['win'].flip()
 
-        print('out of loop')
+        # print('out of loop')
+
 
         if cfg['eyetracking']:
             cfg['hw']['tracker'].comment('stop recording') # not a good comment...
+
+        cfg['hw']['fixation'].ori=45
+
+        k = []
+        while not(k):
+            k = event.getKeys(['space']) # space for next trial trial
+            cfg['hw']['fixation'].draw()
+            cfg['hw']['win'].flip()
+        
+        cfg['hw']['fixation'].ori=o
+
 
 
         # record eye-movements for ~1.5 seconds? maybe less
