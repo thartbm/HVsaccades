@@ -326,7 +326,7 @@ def getTasks(cfg):
 
                          ]
 
-        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=3, nrepetitions=3, shuffle=True) )
+        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=4, nrepetitions=4, shuffle=True) )
 
 
 def dictToBlockTrials(cfg, condictionary, nblocks, nrepetitions, shuffle=True):
@@ -434,7 +434,7 @@ def setEyetracker(cfg):
 
     # do not store any files anywhere:
     filefolder = cfg['datadir']
-    filename = '%s_exp%d.csv'%(cfg['ID'],cfg['expno'])
+    filename = '%s_exp%d'%(cfg['ID'],cfg['expno'])
 
     colors = {'back' : [ 0, 0, 0],
               'both' : [-1,-1,-1]} # only for EyeLink
@@ -534,12 +534,24 @@ def doTrial(cfg):
         cfg['hw']['diamond'].draw()
         cfg['hw']['win'].flip()
 
-        k = ['wait']
-        #! empty buffer?
-        while k[0] not in ['q','r','space']:
+        k = []
+
+        while not(k):
+            k = event.getKeys(['q','r','space']) # quit / abort during trial
             cfg['hw']['diamond'].draw()
             cfg['hw']['win'].flip()
-            k = event.waitKeys()
+    
+        # #! empty buffer?
+        # if k and 'q' in k:
+        #     # quit something?
+        #     pass
+        # if k and 'r' in k:
+        #     # recalibrate
+        #     pass
+        # if k and 'space' in k:
+        #     # next trial
+        #     pass
+
 
         if k[0] in ['space']:
             # nothing to do really?
@@ -557,6 +569,8 @@ def doTrial(cfg):
                 cfg['hw']['tracker'].comment('calibration done')
 
 
+        event.clearEvents(eventType='keyboard') #
+
         # show abort thing
         # allow recalibration
         # stick trial at the end of the trial list for this block
@@ -570,8 +584,8 @@ def doTrial(cfg):
         # - next trial [space]
         # - quit experiment [q]
 
-        cfg['hw']['abort'].draw()
-        cfg['hw']['win'].flip()
+        # cfg['hw']['abort'].draw()
+        # cfg['hw']['win'].flip()
 
 
     else:
@@ -587,7 +601,7 @@ def doTrial(cfg):
 
         while recording:
 
-            print([time.time()-EMstart, recording, leftFix])
+            # print([time.time()-EMstart, recording, leftFix])
 
             gazeCheck = cfg['hw']['tracker'].gazeInFixationWindow() 
 
@@ -597,20 +611,20 @@ def doTrial(cfg):
                     if (time.time() - leftFixTime) > 0.2:
                         # back at fixation:
                         recording = False
-                        print('back at fixation')
+                        # print('back at fixation')
                     else:
-                        # at fixation and have left fixation less than 200 ms ago: don't do anything
+                        # at fixation and have left fixation less than 200 ms ago... can't have made 2 saccades: don't do anything
                         pass
                 else:
-                    # at fixation and not left fixation: start of trial, don't do anything
+                    # at fixation and not left fixation... start of trial: don't do anything
                     pass
             else:
                 if leftFix:
-                    # left fixation, and not at fixation... don't do anything
+                    # left fixation, and not at fixation... still making saccades: don't do anything
                     pass
                 else:
                     # do not leave fixation, and not at fixation: mark fixation as left:
-                    print('left fixation')
+                    # print('left fixation')
                     leftFix = True
                     leftFixTime = time.time()
 
@@ -667,7 +681,10 @@ def doTrial(cfg):
 
     # space bar to end trial and start next
 
+    waitStart = time.time()
 
+    while (time.time() - waitStart) < 0.5: # half a second of blink time?
+        cfg['hw']['win'].flip()
 
     return(cfg)
 
