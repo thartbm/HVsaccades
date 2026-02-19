@@ -587,16 +587,18 @@ def doTrial(cfg):
 
         while recording:
 
-            if not(leftFix) and not(cfg['hw']['tracker'].gazeInFixationWindow()):
-                leftFix = True
-                leftFixTime = time.time()
-                print('left central fixation?')
+            if not(leftFix):
+                if not(cfg['hw']['tracker'].gazeInFixationWindow()):
+                    leftFix = True
+                    leftFixTime = time.time()
+                    print('left central fixation?')
 
-            if leftFix and cfg['hw']['tracker'].gazeInFixationWindow():
-                if (time.time() - leftFixTime) > 0.2: # left central fixation point at least 200 ms ago?
-                    recording = False  #?
-                    print('back at fixation?')
-                    recording = False
+            if leftFix:
+                if cfg['hw']['tracker'].gazeInFixationWindow():
+                    if (time.time() - leftFixTime) > 0.2: # left central fixation point at least 200 ms ago?
+                        recording = False  #?
+                        print('back at fixation?')
+                        recording = False
 
             cfg['hw']['fixation'].draw()
             cfg['hw']['win'].flip()
