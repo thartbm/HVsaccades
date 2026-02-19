@@ -376,7 +376,9 @@ def runTasks(cfg):
 
         # after instructions, calibrate:
         if cfg['eyetracking']:
+            cfg['hw']['tracker'].comment('calibration start')
             cfg['hw']['tracker'].calibrate()
+            cfg['hw']['tracker'].comment('calibration done')
 
         while cfg['currenttrial'] < len(cfg['blocks'][cfg['currentblock']]['trialtypes']):
             
@@ -508,13 +510,13 @@ def doTrial(cfg):
 
     while (time.time() - stimulus_start) < .5 and not abort:
 
-        if cfg['hw']['tracker'].gazeInFixationWindow():
-            pass
-        else:
-            if cfg['eyetracking']:
+        if cfg['eyetracking']:
+            if cfg['hw']['tracker'].gazeInFixationWindow():
+                pass
+            else:
                 cfg['hw']['tracker'].comment('fixation broken')
-
-            abort = True
+                abort = True
+        
         cfg['hw']['fixation'].draw()
 
         if (time.time() - stimulus_start) > .1:
@@ -539,11 +541,21 @@ def doTrial(cfg):
             cfg['hw']['win'].flip()
             k = event.waitKeys()
 
-            # space: next trial
+        if k[0] in ['space']:
+            # nothing to do really?
+            pass
 
             # q: quit experiment
+        if k[0] in ['q']:
+            print('quitting not implemented')
 
             # r: recalibrate eye-tracker
+        if k[0] in ['r']:
+            if cfg['eyetracking']:
+                cfg['hw']['tracker'].comment('calibration start')
+                cfg['hw']['tracker'].calibrate()
+                cfg['hw']['tracker'].comment('calibration done')
+
 
         # show abort thing
         # allow recalibration
@@ -577,21 +589,29 @@ def doTrial(cfg):
 
             if not(leftFix) and not(cfg['hw']['tracker'].gazeInFixationWindow()):
                 leftFix = True
+                leftFixTime = time.time()
+                print('left central fixation?')
 
             if leftFix and cfg['hw']['tracker'].gazeInFixationWindow():
-                recording = False  #?
+                if (time.time() - leftFixTime) > 0.2: # left central fixation point at least 200 ms ago?
+                    recording = False  #?
+                    print('back at fixation?')
+                    recording = False
 
             cfg['hw']['fixation'].draw()
             cfg['hw']['win'].flip()
 
             k = event.waitKeys()
             if len(k) > 0:
-                if k[0] in ['q', 'r', 'space']:
-
-                    pass
+                if k[0] in ['space']:
+                    cfg['hw']['tracker'].comment('self abort')
+                    print('self aborted?')
+                    recording = False
                     # handle same as above?
+                    # no: no recalibrating or quitting here, only skip to the next trial
+
                 
-            if (time.time() - EMstart > 2):
+            if (time.time() - EMstart > 1.5):
                 recording = False
 
         if cfg['eyetracking']:
@@ -623,6 +643,14 @@ def cleanExit(cfg):
     saveCfg(cfg)
 
     print('cfg stored as json')
+
+    if cfg['eyetracking']:
+        cfg['hw']['tracker'].comment('end of run')
+        cfg['hw']['tracker'].stopcollecting()
+        cfg['hw']['tracker'].closefile()
+        cfg['hw']['tracker'].shutdown()
+
+        del cfg['hw']['tracker'] # is this what we want?
 
     cfg['hw']['win'].close()
 
