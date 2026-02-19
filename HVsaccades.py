@@ -587,18 +587,44 @@ def doTrial(cfg):
 
         while recording:
 
-            if not(leftFix):
-                if not(cfg['hw']['tracker'].gazeInFixationWindow()):
+            gazeCheck = cfg['hw']['tracker'].gazeInFixationWindow() 
+
+            if gazeCheck:
+                if leftFix:
+                    # left fixation, and at fixation... check time:
+                    if (time.time() - leftFixTime) > 0.2:
+                        # back at fixation:
+                        recording = False
+                    else:
+                        # at fixation and have left fixation less than 200 ms ago: don't do anything
+                        pass
+                else:
+                    # at fixation and not left fixation: start of trial, don't do anything
+                    pass
+            else:
+                if leftFix:
+                    # left fixation, and not at fixation... don't do anything
+                    pass
+                else:
+                    # do not leave fixation, and not at fixation: mark fixation as left:
                     leftFix = True
                     leftFixTime = time.time()
-                    print('left central fixation?')
 
-            if leftFix:
-                if cfg['hw']['tracker'].gazeInFixationWindow():
-                    if (time.time() - leftFixTime) > 0.2: # left central fixation point at least 200 ms ago?
-                        recording = False  #?
-                        print('back at fixation?')
-                        recording = False
+            # if not(leftFix):
+            #     print('1: not yet left fixation')
+            #     if not(cfg['hw']['tracker'].gazeInFixationWindow()):
+            #         leftFix = True
+            #         leftFixTime = time.time()
+            #         print('2: left central fixation')
+
+            # if leftFix:
+            #     print('3: not at central fixation')
+            #     if cfg['hw']['tracker'].gazeInFixationWindow():
+            #         print('4: back at central fixation')
+            #         if (time.time() - leftFixTime) > 0.2: # left central fixation point at least 200 ms ago?
+            #             recording = False  #?
+            #             print('5: enough time has passed: end trial')
+            #             recording = False
 
             cfg['hw']['fixation'].draw()
             cfg['hw']['win'].flip()
@@ -606,8 +632,8 @@ def doTrial(cfg):
             k = event.waitKeys()
             if len(k) > 0:
                 if k[0] in ['space']:
-                    cfg['hw']['tracker'].comment('self abort')
-                    print('self aborted?')
+                    cfg['hw']['tracker'].comment('self ended')
+                    print('self ended')
                     recording = False
                     # handle same as above?
                     # no: no recalibrating or quitting here, only skip to the next trial
