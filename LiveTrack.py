@@ -353,6 +353,6 @@ def SetDataComment(comment):
     if result!=0:
         print('LiveTrack: Error setting data comment')
     else:
-        print('LiveTrack: Successfully set data comment')
+        # print('LiveTrack: Successfully set data comment') # commented out: too much
     return result
 
