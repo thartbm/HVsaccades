@@ -586,6 +586,7 @@ def doTrial(cfg):
         recording = True
 
         while recording:
+            print(recording)
 
             gazeCheck = cfg['hw']['tracker'].gazeInFixationWindow() 
 
@@ -595,6 +596,7 @@ def doTrial(cfg):
                     if (time.time() - leftFixTime) > 0.2:
                         # back at fixation:
                         recording = False
+                        print('back at fixation')
                     else:
                         # at fixation and have left fixation less than 200 ms ago: don't do anything
                         pass
@@ -607,6 +609,7 @@ def doTrial(cfg):
                     pass
                 else:
                     # do not leave fixation, and not at fixation: mark fixation as left:
+                    print('left fixation')
                     leftFix = True
                     leftFixTime = time.time()
 
@@ -640,6 +643,7 @@ def doTrial(cfg):
 
                 
             if (time.time() - EMstart > 1.5):
+                print('eye movement recoring interval over')
                 recording = False
 
         if cfg['eyetracking']:
