@@ -171,11 +171,12 @@ def setWindow(cfg, setup='livetrack'):
     mymonitor.setGammaGrid(gammaGrid)
     mymonitor.setSizePix(resolution)
 
-    cfg['gammaGrid']    = list(gammaGrid.reshape([np.size(gammaGrid)]))
-    cfg['waitBlanking'] = waitBlanking
-    #cfg['resolution']   = resolution
-
     cfg['hw'] = {}
+
+    cfg['hw']['gammaGrid']    = list(gammaGrid.reshape([np.size(gammaGrid)]))
+    cfg['waitBlanking']       = waitBlanking
+    #cfg['resolution']         = resolution
+
 
     # to be able to convert degrees back into pixels/cm
     cfg['hw']['mon'] = mymonitor
@@ -682,7 +683,7 @@ def saveCfg(cfg):
     del scfg['hw']
 
     print(scfg.keys())
-    
+
     with open('%scfg.json'%(cfg['datadir']), 'w') as fp:
         json.dump(scfg, fp,  indent=4)
 
