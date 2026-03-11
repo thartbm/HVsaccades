@@ -529,7 +529,7 @@ def doTrial(cfg):
 
     # here the magic happens ! ! ! ! ! ! ! ! !
 
-    mouse_scale = 3
+    mouse_scale = 1.5
 
     # {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':0.5}
     # unpack the expected variables from the trial-dictionary:
@@ -607,7 +607,7 @@ def doTrial(cfg):
         # read out mouse position, and use for adjusting the adjustable dot position:
         if adjustPos:
             adjust_pos = adjust
-            adjust_pos[coord] = adjust[coord] + (cfg['hw']['mouse'].getPos()[coord] / mouse_scale)
+            adjust_pos[coord] = (cfg['hw']['mouse'].getPos()[coord] / mouse_scale)
             cfg['hw']['adjust'].pos = adjust_pos
 
         if drawStimuli:
