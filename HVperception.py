@@ -338,7 +338,7 @@ def getTasks(cfg):
 
                          ]
 
-        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=3, nrepetitions=1, shuffle=True) )
+        return( dictToBlockTrials(cfg=cfg, condictionary=condictionary, nblocks=1, nrepetitions=1, shuffle=True) )
 
 
 def dictToBlockTrials(cfg, condictionary, nblocks, nrepetitions, shuffle=True):
@@ -679,13 +679,14 @@ def cleanExit(cfg):
 
 def saveCfg(cfg):
 
-    scfg = copy.copy(cfg)
-    del scfg['hw']
+    print('skipping saving cfg for now...')
+    # scfg = copy.copy(cfg)
+    # del scfg['hw']
 
-    entries = scfg.keys()
-    for entry in entries:
-        print(scfg[entry])
+    # entries = scfg.keys()
+    # for entry in entries:
+    #     print(scfg[entry])
 
-    with open('%scfg.json'%(cfg['datadir']), 'w') as fp:
-        json.dump(scfg, fp,  indent=4)
+    # with open('%scfg.json'%(cfg['datadir']), 'w') as fp:
+    #     json.dump(scfg, fp,  indent=4)
 
