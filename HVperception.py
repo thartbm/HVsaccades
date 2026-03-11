@@ -279,60 +279,60 @@ def getTasks(cfg):
 
                          # offset: +0.5
 
-                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':0.5}
-                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':0.5}
+                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':0.5},
+                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':0.5},
 
-                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':0.5}
-                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':0.5}
+                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':0.5},
+                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':0.5},
 
-                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':0.5}
-                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':0.5}
+                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':0.5},
+                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':0.5},
 
-                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':0.5}
-                         {'test':'down-left-horizontal',  'corner':[-7.5, -7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':0, 'offset':0.5}
+                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':0.5},
+                         {'test':'down-left-horizontal',  'corner':[-7.5, -7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':0, 'offset':0.5},
 
                          # offset: -0.5
 
-                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':-0.5}
-                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':-0.5}
+                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':-0.5},
+                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':-0.5},
 
-                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':-0.5}
-                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':-0.5}
+                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':-0.5},
+                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':-0.5},
 
-                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':-0.5}
-                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':-0.5}
+                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':-0.5},
+                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':-0.5},
 
-                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':-0.5}
-                         {'test':'down-left-horizontal',  'corner':[-7.5, -7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':0, 'offset':-0.5}
+                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':-0.5},
+                         {'test':'down-left-horizontal',  'corner':[-7.5, -7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':0, 'offset':-0.5},
 
 
                          # offset: +1.5
 
-                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':1.5}
-                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':1.5}
+                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':1.5},
+                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':1.5},
 
-                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':1.5}
-                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':1.5}
+                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':1.5},
+                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':1.5},
 
-                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':1.5}
-                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':1.5}
+                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':1.5},
+                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':1.5},
 
-                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':1.5}
-                         {'test':'down-left-horizontal',  'corner':[-7.5, -7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':0, 'offset':1.5}
+                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':1.5},
+                         {'test':'down-left-horizontal',  'corner':[-7.5, -7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':0, 'offset':1.5},
 
 
                          # offset: -1.5
 
-                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':-1.5}
-                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':-1.5}
+                         {'test':'up-right-vertical',     'corner':[ 7.5,  7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':1, 'offset':-1.5},
+                         {'test':'up-right-horizontal',   'corner':[ 7.5,  7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':0, 'offset':-1.5},
 
-                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':-1.5}
-                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':-1.5}
+                         {'test':'up-left-vertical',      'corner':[-7.5,  7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':1, 'offset':-1.5},
+                         {'test':'up-left-horizontal',    'corner':[-7.5,  7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':0, 'offset':-1.5},
 
-                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':-1.5}
-                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':-1.5}
+                         {'test':'down-right-vertical',   'corner':[ 7.5, -7.5], 'fixed':[-7.5, -7.5], 'adjust':[ 7.5,  7.5], 'coord':1, 'offset':-1.5},
+                         {'test':'down-right-horizontal', 'corner':[ 7.5, -7.5], 'fixed':[ 7.5,  7.5], 'adjust':[-7.5, -7.5], 'coord':0, 'offset':-1.5},
 
-                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':-1.5}
+                         {'test':'down-left-vertical',    'corner':[-7.5, -7.5], 'fixed':[ 7.5, -7.5], 'adjust':[-7.5,  7.5], 'coord':1, 'offset':-1.5},
                          {'test':'down-left-horizontal',  'corner':[-7.5, -7.5], 'fixed':[-7.5,  7.5], 'adjust':[ 7.5, -7.5], 'coord':0, 'offset':-1.5}
 
                          ]
