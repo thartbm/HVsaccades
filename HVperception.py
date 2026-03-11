@@ -72,14 +72,14 @@ def setParticipant(cfg, ID):
     # set up folder's for groups and participants to store the data
     # if check_path: # always check paths!
         # print('checking paths:')
-    for thisPath in ['data', 'data/%s'%(cfg['ID'])]:
+    for thisPath in ['data', 'data/perception/' 'data/perception/%s'%(cfg['ID'])]:
         print(' - %s'%(thisPath))
         if os.path.exists(thisPath):
             if not(os.path.isdir(thisPath)):
                 # os.makedirs
                 raise('"%s" is not a folder'%(thisPath))
             else:
-                if (thisPath == 'data/%s'%(cfg['ID'])):
+                if (thisPath == 'data/perception/%s'%(cfg['ID'])):
                     raise('participant already exists')
 
         else:
@@ -88,10 +88,10 @@ def setParticipant(cfg, ID):
 
     
     # store data in folder for task / exp no / participant:
-    cfg['datadir'] = 'data/%s/'%(cfg['ID'])
+    cfg['datadir'] = 'data/perception/%s/'%(cfg['ID'])
 
     # we need to seed the random number generator:
-    random.seed('HVsaccades' + ID)
+    random.seed('HVperception' + ID)
 
     return cfg
 
