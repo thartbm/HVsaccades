@@ -554,7 +554,7 @@ def doTrial(cfg):
         drawFixed = False
         trialdict['fixed'] = [None, None]
 
-    if offset in trialdict.keys():
+    if 'offset' in trialdict.keys():
         offset = trialdict['offset']
     else:
         offset = None
