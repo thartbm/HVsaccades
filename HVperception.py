@@ -72,7 +72,7 @@ def setParticipant(cfg, ID):
     # set up folder's for groups and participants to store the data
     # if check_path: # always check paths!
         # print('checking paths:')
-    for thisPath in ['data', 'data/perception/' 'data/perception/%s'%(cfg['ID'])]:
+    for thisPath in ['data', 'data/perception/', 'data/perception/%s'%(cfg['ID'])]:
         print(' - %s'%(thisPath))
         if os.path.exists(thisPath):
             if not(os.path.isdir(thisPath)):
