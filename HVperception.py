@@ -636,8 +636,9 @@ def doTrial(cfg):
             if 'space' in k:
                 waiting_for_response = False
             if '0' in k:
-                # recalibrate:
-                pass
+                if cfg['eyetracking']:
+                    # recalibrate:
+                    cfg['hw']['tracker'].calibrate()
 
     
 
