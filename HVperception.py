@@ -433,7 +433,7 @@ def runTasks(cfg):
 
         while cfg['currenttrial'] < len(cfg['blocks'][cfg['currentblock']]['trialtypes']):
             
-            if cfg['eyetracking']:
+            # if cfg['eyetracking']:
                 # cfg['hw']['tracker'].comment('trial %d'%(cfg['currenttrial']))
 
 
