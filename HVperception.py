@@ -681,6 +681,8 @@ def saveCfg(cfg):
     scfg = copy.copy(cfg)
     del scfg['hw']
 
+    print(scfg.keys())
+    
     with open('%scfg.json'%(cfg['datadir']), 'w') as fp:
         json.dump(scfg, fp,  indent=4)
 
