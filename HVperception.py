@@ -264,7 +264,7 @@ def getStimuli(cfg):
                                 lineColor = None,
                                 fillColor=[1,-1,1]) # close to col_both?
 
-    cfg['hw']['mouse'] = event.Mouse(visible=False, win=win) # invisible !!
+    cfg['hw']['mouse'] = event.Mouse(visible=False, win=cfg['hw']['win']) # invisible !!
 
     return(cfg)
 
