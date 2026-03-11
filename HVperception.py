@@ -238,7 +238,7 @@ def getStimuli(cfg):
                                         radius = .5,
                                         edges=100,
                                         lineWidth=0,
-                                        fillColor=[-1,1,-1])
+                                        fillColor=[-1,0,-1])
 
 
     cfg['hw']['abort'] = visual.Rect(win = cfg['hw']['win'],
@@ -615,12 +615,13 @@ def doTrial(cfg):
 
         if drawStimuli:
             # draw available stimuli:
-            if drawCorner:
-                cfg['hw']['corner'].draw()
-            if drawFixed:
-                cfg['hw']['fixed'].draw()
-            if drawAdjust:
-                cfg['hw']['adjust'].draw()
+            if (time.time() % 1) > 0.2:
+                if drawCorner:
+                    cfg['hw']['corner'].draw()
+                if drawFixed:
+                    cfg['hw']['fixed'].draw()
+                if drawAdjust:
+                    cfg['hw']['adjust'].draw()
 
         cfg['hw']['fixation'].draw()
         cfg['hw']['win'].flip()
