@@ -586,6 +586,8 @@ def doTrial(cfg):
         drawAdjust = False
         trialdict['adjust'] = [None, None]
     
+    jitter = [random.sample([-2,-1,1,2]), random.sample([-2,-1,1,2])]
+    cfg['hw']['fixation'].pos = jitter
 
 
     # MOUSE POS SHOULD BE SET TO [0,0]
@@ -598,7 +600,7 @@ def doTrial(cfg):
     while waiting_for_response:
 
         if cfg['eyetracking']:
-            if cfg['hw']['tracker'].gazeInFixationWindow(fixloc=[0,0]):
+            if cfg['hw']['tracker'].gazeInFixationWindow(fixloc=jitter):
                 drawStimuli = True
             else:
                 drawStimuli = False
