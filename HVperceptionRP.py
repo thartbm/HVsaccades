@@ -681,8 +681,11 @@ def doTrial(cfg):
     response['origin']        = copy.deepcopy(og_pos)
     response['final_adjust']  = cfg['hw']['dot4'].pos
     # if test == 'horizontal':
-    test_dist = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
-    ctrl_dist = abs(cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])
+    # test_dist = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
+    # ctrl_dist = abs(cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])
+
+    test_dist = np.sqrt((cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])**2 + (cfg['hw']['dot3'].pos[1] - cfg['hw']['dot4'].pos[1])**2)
+    ctrl_dist = np.sqrt((cfg['hw']['dot1'].pos[0] - cfg['hw']['dot2'].pos[0])**2 + (cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])**2)
 
     response['test_dist'] = test_dist
     response['ctrl_dist'] = ctrl_dist
@@ -697,6 +700,15 @@ def doTrial(cfg):
         print('add vertical response')
         response['V_d'] = test_dist
         response['H_d'] = ctrl_dist
+
+    response['x1'] = cfg['hw']['dot1'].pos[0]
+    response['y1'] = cfg['hw']['dot1'].pos[1]
+    response['x2'] = cfg['hw']['dot2'].pos[0]
+    response['y2'] = cfg['hw']['dot2'].pos[1]
+    response['x3'] = cfg['hw']['dot3'].pos[0]
+    response['y3'] = cfg['hw']['dot3'].pos[1]
+    response['x4'] = cfg['hw']['dot4'].pos[0]
+    response['y4'] = cfg['hw']['dot4'].pos[1]
 
 
     cfg['responses'] += [response]
