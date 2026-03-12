@@ -597,10 +597,10 @@ def doTrial(cfg):
 
     # we adjust dot4... dot1, 2, 3 are fixed (dot 4 is blue, the rest is black)
 
-    dot1_pos = og_pos
-    dot2_pos = og_pos
-    dot3_pos = og_pos
-    dot4_pos = og_pos
+    dot1_pos = copy.deepcopy(og_pos)
+    dot2_pos = copy.deepcopy(og_pos)
+    dot3_pos = copy.deepcopy(og_pos)
+    dot4_pos = copy.deepcopy(og_pos)
 
     dot1_pos[1-coord] += distance
     dot2_pos[1-coord] += distance + separation
