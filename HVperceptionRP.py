@@ -593,6 +593,8 @@ def doTrial(cfg):
     angle_rad = (((random.random() * 30) + 30) / 180) * np.pi
     og_pos = [origin*np.cos(angle_rad), origin*np.sin(angle_rad)]
 
+    print(og_pos)
+
     # we adjust dot4... dot1, 2, 3 are fixed (dot 4 is blue, the rest is black)
 
     dot1_pos = og_pos
@@ -610,6 +612,11 @@ def doTrial(cfg):
     dot2_pos = [dot2_pos[0] * multipliers[0], dot2_pos[1]* multipliers[1]]
     dot3_pos = [dot3_pos[0] * multipliers[0], dot3_pos[1]* multipliers[1]]
     dot4_pos = [dot4_pos[0] * multipliers[0], dot4_pos[1]* multipliers[1]]
+
+    print(dot1_pos)
+    print(dot2_pos)
+    print(dot3_pos)
+    print(dot4_pos)
 
     cfg['hw']['dot1'].pos = dot1_pos
     cfg['hw']['dot2'].pos = dot2_pos
