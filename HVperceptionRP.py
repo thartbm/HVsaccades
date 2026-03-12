@@ -646,7 +646,7 @@ def doTrial(cfg):
         # read out mouse position, and use for adjusting the adjustable dot position:
         if adjustPos:
             adjust_pos = dot4_pos
-            adjust_pos[coord] = (cfg['hw']['mouse'].getPos()[coord] / mouse_scale)
+            adjust_pos[coord] += (cfg['hw']['mouse'].getPos()[coord] / mouse_scale)
             cfg['hw']['dot4'].pos = adjust_pos
 
         if drawStimuli:
