@@ -681,12 +681,22 @@ def doTrial(cfg):
     response['origin']        = copy.deepcopy(og_pos)
     response['final_adjust']  = cfg['hw']['dot4'].pos
     # if test == 'horizontal':
-    response['horizontal_d'] = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
-    response['vertical_d']   = abs(cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])
+    test_dist = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
+    ctrl_dist = abs(cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])
+
+    response['test_dist'] = test_dist
+    response['ctrl_dist'] = ctrl_dist
+    # response['horizontal_d'] = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
+    # response['vertical_d']   = abs(cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])
+    print(test)
+    if test == 'horizontal':
+        print('add horizontal response')
+        response['H_d'] = test_dist
+        response['V_d'] = ctrl_dist
     if test == 'vertical':
-        # response['horizontal_d'] = abs(cfg['hw']['dot1'].pos[0] - cfg['hw']['dot2'].pos[0])
-        # response['vertical_d']   = abs(cfg['hw']['dot3'].pos[1] - cfg['hw']['dot4'].pos[1])
-        response['horizontal_d'], response['vertical_d'] = response['vertical_d'], response['horizontal_d']
+        print('add vertical response')
+        response['V_d'] = test_dist
+        response['H_d'] = ctrl_dist
 
 
     cfg['responses'] += [response]
