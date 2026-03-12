@@ -244,17 +244,17 @@ def getStimuli(cfg):
                                       radius = .5,
                                       edges=100,
                                       lineWidth=0,
-                                      fillColor=[-1,-1,-1])
+                                      fillColor=[.5,.5,.5])
     cfg['hw']['dot2'] = visual.Circle(win = cfg['hw']['win'],
                                       radius = .5,
                                       edges=100,
                                       lineWidth=0,
-                                      fillColor=[-1,-1,-1])
+                                      fillColor=[.5,.5,.5])
     cfg['hw']['dot3'] = visual.Circle(win = cfg['hw']['win'],
                                       radius = .5,
                                       edges=100,
                                       lineWidth=0,
-                                      fillColor=[-1,-1,-1])
+                                      fillColor=[1,-1,-1])
     cfg['hw']['dot4'] = visual.Circle(win = cfg['hw']['win'],
                                       radius = .5,
                                       edges=100,
