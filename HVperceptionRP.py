@@ -244,12 +244,12 @@ def getStimuli(cfg):
                                       radius = .5,
                                       edges=100,
                                       lineWidth=0,
-                                      fillColor=[.5,.5,.5])
+                                      fillColor=[.75,.75,.75])
     cfg['hw']['dot2'] = visual.Circle(win = cfg['hw']['win'],
                                       radius = .5,
                                       edges=100,
                                       lineWidth=0,
-                                      fillColor=[.5,.5,.5])
+                                      fillColor=[.75,.75,.75])
     cfg['hw']['dot3'] = visual.Circle(win = cfg['hw']['win'],
                                       radius = .5,
                                       edges=100,
@@ -679,12 +679,13 @@ def doTrial(cfg):
 
     response                  = copy.deepcopy(trialdict)
     response['final_adjust']  = cfg['hw']['dot4'].pos
-    if test == 'horizontal':
-        response['horizontal_d'] = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
-        response['vertical_d']   = abs(cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])
-    if test == 'horizontal':
-        response['horizontal_d'] = abs(cfg['hw']['dot1'].pos[0] - cfg['hw']['dot2'].pos[0])
-        response['vertical_d']   = abs(cfg['hw']['dot3'].pos[1] - cfg['hw']['dot4'].pos[1])
+    # if test == 'horizontal':
+    response['horizontal_d'] = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
+    response['vertical_d']   = abs(cfg['hw']['dot1'].pos[1] - cfg['hw']['dot2'].pos[1])
+    if test == 'vertical':
+        # response['horizontal_d'] = abs(cfg['hw']['dot1'].pos[0] - cfg['hw']['dot2'].pos[0])
+        # response['vertical_d']   = abs(cfg['hw']['dot3'].pos[1] - cfg['hw']['dot4'].pos[1])
+        response['horizontal_d'], response['vertical_d'] = response['vertical_d'], response['horizontal_d']
 
 
     cfg['responses'] += [response]
