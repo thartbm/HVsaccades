@@ -629,7 +629,7 @@ def doTrial(cfg):
     while waiting_for_response:
 
         if cfg['eyetracking']:
-            if cfg['hw']['tracker'].gazeInFixationWindow(fixloc=jitter):
+            if cfg['hw']['tracker'].gazeInFixationWindow(fixloc=cfg['hw']['fixation'].pos):
                 drawStimuli = True
             else:
                 drawStimuli = False
