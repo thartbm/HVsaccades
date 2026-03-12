@@ -238,7 +238,7 @@ def getStimuli(cfg):
                                         radius = .5,
                                         edges=100,
                                         lineWidth=0,
-                                        fillColor=[-1,0,-1])
+                                        fillColor=[-1,.5,-1])
 
 
     cfg['hw']['abort'] = visual.Rect(win = cfg['hw']['win'],
