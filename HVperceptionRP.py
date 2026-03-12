@@ -678,6 +678,7 @@ def doTrial(cfg):
     
 
     response                  = copy.deepcopy(trialdict)
+    response['origin']        = copy.deepcopy(og_pos)
     response['final_adjust']  = cfg['hw']['dot4'].pos
     # if test == 'horizontal':
     response['horizontal_d'] = abs(cfg['hw']['dot3'].pos[0] - cfg['hw']['dot4'].pos[0])
