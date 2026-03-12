@@ -298,41 +298,41 @@ def getTasks(cfg):
 
         condictionary = [
 
-                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
-                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
-                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
-                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
-                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
-                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
-                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
-                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':-1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
+                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
+                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
+                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
+                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':-1},
 
-                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
-                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
-                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
-                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':-.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':-.5},
 
-                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
-                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
-                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
-                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
-                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
+                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
+                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':.5},
 
-                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
-                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
-                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
-                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
-                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
-                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
-                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
-                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':3, 'separation':10, 'offset':1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
+                         {'test':'vertical',   'coord':1, 'quadrant':1, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
+                         {'test':'vertical',   'coord':1, 'quadrant':2, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
+                         {'test':'vertical',   'coord':1, 'quadrant':3, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
+                         {'test':'horizontal', 'coord':0, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
+                         {'test':'vertical',   'coord':1, 'quadrant':4, 'origin': 3, 'distance':2, 'separation':8, 'offset':1},
 
                          ]
 
@@ -645,7 +645,7 @@ def doTrial(cfg):
 
         # read out mouse position, and use for adjusting the adjustable dot position:
         if adjustPos:
-            adjust_pos = dot4_pos
+            adjust_pos = copy.deepcopy(dot4_pos)
             adjust_pos[coord] += (cfg['hw']['mouse'].getPos()[coord] / mouse_scale)
             cfg['hw']['dot4'].pos = adjust_pos
 
