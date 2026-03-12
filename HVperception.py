@@ -586,7 +586,7 @@ def doTrial(cfg):
         drawAdjust = False
         trialdict['adjust'] = [None, None]
     
-    jitter = random.sample([-1.5,-1,-.5,.5,1,1.5])[0]
+    jitter = random.sample([-1.5,-1,-.5,.5,1,1.5],1)[0]
     jitter = [jitter * np.sign(x) for x in corner]
     cfg['hw']['fixation'].pos = jitter
 
