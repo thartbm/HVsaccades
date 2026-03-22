@@ -11,7 +11,8 @@ tryMe <- function() {
   
   # df <- read.csv('data/marius_exp1.csv')
   # df <- read.csv('data/marius2_exp1.csv')
-  df <- read.csv('data/p02_exp1.csv')
+  # df <- read.csv('data/p02_exp1.csv')
+  df <- read.csv('data/p03_exp1.csv')
   df <- fixLiveTrack(df)
   df$X <- rowMeans(as.matrix(df[,c('LeftGazeX', 'RightGazeX')]))
   df$Y <- rowMeans(as.matrix(df[,c('LeftGazeY', 'RightGazeY')]))
@@ -143,7 +144,7 @@ tryMe <- function() {
   }
   
   # print(all_saccades)
-  write.csv(all_saccades, 'data/saccades.csv', row.names=FALSE)
+  write.csv(all_saccades, 'data/p03_saccades.csv', row.names=FALSE)
 }
 
 getSaccades <- function(condition,
@@ -484,7 +485,7 @@ conditionFromTargets <- function(first, second) {
 
 plotHVsaccades <- function() {
   
-  df <- read.csv('data/p02_saccades.csv', stringsAsFactors = FALSE)
+  df <- read.csv('data/p03_saccades.csv', stringsAsFactors = FALSE)
   
   layout(mat=matrix(c(1:2), nrow=2, byrow=TRUE))
   
