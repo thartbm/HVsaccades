@@ -217,6 +217,11 @@ __marimo__/
 *.txt
 *.zip
 
+# summary spreadsheets:
+*.xls
+*.xlsx
+*.ods
+
 # output documents:
 *.doc
 *.docx
