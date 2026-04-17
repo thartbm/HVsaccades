@@ -120,3 +120,29 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     fixation = setup['fixation']
 
     tracker = setup['tracker']
+
+    # in order to set up the stimuli, we need the blind spot marker properties:
+
+
+    left_prop  = setup['blindspotmarkers']['left_prop']
+    right_prop = setup['blindspotmarkers']['right_prop']
+
+    # spot_left    = left_prop['spot'] # polar coords?
+    spot_left    = left_prop['cart']
+    size_left    = left_prop['size']
+    # ang_up_left  = left_prop['ang_up'] # angle for distance task away from BS locations
+    # tar_left     = left_prop['tar']  # target distance for distance task
+
+    # spot_right   = right_prop['spot']
+    spot_right   = right_prop['cart']
+    size_right   = right_prop['size']
+    # ang_up_right = right_prop['ang_up'] # angle for distance task away from BS locations
+    # tar_right    = right_prop['tar']  # target distance for distance task
+
+    # longest axis of the blind spot marker:
+    lax_left  = np.max(size_left)
+    lax_right = np.max(size_right)
+
+    # margin of 2 dva on either side
+    dist_left  = 2 + lax_left  + 2
+    dist_right = 2 + lax_right + 2
