@@ -7,7 +7,7 @@ library('emov')
 
 tryMe <- function() {
   
-  convertCommentsWithCommas('data/marius_exp1.csv.csv', 'data/marius_exp1.csv')
+  #convertCommentsWithCommas('data/marius_exp1.csv.csv', 'data/marius_exp1.csv')
   
   # df <- read.csv('data/marius_exp1.csv')
   # df <- read.csv('data/marius2_exp1.csv')
