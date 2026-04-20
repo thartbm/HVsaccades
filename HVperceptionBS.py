@@ -25,6 +25,8 @@ from itertools import compress
 from psychopy.hardware import keyboard
 from pyglet.window import key
 
+import pandas as pd
+
 
 import sys, os
 sys.path.append(os.path.join('..', 'EyeTracking'))
@@ -123,26 +125,101 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # in order to set up the stimuli, we need the blind spot marker properties:
 
+    if hemifield == 'left':
+        prop  = setup['blindspotmarkers']['left_prop']
+        mult_fact = -1
+    if hemifield == 'right':
+        prop = setup['blindspotmarkers']['right_prop']
+        mult_fact = 1
 
-    left_prop  = setup['blindspotmarkers']['left_prop']
-    right_prop = setup['blindspotmarkers']['right_prop']
+    # # spot_left    = left_prop['spot'] # polar coords?
+    # spot_left    = left_prop['cart']
+    # size_left    = left_prop['size']
+    # # ang_up_left  = left_prop['ang_up'] # angle for distance task away from BS locations
+    # # tar_left     = left_prop['tar']  # target distance for distance task
 
-    # spot_left    = left_prop['spot'] # polar coords?
-    spot_left    = left_prop['cart']
-    size_left    = left_prop['size']
-    # ang_up_left  = left_prop['ang_up'] # angle for distance task away from BS locations
-    # tar_left     = left_prop['tar']  # target distance for distance task
+    # # spot_right   = right_prop['spot']
+    # spot_right   = right_prop['cart']
+    # size_right   = right_prop['size']
+    # # ang_up_right = right_prop['ang_up'] # angle for distance task away from BS locations
+    # # tar_right    = right_prop['tar']  # target distance for distance task
 
-    # spot_right   = right_prop['spot']
-    spot_right   = right_prop['cart']
-    size_right   = right_prop['size']
-    # ang_up_right = right_prop['ang_up'] # angle for distance task away from BS locations
-    # tar_right    = right_prop['tar']  # target distance for distance task
+    pos_polar = prop['spot']
+    test_pos = prop['cart']
+    size = prop['size']
 
-    # longest axis of the blind spot marker:
-    lax_left  = np.max(size_left)
-    lax_right = np.max(size_right)
+    # # longest axis of the blind spot marker:
+    # lax_left  = np.max(size_left)
+    # lax_right = np.max(size_right)
 
-    # margin of 2 dva on either side
-    dist_left  = 2 + lax_left  + 2
-    dist_right = 2 + lax_right + 2
+    lax = np.max(size)
+
+    # # margin of 2 dva on either side
+    # dist_left  = 2 + lax_left  + 2
+    # dist_right = 2 + lax_right + 2
+
+    test_dist = 2 + lax + 2
+
+    bs_dist = (np.array(test_pos)**2)**0.5
+    
+    # now we want an isosecles triangle with the two legs equal to test_dist, and the base equal to lax
+    # an isosecles triangle can be split into two congruent right triangles, where the hypotenuse is test_dist, and one leg is lax/2
+    # we want the angle between the hypothenuse and the side of unknown length
+    alpha = np.arcsin((test_dist/2)/bs_dist) * 2
+    
+    # in the right hemifield, we add the alpha, on the left, we subtract it
+    foil_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist)
+
+    # conditions we want to test:
+
+    # TILTS:
+    # - both horizontal
+    # - blind spot tilted 45 degrees, one way
+    # - other way
+    # - comparison tilted 45 degrees, one way
+    # - other way
+
+    # EYE:
+    # - blind spot eye only
+    # - both eyes
+    # - other eye?
+
+    # this would make 5 * 3 = 15 conditions
+
+    # we want to repeat each condition some numner of times
+    # we can adjust the starting size of the adjustable pair
+
+    # if we use 2 starting distances (+2 dva and -2 dva?)
+    # we could have 30 trials per block, and do 150 trials total
+    # that would be 10 repetitions per condition
+    # and we repeat this for both hemifields
+    # (any cancelled trials will be repeated at the end of the block, so it's always 10)
+
+    # 10 repetitions means a good distributions within each condition separately
+    # but we could also do 8 or 6... that would make for a shorter task
+    # and more of a stochastic approach: we need statistics and large N
+
+    bs_tilt = [0, 0, 0, -45, 45] * 6
+    comp_tilt = [0, -45, 45, 0, 0] * 6
+    eye = ['both', 'both', 'both', 'both', 'both', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'contra', 'contra', 'contra', 'contra', 'contra'] * 2
+    dist_diff = [-2] * 15 + [2] * 15
+
+
+    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'comp_tilt': comp_tilt, 'eye': eye, 'dist_diff': dist_diff})
+
+    cond_idx = list(range(len(conditions)))
+    blocks = []
+    for block_no in range(5):
+        block_def = {}
+        block_def['block_no'] = block_no
+        block_def['trials'] = random.shuffle(cond_idx.copy())
+        block_def['instructions'] = 'press space to start block ' + str(block_no+1) + ' out of 5'
+        blocks.append(block_def)    
+
+    
+
+
+
+
+
+
