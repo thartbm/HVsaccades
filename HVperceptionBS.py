@@ -200,12 +200,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # and more of a stochastic approach: we need statistics and large N
 
     bs_tilt = [0, 0, 0, -45, 45] * 6
-    comp_tilt = [0, -45, 45, 0, 0] * 6
+    aw_tilt = [0, -45, 45, 0, 0] * 6
     eye = ['both', 'both', 'both', 'both', 'both', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'contra', 'contra', 'contra', 'contra', 'contra'] * 2
     dist_diff = [-2] * 15 + [2] * 15
 
 
-    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'comp_tilt': comp_tilt, 'eye': eye, 'dist_diff': dist_diff})
+    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'aw_tilt': aw_tilt, 'eye': eye, 'dist_diff': dist_diff})
 
     cond_idx = list(range(len(conditions)))
     blocks = []
@@ -222,8 +222,14 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # collect data in a dictionary:
 
-    data = { 'blockno':[],
-             'trialno':[]}
+    data = { 'blockno':    [],
+             'trialno':    [],
+             'bs_tilt':    [],
+             'aw_tilt':    [],
+             'eye'    :    [],
+             'start_diff': [],
+             'rt':         [],
+             'final_dist': []}
 
 
     not_done = True
