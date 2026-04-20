@@ -162,10 +162,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     bs_dist = (np.array(test_pos)**2)**0.5
     
+    margin = 2
+
     # now we want an isosecles triangle with the two legs equal to test_dist, and the base equal to lax
     # an isosecles triangle can be split into two congruent right triangles, where the hypotenuse is test_dist, and one leg is lax/2
     # we want the angle between the hypothenuse and the side of unknown length
-    alpha = np.arcsin((test_dist/2)/bs_dist) * 2
+    alpha = np.arcsin(((test_dist+margin)/2)/bs_dist) * 2
     
     # in the right hemifield, we add the alpha, on the left, we subtract it
     foil_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist)
@@ -201,9 +203,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     bs_tilt = [0, 0, 0, -45, 45] * 6
     aw_tilt = [0, -45, 45, 0, 0] * 6
-    eye = ['both', 'both', 'both', 'both', 'both', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'contra', 'contra', 'contra', 'contra', 'contra'] * 2
+    eye = ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5 + ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5
     dist_diff = [-2] * 15 + [2] * 15
-
 
     conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'aw_tilt': aw_tilt, 'eye': eye, 'dist_diff': dist_diff})
 
@@ -236,15 +237,35 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     while not_done:
 
+        # properties of the current trial:
+        cond_idx = blocks[block_idx][trial_idx]
+
+        bs_tilt = conditions['bs_tilt'][cond_idx]
+        aw_tilt = conditions['aw_tilt'][cond_idx]
+        eye = conditions['eye'][cond_idx]
+        dist_diff = conditions['dist_diff'][cond_idx]
+
+
+        # if trial_idx = 0:
+        # - show instructions
+        # - do calibration
 
 
 
 
-        if trial_idx > len(block_def[block_idx]):
+        # store the collected data as a csv:
+        # data.to_csv()
+
+        # end of trial: increase trial & block indices
+        trial_idx = trial_idx + 1
+
+        if trial_idx >= len(block_def[block_idx]):
+            # done all trials in the block... next block:
             block_idx = block_idx + 1
             trial_idx = 0
 
-        if block_idx > len(block_def):
+        if block_idx >= len(block_def):
+            # done all the blocks... end task:
             not_done = False
 
 
