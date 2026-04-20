@@ -216,7 +216,30 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         block_def['instructions'] = 'press space to start block ' + str(block_no+1) + ' out of 5'
         blocks.append(block_def)    
 
-    
+    block_idx = 0
+    trial_idx = 0
+
+
+    # collect data in a dictionary:
+
+    data = { 'blockno':[],
+             'trialno':[]}
+
+
+    not_done = True
+
+    while not_done:
+
+
+
+
+
+        if trial_idx > len(block_def[block_idx]):
+            block_idx = block_idx + 1
+            trial_idx = 0
+
+        if block_idx > len(block_def):
+            not_done = False
 
 
 
