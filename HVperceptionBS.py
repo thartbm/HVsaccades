@@ -106,6 +106,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     if hemifield == 'right':
         col_contra, col_ipsi = colors['left'], colors['right']
 
+        ## stimuli
+    point_1 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    point_2 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    point_3 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    point_4 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+
     # if hemifield == 'left':
     #     col_ipsi, col_contra = colors['right'], colors['left']
     # if hemifield == 'right':
@@ -232,6 +238,31 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
              'rt':         [],
              'final_dist': []}
 
+
+    # show first instructions
+    visual.TextStim(win,
+        'Throughout the task, use the mouse adjust the upper dot pair so that the distance between the dots matches the distance of the lower pair.\n\nPress space to continue.', 
+        height = 1, 
+        wrapWidth=15,
+        color = 'black').draw()
+    win.flip()
+    k = ['wait']
+    while k[0] not in ['space']:
+        k = event.waitKeys()
+
+
+    # show instruction to start with eye-tracker calibration
+    visual.TextStim(win,
+        'Press space to calibrate the eye-tracker.', 
+        height = 1, 
+        wrapWidth=15,
+        color = 'black').draw()
+    win.flip()
+    k = ['wait']
+    while k[0] not in ['space']:
+        k = event.waitKeys()
+
+    tracker.calibrate()
 
     not_done = True
 
