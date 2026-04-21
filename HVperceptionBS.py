@@ -82,11 +82,17 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     os.makedirs(eyetracking_path, exist_ok=True)
 
 
-    # create output file:
+    # create data output filename:
     x = 1
     # filename = '_dist_' + ('LH' if hemifield == 'left' else 'RH') + '_' + ID + '_'
     filename = ID + '_HVpercept_' + ('LH' if hemifield == 'left' else 'RH') + '_'
     while (filename + str(x) + '.csv') in os.listdir(data_path):
+        x += 1
+
+    # create eye-tracking output filename:
+    x = 1
+    et_filename = 'HVpr' + ('LH' if hemifield == 'left' else 'RH')
+    while len(glob(eyetracking_path + et_filename + str(x) + '.*')):
         x += 1
 
     # get everything shared from central:
@@ -106,7 +112,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     if hemifield == 'right':
         col_contra, col_ipsi = colors['left'], colors['right']
 
-        ## stimuli
+    # stimuli
     point_1 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
     point_2 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
     point_3 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
@@ -125,7 +131,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     blindspot = setup['blindspotmarkers'][hemifield]
     # print(blindspot.fillColor)
     
-    fixation = setup['fixation']
+    fixation   = setup['fixation']
+    fixation_x = setup['fixation_x']
 
     tracker = setup['tracker']
 
@@ -249,7 +256,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     k = ['wait']
     while k[0] not in ['space']:
         k = event.waitKeys()
-
+    
+    event.clearEvents(eventType='keyboard') # just to be sure?
 
     # show instruction to start with eye-tracker calibration
     visual.TextStim(win,
@@ -262,7 +270,16 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     while k[0] not in ['space']:
         k = event.waitKeys()
 
+    event.clearEvents(eventType='keyboard') # just to be sure?
+
+    # calibration
+    tracker.openfile()
+    tracker.startcollecting()
     tracker.calibrate()
+    
+    fixation.draw()
+    win.flip()
+
 
     not_done = True
 
