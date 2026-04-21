@@ -14,13 +14,16 @@
 
 
 
-import psychopy
-from psychopy import core, visual, gui, data, event
-from psychopy.tools.coordinatetools import pol2cart, cart2pol
+# import psychopy
+from psychopy import visual, gui, event
+# from psychopy import core, data
+from psychopy.tools.coordinatetools import pol2cart
+# from psychopy.tools.coordinatetools import cart2pol
 import numpy as np
-import random, datetime, os
+import random, os, time
+# import datetime
 from glob import glob
-from itertools import compress
+# from itertools import compress
 
 from psychopy.hardware import keyboard
 from pyglet.window import key
@@ -28,9 +31,9 @@ from pyglet.window import key
 import pandas as pd
 
 
-import sys, os
+import sys
 sys.path.append(os.path.join('..', 'EyeTracking'))
-from EyeTracking import localizeSetup, EyeTracker
+from EyeTracking import localizeSetup
 
 ######
 #### Initialize experiment
@@ -89,6 +92,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     while (filename + str(x) + '.csv') in os.listdir(data_path):
         x += 1
 
+    csv_filename = data_path + filename + str(x) + '.csv'
+
     # create eye-tracking output filename:
     x = 1
     et_filename = 'HVpr' + ('LH' if hemifield == 'left' else 'RH')
@@ -136,6 +141,10 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     tracker = setup['tracker']
 
+    # additional hardware is a mouse object:
+
+    mouse = event.Mouse(visible=False, win=win) #invisible
+
     # in order to set up the stimuli, we need the blind spot marker properties:
 
     if hemifield == 'left':
@@ -173,7 +182,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     test_dist = 2 + lax + 2
 
-    bs_dist = (np.array(test_pos)**2)**0.5
+    bs_dist = (np.array(bs_pos)**2)**0.5
     
     margin = 2
 
@@ -241,6 +250,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
              'bs_tilt':    [],
              'aw_tilt':    [],
              'eye'    :    [],
+             'bs_dist':    [],
              'start_diff': [],
              'rt':         [],
              'final_dist': []}
@@ -264,6 +274,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # fixation.draw()
     # win.flip()
 
+    mouse_factor = 2.5
 
     not_done = True
 
@@ -277,8 +288,14 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         eye = conditions['eye'][cond_idx]
         dist_diff = conditions['dist_diff'][cond_idx]
 
-        point_1.pos = []
+        # bs points are non-adjustable and points 1 & 2:
+        temp_pos = pol2cart(bs_tilt, test_dist/2, unit='deg')
+        point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
+        point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
+        distance = (test_dist+dist_diff)/2
+        mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
+        
         if trial_idx == 0:
             # show instruction to start with eye-tracker calibration
             visual.TextStim(win,
@@ -303,28 +320,69 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         hiFusion.resetProperties()
         loFusion.resetProperties()
 
+
+        start_time = time.time()
+
         while waiting_for_response:
             
-        # show fixation
-        # show fusion stimuli
-        hiFusion.draw()
-        loFusion.draw()
-
-        # check fixation
-        # if fixating:
-        # - show stimuli
-        # - use mouse to adjust the distance of the adjustable pair
-        # - check for response (e.g. spacebar press)
-
-        # else:
-        # - show fixation_x
-        # either way, check keyboard for recalibration key (or quitting key))
+            # show fixation
+            # show fusion stimuli
+            hiFusion.draw()
+            loFusion.draw()
 
 
+            # check fixation
+            # if fixating:
+            # - show stimuli
+            # - use mouse to adjust the distance of the adjustable pair
+            # - check for response (e.g. spacebar press)
+            if tracker.gazeInFixationWindow(fixloc=fixation.pos):
+                fixation.draw()
+                point_1.draw()
+                point_2.draw()
+
+                # adjustable points are points 3 & 4:
+                distance = mouse.getPos()[1]/mouse_factor
+                temp_pos = pol2cart(ad_tilt, distance, unit='deg')
+                point_3.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
+                point_4.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
+
+                point_3.draw()
+                point_4.draw()
+            else:
+                mouse.setPos([0, distance*mouse_factor]) # keep mouse at a reasonable position if not fixating
+                fixation_x.draw()
+            
+            win.flip()
+
+            # either way, check keyboard for recalibration key (or quitting key)
+            k = event.getKeys(['r', 'space']) # shouldn't this be space? like after the stimulus? this is confusing...
+            if k and 'r' in k:
+                # recalibrate
+                tracker.stopcollecting()
+                tracker.calibrate()
+                tracker.startcollecting()
+            if k and 'space' in k:
+                # response given, move on to next trial
+                rt = time.time() - start_time
+                waiting_for_response = False
 
 
-        # store the collected data as a csv:
+        # store the collected data in the data frame
+        # 
+        # store the data frame as a csv:
         # data.to_csv()
+        data['blockno'].append(block_idx+1)
+        data['trialno'].append(trial_idx+1)
+        data['bs_tilt'].append(bs_tilt)
+        data['aw_tilt'].append(ad_tilt)
+        data['eye'].append(eye)
+        data['bs_dist'].append(test_dist)
+        data['start_diff'].append(dist_diff)
+        data['rt'].append(rt)
+        data['final_dist'].append(distance*2) 
+
+        data.to_csv(csv_filename, index=False)
 
         # end of trial: increase trial & block indices
         trial_idx = trial_idx + 1
@@ -338,8 +396,22 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             # done all the blocks... end task:
             not_done = False
 
+    # end of task: stop eye-tracker recording, show end screen
+    tracker.stopcollecting()
+    tracker.closefile()
+    tracker.shutdown()
 
-
+    visual.TextStim(win,
+        'THE END\n\nThank you for participating!', 
+        height = 1, 
+        wrapWidth=15,
+        color = 'black').draw()
+    win.flip()
+    k = ['wait']
+    while k[0] not in ['space']:
+        k = event.waitKeys()
+    
+    win.close()
 
 
 
