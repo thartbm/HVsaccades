@@ -158,7 +158,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # # tar_right    = right_prop['tar']  # target distance for distance task
 
     pos_polar = prop['spot']
-    test_pos = prop['cart']
+    bs_pos = prop['cart']
     size = prop['size']
 
     # # longest axis of the blind spot marker:
@@ -180,10 +180,10 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # now we want an isosecles triangle with the two legs equal to test_dist, and the base equal to lax
     # an isosecles triangle can be split into two congruent right triangles, where the hypotenuse is test_dist, and one leg is lax/2
     # we want the angle between the hypothenuse and the side of unknown length
-    alpha = np.arcsin(((test_dist+margin)/2)/bs_dist) * 2
+    alpha = np.arcsin(((test_dist+margin)/2)/bs_dist) * 2 * 180/np.pi
     
     # in the right hemifield, we add the alpha, on the left, we subtract it
-    foil_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist)
+    ad_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist, unit='deg')
 
     # conditions we want to test:
 
@@ -215,11 +215,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # and more of a stochastic approach: we need statistics and large N
 
     bs_tilt = [0, 0, 0, -45, 45] * 6
-    aw_tilt = [0, -45, 45, 0, 0] * 6
+    ad_tilt = [0, -45, 45, 0, 0] * 6
     eye = ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5 + ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5
     dist_diff = [-2] * 15 + [2] * 15
 
-    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'aw_tilt': aw_tilt, 'eye': eye, 'dist_diff': dist_diff})
+    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'dist_diff': dist_diff})
 
     cond_idx = list(range(len(conditions)))
     blocks = []
@@ -227,7 +227,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         block_def = {}
         block_def['block_no'] = block_no
         block_def['trials'] = random.shuffle(cond_idx.copy())
-        block_def['instructions'] = 'press space to start block ' + str(block_no+1) + ' out of 5'
+        block_def['instructions'] = 'press space to calibrate\n\nand start block ' + str(block_no+1) + ' / 5'
         blocks.append(block_def)    
 
     block_idx = 0
@@ -259,26 +259,10 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     
     event.clearEvents(eventType='keyboard') # just to be sure?
 
-    # show instruction to start with eye-tracker calibration
-    visual.TextStim(win,
-        'Press space to calibrate the eye-tracker.', 
-        height = 1, 
-        wrapWidth=15,
-        color = 'black').draw()
-    win.flip()
-    k = ['wait']
-    while k[0] not in ['space']:
-        k = event.waitKeys()
-
-    event.clearEvents(eventType='keyboard') # just to be sure?
-
-    # calibration
-    tracker.openfile()
-    tracker.startcollecting()
-    tracker.calibrate()
     
-    fixation.draw()
-    win.flip()
+    
+    # fixation.draw()
+    # win.flip()
 
 
     not_done = True
@@ -289,14 +273,52 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         cond_idx = blocks[block_idx][trial_idx]
 
         bs_tilt = conditions['bs_tilt'][cond_idx]
-        aw_tilt = conditions['aw_tilt'][cond_idx]
+        ad_tilt = conditions['ad_tilt'][cond_idx]
         eye = conditions['eye'][cond_idx]
         dist_diff = conditions['dist_diff'][cond_idx]
 
+        point_1.pos = []
 
-        # if trial_idx = 0:
-        # - show instructions
-        # - do calibration
+        if trial_idx == 0:
+            # show instruction to start with eye-tracker calibration
+            visual.TextStim(win,
+                blocks[block_idx]['instructions'], 
+                height = 1, 
+                wrapWidth=15,
+                color = 'black').draw()
+            win.flip()
+            k = ['wait']
+            while k[0] not in ['space']:
+                k = event.waitKeys()
+
+            event.clearEvents(eventType='keyboard') # just to be sure?
+
+            # calibration
+            tracker.openfile()
+            tracker.startcollecting()
+            tracker.calibrate()
+
+        waiting_for_response = True
+
+        hiFusion.resetProperties()
+        loFusion.resetProperties()
+
+        while waiting_for_response:
+            
+        # show fixation
+        # show fusion stimuli
+        hiFusion.draw()
+        loFusion.draw()
+
+        # check fixation
+        # if fixating:
+        # - show stimuli
+        # - use mouse to adjust the distance of the adjustable pair
+        # - check for response (e.g. spacebar press)
+
+        # else:
+        # - show fixation_x
+        # either way, check keyboard for recalibration key (or quitting key))
 
 
 
