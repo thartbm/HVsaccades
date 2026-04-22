@@ -262,7 +262,7 @@ def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,0]):
         expInfo['ID'] = ''
         askQuestions = True
     if task == None:
-        expInfo['task'] = ['distHorizontal', 'distBinocular', 'distScaled', 'distCentred', 'distRotated','distUpturned','distUpshifted','distAsynchronous','distScaledAsynchronous','distScaledAsynchronousOFS','distUpScaledAsynchronous','distAsynchronousNAM', 'distBinocHorizontal']
+        expInfo['task'] = ['perception', 'saccades']
         askQuestions = True
     # if hemifield == None:
     #     expInfo['hemifield'] = ['left','right']
@@ -278,7 +278,7 @@ def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,0]):
     #     hemifield = expInfo['hemifield']
 
     ## path
-    data_path = "../data/%s/mapping/"%(task)
+    data_path = "data/%s/mapping/"%(task)
     os.makedirs(data_path, exist_ok=True)
 
     step = .25
