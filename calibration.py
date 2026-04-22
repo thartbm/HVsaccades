@@ -35,7 +35,7 @@ def doColorCalibration(ID=None, task=None, location=None):
         expInfo['ID'] = ''
         askQuestions = True
     if task == None:
-        expInfo['task'] = ['distHorizontal', 'distBinocular', 'distScaled', 'distCentred', 'distRotated','distUpturned','distUpshifted','distAsynchronous','distScaledAsynchronous','distScaledAsynchronousOFS','distUpScaledAsynchronous','distAsynchronousNAM', 'distBinocHorizontal']
+        expInfo['task'] = ['perception', 'saccades']
         askQuestions = True
     # if location == None:
     #     expInfo['location'] = ['glasgow', 'toronto']
@@ -52,7 +52,7 @@ def doColorCalibration(ID=None, task=None, location=None):
     #     location = expInfo[]
 
     ## path
-    data_path = "../data/%s/color/"%(task)
+    data_path = "data/%s/color/"%(task)
     os.makedirs(data_path, exist_ok=True)
 
     filename = ID.lower() + '_col_cal_'
