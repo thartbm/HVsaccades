@@ -1705,11 +1705,11 @@ def getColors(colors={}, task=None, ID=None):
         return(colors)
 
     ## colour (eye) parameters
-    all_files = glob('../data/' + task + '/color/' + ID + '_col_cal*.txt')
+    all_files = glob('data/' + task + '/color/' + ID + '_col_cal*.txt')
     if len(all_files) == 0:
         # no color calibration done, skip
         print('NO color calibration founc:')
-        print('../data/' + task + '/color/' + ID + '_col_cal*.txt')
+        print('data/' + task + '/color/' + ID + '_col_cal*.txt')
         return(colors)
 
     # find the largest color calibration file index:
@@ -1750,7 +1750,7 @@ def makeBlindSpotMarkers(win, task, ID, colors):
     hemifields = []
 
     ## read blindspot parameters... if any...
-    left_files = glob(os.path.join('..', 'data', task, 'mapping', ID + '_LH_blindspot*.txt' ) )
+    left_files = glob(os.path.join('data', task, 'mapping', ID + '_LH_blindspot*.txt' ) )
     if len(left_files):
         idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in left_files])
         bs_file = open(left_files[idx], 'r')
@@ -1761,7 +1761,7 @@ def makeBlindSpotMarkers(win, task, ID, colors):
         spot_left_size = eval(bs_param[3])
         hemifields.append('left')
 
-    right_files = glob(os.path.join('..', 'data', task, 'mapping', ID + '_RH_blindspot*.txt' ) )
+    right_files = glob(os.path.join('data', task, 'mapping', ID + '_RH_blindspot*.txt' ) )
     if len(right_files):
         idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in right_files])
         bs_file = open(right_files[idx],'r')
