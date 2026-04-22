@@ -193,7 +193,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     alpha = np.arcsin(((test_dist+margin)/2)/bs_dist) * 2 * 180/np.pi
     
     # in the right hemifield, we add the alpha, on the left, we subtract it
-    ad_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist, unit='deg')
+    ad_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist, units='deg')
 
     # conditions we want to test:
 
@@ -290,7 +290,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         dist_diff = conditions['dist_diff'][cond_idx]
 
         # bs points are non-adjustable and points 1 & 2:
-        temp_pos = pol2cart(bs_tilt, test_dist/2, unit='deg')
+        temp_pos = pol2cart(bs_tilt, test_dist/2, units='deg')
         point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
         point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
@@ -344,7 +344,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
                 # adjustable points are points 3 & 4:
                 distance = mouse.getPos()[1]/mouse_factor
-                temp_pos = pol2cart(ad_tilt, distance, unit='deg')
+                temp_pos = pol2cart(ad_tilt, distance, units='deg')
                 point_3.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
                 point_4.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
 
