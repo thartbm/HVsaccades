@@ -76,7 +76,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     trackEyes = [True, True]
 
-    main_path = 'data/perception_v2/'
+    main_path = 'data/perception/'
     data_path = main_path
     eyetracking_path = main_path + 'eyetracking/' + ID + '/'
 
@@ -101,7 +101,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         x += 1
 
     # get everything shared from central:
-    setup = localizeSetup(location=location, trackEyes=trackEyes, filefolder=eyetracking_path, filename=et_filename+str(x), task='distance', ID=ID) # data path is for the mapping data, not the eye-tracker data!
+    setup = localizeSetup(location=location, trackEyes=trackEyes, filefolder=eyetracking_path, filename=et_filename+str(x), task='perception', ID=ID) # data path is for the mapping data, not the eye-tracker data!
 
     # unpack all this
     win = setup['win']
@@ -111,6 +111,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     win.winHandle.push_handlers(pyg_keyboard)
 
     colors = setup['colors']
+    print(colors)
     col_both = colors['both']
     if hemifield == 'left':
         col_ipsi, col_contra = colors['left'], colors['right']
