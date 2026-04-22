@@ -281,7 +281,7 @@ def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,0]):
     data_path = "data/%s/mapping/"%(task)
     os.makedirs(data_path, exist_ok=True)
 
-    step = .25
+    step = .01
 
     # # col_file = open(glob(main_path + 'mapping_data/' + ID + '_col_cal*.txt')[-1],'r')
     # col_file = open(glob('../data/' + task + '/color/' + ID + '_col_cal*.txt')[-1],'r')
