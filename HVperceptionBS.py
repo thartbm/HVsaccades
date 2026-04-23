@@ -181,7 +181,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # dist_left  = 2 + lax_left  + 2
     # dist_right = 2 + lax_right + 2
 
-    test_dist = 2 + lax + 2
+    test_dist = 3 + lax + 3
 
     bs_dist = sum(np.array(bs_pos)**2)**0.5
     
@@ -374,9 +374,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             # - show stimuli
             # - use mouse to adjust the distance of the adjustable pair
             # - check for response (e.g. spacebar press)
-            fixation.draw()
+            
             if tracker.gazeInFixationWindow(fixloc=fixation.pos):
-                
+                fixation.draw()    
                 if draw_pair_1:
                     point_1.draw()
                     point_2.draw()
