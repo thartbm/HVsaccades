@@ -290,7 +290,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     
     event.clearEvents(eventType='keyboard') # just to be sure?
 
-    
+    tracker.openfile()
+    tracker.startcollecting()
     
     # fixation.draw()
     # win.flip()
@@ -348,8 +349,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             event.clearEvents(eventType='keyboard') # just to be sure?
 
             # calibration
-            tracker.openfile()
-            tracker.startcollecting()
+            # tracker.openfile()
+            # tracker.startcollecting()
             tracker.calibrate()
 
         waiting_for_response = True
@@ -412,9 +413,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             k = event.getKeys(['r', 'space']) # shouldn't this be space? like after the stimulus? this is confusing...
             if k and 'r' in k:
                 # recalibrate
-                tracker.stopcollecting()
+                # tracker.stopcollecting()
                 tracker.calibrate()
-                tracker.startcollecting()
+                # tracker.startcollecting()
             if k and 'space' in k:
                 # response given, move on to next trial
                 rt = time.time() - start_time
