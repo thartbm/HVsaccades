@@ -190,21 +190,21 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # now we want an isosecles triangle with the two legs equal to test_dist, and the base equal to lax
     # an isosecles triangle can be split into two congruent right triangles, where the hypotenuse is test_dist, and one leg is lax/2
     # we want the angle between the hypothenuse and the side of unknown length
-    print(test_dist)
-    print(margin)
-    print(bs_dist)
+    # print(test_dist)
+    # print(margin)
+    # print(bs_dist)
     alpha = np.arcsin(((test_dist+margin)/2)/bs_dist) * 2 * 180/np.pi
     
     # in the right hemifield, we add the alpha, on the left, we subtract it
-    print(pos_polar[0])
-    print(alpha)
-    print(mult_fact)
-    print(alpha * mult_fact)
-    print(bs_dist)
+    # print(pos_polar[0])
+    # print(alpha)
+    # print(mult_fact)
+    # print(alpha * mult_fact)
+    # print(bs_dist)
 
     ad_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist, units='deg')
 
-    print(ad_pos)
+    # print(ad_pos)
 
     # conditions we want to test:
 
@@ -293,10 +293,10 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     while not_done:
 
-        print(block_idx)
-        print(trial_idx)
-        print(blocks)
-        print(blocks[block_idx])
+        # print(block_idx)
+        # print(trial_idx)
+        # print(blocks)
+        # print(blocks[block_idx])
 
         # properties of the current trial:
         cond_idx = blocks[block_idx]['trials'][trial_idx]
@@ -361,13 +361,13 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
                 # adjustable points are points 3 & 4:
                 distance = mouse.getPos()[1]/mouse_factor
-                print(distance) # one number
+                # print(distance) # one number
                 temp_pos = pol2cart(ad_tilt, distance, units='deg')
-                print(ad_pos) # tuple of arrays?
-                print(temp_pos) # tuple of numbers
+                # print(ad_pos) # tuple of arrays?
+                # print(temp_pos) # tuple of numbers
                 p3p = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
                 p4p = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
-                print(p3p, p4p)
+                # print(p3p, p4p)
                 point_3.pos = p3p
                 point_4.pos = p4p
 
@@ -406,7 +406,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         data['rt'].append(rt)
         data['final_dist'].append(distance*2) 
 
-        data.to_csv(csv_filename, index=False)
+        pd.DataFrame(data).to_csv(csv_filename, index=False)
 
         # end of trial: increase trial & block indices
         trial_idx = trial_idx + 1
