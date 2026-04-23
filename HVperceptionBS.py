@@ -351,8 +351,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                 # adjustable points are points 3 & 4:
                 distance = mouse.getPos()[1]/mouse_factor
                 temp_pos = pol2cart(ad_tilt, distance, units='deg')
-                point_3.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
-                point_4.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
+                p3p = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
+                p4p = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
+                print(p3p, p4p)
+                point_3.pos = p3p
+                point_4.pos = p4p
 
                 point_3.draw()
                 point_4.draw()
