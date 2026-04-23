@@ -20,7 +20,7 @@ from psychopy import visual, gui, event
 from psychopy.tools.coordinatetools import pol2cart
 # from psychopy.tools.coordinatetools import cart2pol
 import numpy as np
-import random, os, time
+import random, os, time, copy
 # import datetime
 from glob import glob
 # from itertools import compress
@@ -236,7 +236,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     for block_no in range(5):
         block_def = {}
         block_def['block_no'] = block_no
-        block_def['trials'] = random.shuffle(cond_idx.copy())
+        random.shuffle(cond_idx)
+        block_def['trials'] = copy.deepcopy(cond_idx)
         block_def['instructions'] = 'press space to calibrate\n\nand start block ' + str(block_no+1) + ' / 5'
         blocks.append(block_def)    
 
