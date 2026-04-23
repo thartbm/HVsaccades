@@ -134,10 +134,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     hiFusion = setup['fusion']['hi']
     loFusion = setup['fusion']['lo']
 
+    loFusion.pos = [0, -10]
     if hemifield == 'left':
-        hiFusion.pos = [15, 0]
+        hiFusion.pos = [10, 0]
     if hemifield == 'right':
-        hiFusion.pos = [-15, 0]
+        hiFusion.pos = [-10, 0]
 
     blindspot = setup['blindspotmarkers'][hemifield]
     # print(blindspot.fillColor)
