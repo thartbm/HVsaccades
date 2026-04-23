@@ -282,8 +282,13 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     while not_done:
 
+        print(block_idx)
+        print(trial_idx)
+        print(blocks)
+        print(blocks[block_idx])
+
         # properties of the current trial:
-        cond_idx = blocks[block_idx][trial_idx]
+        cond_idx = blocks[block_idx]['trials'][trial_idx]
 
         bs_tilt = conditions['bs_tilt'][cond_idx]
         ad_tilt = conditions['ad_tilt'][cond_idx]
