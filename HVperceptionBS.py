@@ -183,7 +183,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     test_dist = 2 + lax + 2
 
-    bs_dist = (np.array(bs_pos)**2)**0.5
+    bs_dist = sum(np.array(bs_pos)**2)**0.5
     
     margin = 2
 
