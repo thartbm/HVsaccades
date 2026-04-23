@@ -105,7 +105,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # unpack all this
     win = setup['win']
-
+    win.viewPos = [0,-6] # should also be applied to the blind spot mapping procedure!
 
     pyg_keyboard = key.KeyStateHandler()
     win.winHandle.push_handlers(pyg_keyboard)
