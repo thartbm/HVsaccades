@@ -193,7 +193,15 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     alpha = np.arcsin(((test_dist+margin)/2)/bs_dist) * 2 * 180/np.pi
     
     # in the right hemifield, we add the alpha, on the left, we subtract it
+    print(pos_polar[0])
+    print(alpha)
+    print(mult_fact)
+    print(alpha * mult_fact)
+    print(bs_dist)
+
     ad_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist, units='deg')
+
+    print(ad_pos)
 
     # conditions we want to test:
 
@@ -350,10 +358,10 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
                 # adjustable points are points 3 & 4:
                 distance = mouse.getPos()[1]/mouse_factor
-                print(distance)
+                print(distance) # one number
                 temp_pos = pol2cart(ad_tilt, distance, units='deg')
-                print(ad_pos)
-                print(temp_pos)
+                print(ad_pos) # tuple of arrays?
+                print(temp_pos) # tuple of numbers
                 p3p = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
                 p4p = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
                 print(p3p, p4p)
