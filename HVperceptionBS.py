@@ -244,7 +244,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     cond_idx = list(range(len(conditions)))
     blocks = []
-    for block_no in range(5):
+    for block_no in range(3):
         block_def = {}
         block_def['block_no'] = block_no
         random.shuffle(cond_idx)
@@ -422,12 +422,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         # end of trial: increase trial & block indices
         trial_idx = trial_idx + 1
 
-        if trial_idx >= len(block_def[block_idx]):
+        if trial_idx >= len(blocks[block_idx]['trials']):
             # done all trials in the block... next block:
             block_idx = block_idx + 1
             trial_idx = 0
 
-        if block_idx >= len(block_def):
+        if block_idx >= len(blocks):
             # done all the blocks... end task:
             not_done = False
 
