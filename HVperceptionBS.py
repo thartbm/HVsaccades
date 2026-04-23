@@ -190,6 +190,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # now we want an isosecles triangle with the two legs equal to test_dist, and the base equal to lax
     # an isosecles triangle can be split into two congruent right triangles, where the hypotenuse is test_dist, and one leg is lax/2
     # we want the angle between the hypothenuse and the side of unknown length
+    print(test_dist)
+    print(margin)
+    print(bs_dist)
     alpha = np.arcsin(((test_dist+margin)/2)/bs_dist) * 2 * 180/np.pi
     
     # in the right hemifield, we add the alpha, on the left, we subtract it
