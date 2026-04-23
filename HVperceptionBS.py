@@ -258,15 +258,17 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # collect data in a dictionary:
 
-    data = { 'blockno':    [],
-             'trialno':    [],
-             'bs_tilt':    [],
-             'aw_tilt':    [],
-             'eye'    :    [],
-             'bs_dist':    [],
-             'start_diff': [],
-             'rt':         [],
-             'final_dist': []}
+    data = { 'participant': [],
+             'hemifield':   [],
+             'blockno':     [],
+             'trialno':     [],
+             'bs_tilt':     [],
+             'aw_tilt':     [],
+             'eye'    :     [],
+             'bs_dist':     [],
+             'start_diff':  [],
+             'rt':          [],
+             'final_dist':  []}
 
 
     # show first instructions
@@ -359,16 +361,25 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             hiFusion.draw()
             loFusion.draw()
 
+            t = time.time() % 1
+            draw_pair_1 = True
+            draw_pair_2 = True
+            if 0 < t < 0.1:
+                draw_pair_1 = False
+            if 0.5 < t < 0.6:
+                draw_pair_2 = False
 
             # check fixation
             # if fixating:
             # - show stimuli
             # - use mouse to adjust the distance of the adjustable pair
             # - check for response (e.g. spacebar press)
+            fixation.draw()
             if tracker.gazeInFixationWindow(fixloc=fixation.pos):
-                fixation.draw()
-                point_1.draw()
-                point_2.draw()
+                
+                if draw_pair_1:
+                    point_1.draw()
+                    point_2.draw()
 
                 # adjustable points are points 3 & 4:
                 distance = mouse.getPos()[1]/mouse_factor
@@ -382,8 +393,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                 point_3.pos = p3p
                 point_4.pos = p4p
 
-                point_3.draw()
-                point_4.draw()
+                if draw_pair_2:
+                    point_3.draw()
+                    point_4.draw()
             else:
                 mouse.setPos([0, distance*mouse_factor]) # keep mouse at a reasonable position if not fixating
                 fixation_x.draw()
@@ -407,6 +419,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         # 
         # store the data frame as a csv:
         # data.to_csv()
+        data['participant'].append(ID)
+        data['hemifield'].append(hemifield)
         data['blockno'].append(block_idx+1)
         data['trialno'].append(trial_idx+1)
         data['bs_tilt'].append(bs_tilt)

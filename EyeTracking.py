@@ -1708,7 +1708,7 @@ def getColors(colors={}, task=None, ID=None):
     all_files = glob('data/' + task + '/color/' + ID + '_col_cal*.txt')
     if len(all_files) == 0:
         # no color calibration done, skip
-        print('NO color calibration founc:')
+        print('NO color calibration found:')
         print('data/' + task + '/color/' + ID + '_col_cal*.txt')
         return(colors)
 
