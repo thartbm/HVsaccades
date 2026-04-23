@@ -306,6 +306,17 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         eye = conditions['eye'][cond_idx]
         dist_diff = conditions['dist_diff'][cond_idx]
 
+        if eye == 'both':
+            point_color = col_both
+        elif eye == 'ipsi':
+            point_color = col_ipsi
+        elif eye == 'contra':
+            point_color = col_contra
+        point_1.fillColor = point_color
+        point_2.fillColor = point_color
+        point_3.fillColor = point_color
+        point_4.fillColor = point_color
+
         # bs points are non-adjustable and points 1 & 2:
         temp_pos = pol2cart(bs_tilt, test_dist/2, units='deg')
         point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
