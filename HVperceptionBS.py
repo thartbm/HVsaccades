@@ -105,7 +105,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # unpack all this
     win = setup['win']
-    win.viewPos = [0,-6] # should also be applied to the blind spot mapping procedure!
+    win.viewPos = [0,-4] # should also be applied to the blind spot mapping procedure!
 
     pyg_keyboard = key.KeyStateHandler()
     win.winHandle.push_handlers(pyg_keyboard)
@@ -173,15 +173,15 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # # ang_up_right = right_prop['ang_up'] # angle for distance task away from BS locations
     # # tar_right    = right_prop['tar']  # target distance for distance task
 
-    pos_polar = prop['spot']
-    bs_pos = prop['cart']
-    size = prop['size']
+    bs_pos_pol = prop['spot']
+    bs_pos_cart = prop['cart']
+    bs_size = prop['size']
 
     # # longest axis of the blind spot marker:
     # lax_left  = np.max(size_left)
     # lax_right = np.max(size_right)
 
-    lax = np.max(size)
+    lax = np.max(bs_size)
 
     # # margin of 2 dva on either side
     # dist_left  = 2 + lax_left  + 2
@@ -189,7 +189,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     test_dist = 3 + lax + 3
 
-    bs_dist = sum(np.array(bs_pos)**2)**0.5
+    bs_dist = sum(np.array(bs_pos_cart)**2)**0.5
+
+    angle_var = abs(np.arctan((bs_size[1]/5)/bs_pos_cart[0])/np.pi*180)
     
     margin = 2
 
@@ -208,7 +210,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # print(alpha * mult_fact)
     # print(bs_dist)
 
-    ad_pos = pol2cart(pos_polar[0] + (alpha * mult_fact), bs_dist, units='deg')
+    ad_pos_pol = [bs_pos_pol[0] + (alpha * mult_fact), bs_dist]
+    ad_pos_cart = pol2cart(bs_pos_pol[0] + (alpha * mult_fact), bs_dist, units='deg')
 
     # print(ad_pos)
 
@@ -315,6 +318,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         eye = conditions['eye'][cond_idx]
         dist_diff = conditions['dist_diff'][cond_idx]
 
+        jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
+
+        bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
+        ad_pos = pol2cart(ad_pos_pol[0] + jitter, ad_pos_pol[1], units='deg')
+
         if eye == 'both':
             point_color = col_both
         elif eye == 'ipsi':
@@ -367,6 +375,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             # show fusion stimuli
             hiFusion.draw()
             loFusion.draw()
+            blindspot.draw()
 
             t = time.time() % 1
             draw_pair_1 = True
