@@ -253,12 +253,13 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     cond_idx = list(range(len(conditions)))
     blocks = []
-    for block_no in range(3):
+    n_blocks = 3
+    for block_no in range(n_blocks):
         block_def = {}
         block_def['block_no'] = block_no
         random.shuffle(cond_idx)
         block_def['trials'] = copy.deepcopy(cond_idx)
-        block_def['instructions'] = 'press space to calibrate\n\nand start block ' + str(block_no+1) + ' / 5'
+        block_def['instructions'] = 'press space to calibrate\n\nand start block ' + str(block_no+1) + ' / ' + str(n_blocks)
         blocks.append(block_def)    
 
     block_idx = 0
