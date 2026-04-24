@@ -1772,7 +1772,7 @@ def makeBlindSpotMarkers(win, task, ID, colors):
         spot_righ_size = eval(bs_param[3])
         hemifields.append('right')
 
-    print(hemifields)
+    # print(hemifields)
 
     blindspotmarkers = {}
     
