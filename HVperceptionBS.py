@@ -268,17 +268,18 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # collect data in a dictionary:
 
-    data = { 'participant': [],
-             'hemifield':   [],
-             'blockno':     [],
-             'trialno':     [],
-             'bs_tilt':     [],
-             'aw_tilt':     [],
-             'eye'    :     [],
-             'bs_dist':     [],
-             'start_diff':  [],
-             'rt':          [],
-             'final_dist':  []}
+    data = { 'participant':  [],
+             'hemifield':    [],
+             'blockno':      [],
+             'trialno':      [],
+             'jitter':       [],
+             'bs_tilt':      [],
+             'aw_tilt':      [],
+             'eye'    :      [],
+             'bs_dist':      [],
+             'start_diff':   [],
+             'rt':           [],
+             'final_dist':   []}
 
 
     # show first instructions
@@ -440,6 +441,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         data['hemifield'].append(hemifield)
         data['blockno'].append(block_idx+1)
         data['trialno'].append(trial_idx+1)
+        data['jitter'].append(jitter)
         data['bs_tilt'].append(bs_tilt)
         data['aw_tilt'].append(ad_tilt)
         data['eye'].append(eye)
