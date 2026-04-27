@@ -105,7 +105,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # unpack all this
     win = setup['win']
-    win.viewPos = [0,-4] # should also be applied to the blind spot mapping procedure!
+    win.viewPos = [0,-5] # should also be applied to the blind spot mapping procedure!
 
     pyg_keyboard = key.KeyStateHandler()
     win.winHandle.push_handlers(pyg_keyboard)
@@ -384,8 +384,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         # adds a little time in between trials:
         # probably looking somewhere else as well
-        fixation.pos = random.sample([-4,-3,-2,2,3,4], 2)
-        while time.time() - start_time < 0.333:
+        fixation.pos = random.sample([-8,-6,-4,4,6,8],1) + random.sample([-8,-6,-4,4,6,8],1)
+        while time.time() - start_time < 0.667:
             fixation.draw()
             win.flip()
         
