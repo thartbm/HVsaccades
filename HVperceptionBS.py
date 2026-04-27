@@ -244,10 +244,17 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # but we could also do 8 or 6... that would make for a shorter task
     # and more of a stochastic approach: we need statistics and large N
 
-    bs_tilt = [0, 0, 0, -45, 45] * 6
-    ad_tilt = [0, -45, 45, 0, 0] * 6
-    eye = ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5 + ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5
-    dist_diff = [-2] * 15 + [2] * 15
+    # bs_tilt = [0, 0, 0, -45, 45] * 6
+    # ad_tilt = [0, -45, 45, 0, 0] * 6
+    # eye = ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5 + ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5
+    # dist_diff = [-2] * 15 + [2] * 15
+
+    # conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'dist_diff': dist_diff})
+
+    bs_tilt = [0, 90, 0] * 6
+    ad_tilt = [90, 0, 0] * 6
+    eye = ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3 + ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3
+    dist_diff = [-2] * 9 + [2] * 9
 
     conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'dist_diff': dist_diff})
 
