@@ -308,7 +308,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # fixation.draw()
     # win.flip()
 
-    mouse_factor = 2.5
+    mouse_factor = 2
 
     not_done = True
 
@@ -351,6 +351,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         distance = (test_dist+dist_diff)/2
         mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
         
+
+
+
         if trial_idx == 0:
             # show instruction to start with eye-tracker calibration
             visual.TextStim(win,
@@ -376,7 +379,20 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         loFusion.resetProperties()
 
 
+
         start_time = time.time()
+
+        # adds a little time in between trials:
+        # probably looking somewhere else as well
+        fixation.pos = random.sample([-4,-3,-2,2,3,4], 2)
+        while time.time() - start_time < 0.333:
+            fixation.draw()
+            win.flip()
+        
+        fixation.pos = [0,0]
+
+        tracker.waitForFixation()
+
 
         while waiting_for_response:
             
@@ -389,9 +405,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             t = time.time() % 1
             draw_pair_1 = True
             draw_pair_2 = True
-            if 0 < t < 0.1:
+            if 0 < t < 0.2:
                 draw_pair_1 = False
-            if 0.5 < t < 0.6:
+            if 0.5 < t < 0.7:
                 draw_pair_2 = False
 
             # check fixation
