@@ -253,7 +253,7 @@ def doColorCalibration(ID=None, task=None, location=None):
 
 
 
-def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,0]):
+def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,-5]):
     
     askQuestions = False
     expInfo = {}
