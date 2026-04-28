@@ -1309,7 +1309,7 @@ class EyeTracker:
                  'right':['right'],
                  'average':['average']}[self.samplemode] )
 
-    def waitForFixation(self, minFixDur=None, fixTimeout=None, fixationStimuli=None):
+    def waitForFixation(self, minFixDur=None, fixTimeout=None, fixationStimuli=None, fixloc=None):
 
         if minFixDur == None:
             minFixDur = self.minFixDur
@@ -1325,6 +1325,9 @@ class EyeTracker:
         else:
             if not isinstance(fixationStimuli, list):
                 fixationStimuli = [fixationStimuli]
+
+        if fixloc == None:
+            fixloc = [0,0]
         
 
         # most the initially set values should be used, but we do 1 sanity check here:
@@ -1346,7 +1349,7 @@ class EyeTracker:
 
             now = time.time()
 
-            fixated = self.gazeInFixationWindow()
+            fixated = self.gazeInFixationWindow(fixloc=fixloc)
 
             if fixated:
                 if fixationStart == None:

@@ -191,7 +191,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     bs_dist = sum(np.array(bs_pos_cart)**2)**0.5
 
-    angle_var = abs(np.arctan((bs_size[1]/5)/bs_pos_cart[0])/np.pi*180)
+    angle_var = abs(np.arctan((bs_size[1]/3)/bs_pos_cart[0])/np.pi*180)
     
     margin = 2
 
@@ -385,9 +385,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         # adds a little time in between trials:
         # probably looking somewhere else as well
         fixation.pos = random.sample([-8,-6,-4,4,6,8],1) + random.sample([-8,-6,-4,4,6,8],1)
-        while time.time() - start_time < 0.667:
+        waiting_for_fixation = True
+        while waiting_for_fixation:
             fixation.draw()
             win.flip()
+            if tracker.gazeInFixationWindow(fixloc=fixation.pos):
+                waiting_for_fixation = False
         
         fixation.pos = [0,0]
 
