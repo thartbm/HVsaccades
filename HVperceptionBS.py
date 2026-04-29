@@ -428,7 +428,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                 # adjustable points are points 3 & 4:
                 distance = mouse.getPos()[1]/mouse_factor
                 # print(distance) # one number
-                temp_pos = pol2cart(ad_tilt+jitter, distance, units='deg')
+                temp_pos = pol2cart(ad_tilt, distance, units='deg')
                 # print(ad_pos) # tuple of arrays?
                 # print(temp_pos) # tuple of numbers
                 p3p = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
