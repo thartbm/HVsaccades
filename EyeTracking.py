@@ -1316,18 +1316,18 @@ class EyeTracker:
         if fixTimeout == None:
             fixTimeout = self.fixTimeout
 
+        if fixloc == None:
+            fixloc = [0,0]
+
         if fixationStimuli == None:
             if hasattr(self, 'fixationStimuli'):
                 fixationStimuli = self.fixationStimuli
             else:
-                self.target.pos = [0,0]
+                self.target.pos = fixloc
                 fixationStimuli = [self.target]
         else:
             if not isinstance(fixationStimuli, list):
-                fixationStimuli = [fixationStimuli]
-
-        if fixloc == None:
-            fixloc = [0,0]
+                fixationStimuli = [fixationStimuli] # leave their positions?
         
 
         # most the initially set values should be used, but we do 1 sanity check here:
@@ -1646,27 +1646,27 @@ def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG',
                                    pos    = [0,-15],
                                    colors = fcols)}
 
-    if task in ['distRotated','distUpturned','distUpshifted']:
-        print('rotated fusion stims')
-        fusion = {'hi': fusionStim(win    = win,
-                                   rows    = 11,
-                                   columns = 2,
-                                   pos    = [0,15],
-                                   colors = fcols),
-                  'lo': fusionStim(win    = win,
-                                   rows    = 3,
-                                   columns = 2,
-                                   pos    = [0,-5],
-                                   colors = fcols)}
+    # if task in ['distRotated','distUpturned','distUpshifted']:
+    #     print('rotated fusion stims')
+    #     fusion = {'hi': fusionStim(win    = win,
+    #                                rows    = 11,
+    #                                columns = 2,
+    #                                pos    = [0,15],
+    #                                colors = fcols),
+    #               'lo': fusionStim(win    = win,
+    #                                rows    = 3,
+    #                                columns = 2,
+    #                                pos    = [0,-5],
+    #                                colors = fcols)}
 
-    if task in ['distHorizontal','distBinocular','distance', 'distScaled', 'distAsynchronous', 'distScaledAsynchronous', 'distScaledAsynchronousOFS', 'distUpScaledAsynchronous', 'distAsynchronousNAM', 'distBinocHorizontal']:
+    # if task in ['distHorizontal','distBinocular','distance', 'distScaled', 'distAsynchronous', 'distScaledAsynchronous', 'distScaledAsynchronousOFS', 'distUpScaledAsynchronous', 'distAsynchronousNAM', 'distBinocHorizontal']:
 
-        fusion = {'hi': fusionStim(win    = win,
-                                   pos    = [0,7],
-                                   colors = fcols),
-                  'lo': fusionStim(win    = win,
-                                   pos    = [0,-7],
-                                   colors = fcols)}
+    #     fusion = {'hi': fusionStim(win    = win,
+    #                                pos    = [0,7],
+    #                                colors = fcols),
+    #               'lo': fusionStim(win    = win,
+    #                                pos    = [0,-7],
+    #                                colors = fcols)}
 
 
 
@@ -1675,15 +1675,15 @@ def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG',
     # which returns an empty dictionary
     blindspotmarkers = makeBlindSpotMarkers(win=win, task=task, ID=ID, colors=colors)
 
-    paths = {} # worst case, we return an empty dictionary?
-    if not task == None:
-        paths['data']         = os.path.join('..', 'data', task )
-        paths['color']        = os.path.join('..', 'data', task, 'color' )
-        paths['mapping']      = os.path.join('..', 'data', task, 'mapping' )
-        paths['eyetracking']  = os.path.join('..', 'data', task, 'eyetracking', ID )
-        for p in paths.keys():
-            if not os.path.exists(paths[p]):
-                os.makedirs(paths[p], exist_ok = True)
+    # paths = {} # worst case, we return an empty dictionary?
+    # if not task == None:
+    #     paths['data']         = os.path.join('..', 'data', task )
+    #     paths['color']        = os.path.join('..', 'data', task, 'color' )
+    #     paths['mapping']      = os.path.join('..', 'data', task, 'mapping' )
+    #     paths['eyetracking']  = os.path.join('..', 'data', task, 'eyetracking', ID )
+    #     for p in paths.keys():
+    #         if not os.path.exists(paths[p]):
+    #             os.makedirs(paths[p], exist_ok = True)
 
     
 
