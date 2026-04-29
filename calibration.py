@@ -253,7 +253,7 @@ def doColorCalibration(ID=None, task=None, location=None):
 
 
 
-def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,-5]):
+def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,0]):
     
     askQuestions = False
     expInfo = {}
@@ -368,6 +368,12 @@ def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,-5]):
     cfg['hw']['tracker'].startcollecting()
 
     for hemifield in ['left', 'right']:
+
+        if task == 'saccades':
+            if hemifield == 'left':
+                cfg['hw']['win'].viewPos = [ 10,-5]
+            if hemifield == 'right':
+                cfg['hw']['win'].viewPos = [-10,-5]
 
         abort = False
 
