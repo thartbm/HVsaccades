@@ -105,7 +105,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # unpack all this
     win = setup['win']
-    win.viewPos = [0,-5] # should also be applied to the blind spot mapping procedure!
+    # win.viewPos = [0,-5] # should also be applied to the blind spot mapping procedure!
 
     pyg_keyboard = key.KeyStateHandler()
     win.winHandle.push_handlers(pyg_keyboard)
@@ -114,15 +114,38 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     print(colors)
     col_both = colors['both']
     if hemifield == 'left':
+        win.viewPos = [10,-7.5]
         col_ipsi, col_contra = colors['left'], colors['right']
     if hemifield == 'right':
+        win.viewPos = [-10,-7.5]
         col_contra, col_ipsi = colors['left'], colors['right']
 
     # stimuli
-    point_1 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
-    point_2 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    # point_1 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    # point_2 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
     point_3 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
     point_4 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+
+    point_1 = visual.ShapeStim( win=win,
+                                units='deg',
+                                colorSpace='rgb',
+                                lineColor=None,
+                                fillColor=col_both,
+                                vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
+                                pos = [0,0],
+                                ori = 0
+                                )
+
+    point_2 = visual.ShapeStim( win=win,
+                                units='deg',
+                                colorSpace='rgb',
+                                lineColor=None,
+                                fillColor=col_both,
+                                vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
+                                pos = [0,0],
+                                ori = 45
+                                )
+
 
     # if hemifield == 'left':
     #     col_ipsi, col_contra = colors['right'], colors['left']
@@ -134,7 +157,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     hiFusion = setup['fusion']['hi']
     loFusion = setup['fusion']['lo']
 
-    loFusion.pos = [0, -10]
+    loFusion.pos = [0, -5]
     if hemifield == 'left':
         hiFusion.pos = [10, 0]
     if hemifield == 'right':
@@ -250,7 +273,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     bs_tilt = [0, 90, 0] * 6
     ad_tilt = [90, 0, 0] * 6
     eye = ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3 + ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3
-    tpair = ['bs'] * 9 + ['ad'] * 9
+    tpair = ['bs'] * 9 + ['ad'] * 9 # target pair
 
     conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'tpair': tpair})
 
