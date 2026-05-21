@@ -189,11 +189,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     if hemifield == 'left':
         prop  = setup['blindspotmarkers']['left_prop']
         mult_fact = -1
-        win.viewPos = [10,-5]
+        win.viewPos = [10, -8]
     if hemifield == 'right':
         prop = setup['blindspotmarkers']['right_prop']
         mult_fact = 1
-        win.viewPos = [-10,-5]
+        win.viewPos = [-10,-8]
 
     # # spot_left    = left_prop['spot'] # polar coords?
     # spot_left    = left_prop['cart']
