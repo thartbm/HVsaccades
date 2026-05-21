@@ -1695,7 +1695,8 @@ def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG',
              'fixation'         : fixation,
              'fixation_x'       : fixation_x,
              'blindspotmarkers' : blindspotmarkers,
-             'paths'            : paths } )
+            #  'paths'            : paths
+              } )
 
 def getColors(colors={}, task=None, ID=None):
 
