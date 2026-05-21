@@ -39,7 +39,7 @@ from EyeTracking import localizeSetup
 #### Initialize experiment
 ######
 
-def doHVperceptionTask(ID=None, hemifield=None, location=None):
+def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
     ## files
     # expInfo = {'ID':'test', 'hemifield':['left','right']}
@@ -456,7 +456,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             point_3.draw()
             point_4.draw()
 
-            cfg['hw']['win'].flip()
+            win.flip()
 
 
 
@@ -483,10 +483,10 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
                 # r: recalibrate eye-tracker
             if k[0] in ['r']:
-                if cfg['eyetracking']:
-                    tracker.comment('calibration start')
-                    tracker.calibrate()
-                    tracker.comment('calibration done')
+                # if cfg['eyetracking']:
+                tracker.comment('calibration start')
+                tracker.calibrate()
+                tracker.comment('calibration done')
 
 
             event.clearEvents(eventType='keyboard') #
