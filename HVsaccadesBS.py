@@ -133,7 +133,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                                 fillColor=col_both,
                                 vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
                                 pos = [0,0],
-                                ori = 0
+                                ori = 0,
                                 )
 
     point_2 = visual.ShapeStim( win=win,
@@ -143,9 +143,18 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                                 fillColor=col_both,
                                 vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
                                 pos = [0,0],
-                                ori = 45
+                                ori = 45,
                                 )
 
+    diamond = visual.ShapeStim( win = win, 
+                                pos = [0,0],
+                                vertices=[[[0,.6],[.6,0],[0,-.6],[-.6,0],[0,.6]],[[0,.4],[.4,0],[0,-.4],[-.4,0],[0,.4]]], 
+                                lineWidth = 0, 
+                                units = 'deg', 
+                                size = (1, 1), # might be too small?
+                                closeShape = True, 
+                                lineColor = None,
+                                fillColor=[1,-1,1]) # close to col_both?
 
     # if hemifield == 'left':
     #     col_ipsi, col_contra = colors['right'], colors['left']
@@ -298,7 +307,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
              'hemifield':    [],
              'blockno':      [],
              'trialno':      [],
-             'jitter':       [],
+             'jitter':       [],   # ? there should NOT be jitter in the saccade version? (maybe only angular: middle to fixation, but not distances)
              'bs_tilt':      [],
              'aw_tilt':      [],
              'eye'    :      [],
@@ -309,7 +318,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # show first instructions
     visual.TextStim(win,
-        'In each trial first fixate on the plus, while all dots are being shown. Then first look at where the blue dot was, then the red dot, then back to the plus.\n\nBlink and press space to end each trial.\n\nPress space to continue.', 
+        'In each trial first fixate in the middle, while all targets are being shown. When they disappear first look at where the plus was, then the cross, then back to the plus.\n\nBlink and press space to end each trial.\n\nPress space to continue.', 
         height = 1, 
         wrapWidth=15,
         color = 'black').draw()
@@ -362,17 +371,20 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         point_4.fillColor = point_color
 
         # bs points are non-adjustable and points 1 & 2:
+        # mult_fact depends on hemifield (left: -1, right: 1)
         temp_pos = pol2cart(mult_fact * bs_tilt, test_dist/2, units='deg')
-        point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
-        point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
-
+        point_1.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
+        point_2.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
 
         temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
-        point_3.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
-        point_4.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
+        point_3.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
+        point_4.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
 
-        distance = (test_dist)/2
-        mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
+        if tpair == 'ad':
+            point_1.pos, point_2.pos, point_3.pos, point_4.pos = point_3.pos, point_4.pos, point_1.pos, point_2.pos
+
+        # distance = (test_dist)/2
+        # mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
 
 
 
@@ -406,7 +418,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         # adds a little time in between trials:
         # probably looking somewhere else as well
-        fixation.pos = random.sample([-8,-6,-4,4,6,8],1) + random.sample([-8,-6,-4,4,6,8],1)
+        fixation.pos = random.sample([-8,-6,-4,4,6,8],1) + random.sample([-6,-4,4,6,8,10],1)
         waiting_for_fixation = True
         while waiting_for_fixation:
             fixation.draw()
@@ -418,72 +430,211 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         tracker.waitForFixation()
 
+        # # # # # # # # # # # # # # # # # # # # #
+        #
+        #          REAL    TRIAL    HERE
 
-        while waiting_for_response:
-            
-            # show fixation
-            # show fusion stimuli
-            hiFusion.draw()
-            loFusion.draw()
-            blindspot.draw()
+        abort = False
+        stimulus_start = time.time()
 
-            t = time.time() % 1
-            draw_pair_1 = True
-            draw_pair_2 = True
-            if 0 < t < 0.2:
-                draw_pair_1 = False
-            if 0.5 < t < 0.7:
-                draw_pair_2 = False
+        tracker.comment('stimulus on')
+        while (time.time() - stimulus_start) < .75 and not abort:
 
-            # check fixation
-            # if fixating:
-            # - show stimuli
-            # - use mouse to adjust the distance of the adjustable pair
-            # - check for response (e.g. spacebar press)
-            
-            if tracker.gazeInFixationWindow(fixloc=fixation.pos):
-                fixation.draw()    
-                if draw_pair_1:
-                    point_1.draw()
-                    point_2.draw()
-
-                if draw_pair_2:
-                    point_3.draw()
-                    point_4.draw()
+            if tracker.gazeInFixationWindow():
+                pass
             else:
-                fixation_x.draw()
+                tracker.comment('fixation broken')
+                abort = True
             
+            fixation.draw()
+
+            if (time.time() - stimulus_start) > .25:
+                point_1.draw()
+            if (time.time() - stimulus_start) > .50:
+                point_2.draw()
+            # other pair is always there:
+            point_3.draw()
+            point_4.draw()
+
+            cfg['hw']['win'].flip()
+
+
+
+        if abort:
+            # handle abort
+            # tracker.comment('trial aborted')
+            diamond.draw()
             win.flip()
 
-            # either way, check keyboard for recalibration key (or quitting key)
-            k = event.getKeys(['r', 'space']) # shouldn't this be space? like after the stimulus? this is confusing...
-            if k and 'r' in k:
-                # recalibrate
-                # tracker.stopcollecting()
-                tracker.calibrate()
-                # tracker.startcollecting()
-            if k and 'space' in k:
-                # response given, move on to next trial
-                rt = time.time() - start_time
-                waiting_for_response = False
+            k = []
+            while not(k):
+                k = event.getKeys(['q','r','space']) # quit / abort during trial
+                diamond.draw()
+                win.flip()
+        
+
+            if k[0] in ['space']:
+                # nothing to do really?
+                pass
+
+                # q: quit experiment
+            if k[0] in ['q']:
+                print('quitting not implemented')
+
+                # r: recalibrate eye-tracker
+            if k[0] in ['r']:
+                if cfg['eyetracking']:
+                    tracker.comment('calibration start')
+                    tracker.calibrate()
+                    tracker.comment('calibration done')
+
+
+            event.clearEvents(eventType='keyboard') #
+
+            # redo the trial:
+            # cfg['blocks'][cfg['currentblock']]['trialtypes'] += [copy.deepcopy(trialtype)]
+            blocks[block_idx]['trials'] += [cond_idx]
+
+
+
+
+
+        # if cfg['eyetracking']:
+        tracker.comment('stimulus off')
+
+
+
+
+        EMstart = time.time()
+
+        leftFix = False
+        recording = True
+
+        while recording:
+
+
+            gazeCheck = tracker.gazeInFixationWindow() 
+
+            if gazeCheck:
+                if leftFix:
+                    # left fixation, and at fixation... check time:
+                    if (time.time() - leftFixTime) > 0.3:
+                        # back at fixation:
+                        recording = False
+                        # print('back at fixation')
+                    else:
+                        # at fixation and have left fixation less than 200 ms ago... can't have made 2 saccades: don't do anything
+                        pass
+                else:
+                    # at fixation and not left fixation... start of trial: don't do anything
+                    pass
+            else:
+                if leftFix:
+                    # left fixation, and not at fixation... still making saccades: don't do anything
+                    pass
+                else:
+                    # do not leave fixation, and not at fixation: mark fixation as left:
+                    # print('left fixation')
+                    leftFix = True
+                    leftFixTime = time.time()
+
+            fixation.draw()
+            win.flip()
+
+        # print('out of loop')
+
+
+        tracker.comment('gaze returned') # not a good comment...
+
+        fixation.ori=45
+
+        k = []
+        while not(k):
+            k = event.getKeys(['space']) # space for next trial trial
+            fixation.draw()
+            win.flip()
+        
+        fixation.ori=0
+
+        tracker.comment('space pressed')
+
+        waitStart = time.time()
+
+        while (time.time() - waitStart) < 0.5: # half a second of extra blink time?
+            win.flip()
+
+        tracker.comment('trial ended')
+
+
+
+
+
+        # while waiting_for_response:
+            
+        #     # show fixation
+        #     # show fusion stimuli
+        #     hiFusion.draw()
+        #     loFusion.draw()
+        #     blindspot.draw()
+
+        #     t = time.time() % 1
+        #     draw_pair_1 = True
+        #     draw_pair_2 = True
+        #     if 0 < t < 0.2:
+        #         draw_pair_1 = False
+        #     if 0.5 < t < 0.7:
+        #         draw_pair_2 = False
+
+        #     # check fixation
+        #     # if fixating:
+        #     # - show stimuli
+        #     # - use mouse to adjust the distance of the adjustable pair
+        #     # - check for response (e.g. spacebar press)
+            
+        #     if tracker.gazeInFixationWindow(fixloc=fixation.pos):
+        #         fixation.draw()    
+        #         if draw_pair_1:
+        #             point_1.draw()
+        #             point_2.draw()
+
+        #         if draw_pair_2:
+        #             point_3.draw()
+        #             point_4.draw()
+        #     else:
+        #         fixation_x.draw()
+            
+        #     win.flip()
+
+        #     # either way, check keyboard for recalibration key (or quitting key)
+        #     k = event.getKeys(['r', 'space']) # shouldn't this be space? like after the stimulus? this is confusing...
+        #     if k and 'r' in k:
+        #         # recalibrate
+        #         # tracker.stopcollecting()
+        #         tracker.calibrate()
+        #         # tracker.startcollecting()
+        #     if k and 'space' in k:
+        #         # response given, move on to next trial
+        #         rt = time.time() - start_time
+        #         waiting_for_response = False
 
 
         # store the collected data in the data frame
         # 
         # store the data frame as a csv:
         # data.to_csv()
-        data['participant'].append(ID)
-        data['hemifield'].append(hemifield)
-        data['blockno'].append(block_idx+1)
-        data['trialno'].append(trial_idx+1)
-        data['jitter'].append(jitter)
-        data['bs_tilt'].append(bs_tilt)
-        data['aw_tilt'].append(ad_tilt)
-        data['eye'].append(eye)
-        data['bs_dist'].append(test_dist)
-        data['tpair'].append(dist_diff)
 
-        pd.DataFrame(data).to_csv(csv_filename, index=False)
+        # data['participant'].append(ID)
+        # data['hemifield'].append(hemifield)
+        # data['blockno'].append(block_idx+1)
+        # data['trialno'].append(trial_idx+1)
+        # data['jitter'].append(jitter)
+        # data['bs_tilt'].append(bs_tilt)
+        # data['aw_tilt'].append(ad_tilt)
+        # data['eye'].append(eye)
+        # data['bs_dist'].append(test_dist)
+        # data['tpair'].append(tpair)
+
+        # pd.DataFrame(data).to_csv(csv_filename, index=False)
 
         # end of trial: increase trial & block indices
         trial_idx = trial_idx + 1
@@ -496,6 +647,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         if block_idx >= len(blocks):
             # done all the blocks... end task:
             not_done = False
+
+
 
     # end of task: stop eye-tracker recording, show end screen
     tracker.stopcollecting()
