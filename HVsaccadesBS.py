@@ -114,10 +114,10 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     print(colors)
     col_both = colors['both']
     if hemifield == 'left':
-        win.viewPos = [10,-7.5]
+        win.viewPos = [10,-5]
         col_ipsi, col_contra = colors['left'], colors['right']
     if hemifield == 'right':
-        win.viewPos = [-10,-7.5]
+        win.viewPos = [-10,-5]
         col_contra, col_ipsi = colors['left'], colors['right']
 
     # stimuli
