@@ -123,8 +123,12 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     # stimuli
     # point_1 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
     # point_2 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
-    point_3 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
-    point_4 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    # point_3 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    # point_4 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+
+    point_3 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = None, lineColor = col_both, lineWidth=5)
+    point_4 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = None, lineColor = col_both, lineWidth=5)
+
 
     point_1 = visual.ShapeStim( win=win,
                                 units='deg',
@@ -134,6 +138,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
                                 vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
                                 pos = [0,0],
                                 ori = 0,
+                                size = 2,
                                 )
 
     point_2 = visual.ShapeStim( win=win,
@@ -144,6 +149,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
                                 vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
                                 pos = [0,0],
                                 ori = 45,
+                                size = 2,
                                 )
 
     diamond = visual.ShapeStim( win = win, 
@@ -365,8 +371,10 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
             point_color = col_ipsi
         elif eye == 'contra':
             point_color = col_contra
-        point_1.fillColor = point_color
-        point_2.fillColor = point_color
+        # point_1.fillColor = point_color
+        # point_2.fillColor = point_color
+        point_1.lineColor = point_color
+        point_2.lineColor = point_color
         point_3.fillColor = point_color
         point_4.fillColor = point_color
 
