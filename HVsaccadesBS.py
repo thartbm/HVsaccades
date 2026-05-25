@@ -114,10 +114,10 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     print(colors)
     col_both = colors['both']
     if hemifield == 'left':
-        win.viewPos = [10,-5]
+        win.viewPos = [10,-3]
         col_ipsi, col_contra = colors['left'], colors['right']
     if hemifield == 'right':
-        win.viewPos = [-10,-5]
+        win.viewPos = [-10,-3]
         col_contra, col_ipsi = colors['left'], colors['right']
 
     # stimuli
@@ -195,12 +195,13 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     if hemifield == 'left':
         prop  = setup['blindspotmarkers']['left_prop']
         mult_fact = -1
-        win.viewPos = [10, -7.5]
+        win.viewPos = [10, -3]
+        tracker.setCalibrationTargets( np.array([[0,0],  [3,0],[0,-7],[3,-7],   [-10,3],[-10,13],[-10,-7],   [-20,3],[-20,13],[-20,-7]]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
     if hemifield == 'right':
         prop = setup['blindspotmarkers']['right_prop']
         mult_fact = 1
-        win.viewPos = [-10,-7.5]
-
+        win.viewPos = [-10,-3]
+        tracker.setCalibrationTargets( np.array([[0,0],  [-3,0],[0,-7],[-3,-7],   [10,3],[10,13],[10,-7],   [20,3],[20,13],[20,-7]]) )
     # # spot_left    = left_prop['spot'] # polar coords?
     # spot_left    = left_prop['cart']
     # size_left    = left_prop['size']
@@ -317,7 +318,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
              'bs_tilt':      [],
              'aw_tilt':      [],
              'eye'    :      [],
-             'bs_dist':      [],
+             'dist'   :      [],
              'tpair':        []
              }
 
@@ -420,6 +421,16 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         hiFusion.resetProperties()
         loFusion.resetProperties()
 
+        tracker.comment('block %d trial %d'%(block_idx, trial_idx))
+        time.sleep(2/500)
+        tracker.comment('BS tilt %d'%(bs_tilt))
+        time.sleep(2/500)
+        tracker.comment('AW tilt %d'%(ad_tilt))
+        time.sleep(2/500)
+        tracker.comment('target pair %s'%(tpair))
+        time.sleep(2/500)
+        tracker.comment('eye %s'%(eye))
+        time.sleep(2/500)
 
 
         start_time = time.time()
@@ -631,18 +642,18 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         # store the data frame as a csv:
         # data.to_csv()
 
-        # data['participant'].append(ID)
-        # data['hemifield'].append(hemifield)
-        # data['blockno'].append(block_idx+1)
-        # data['trialno'].append(trial_idx+1)
-        # data['jitter'].append(jitter)
-        # data['bs_tilt'].append(bs_tilt)
-        # data['aw_tilt'].append(ad_tilt)
-        # data['eye'].append(eye)
-        # data['bs_dist'].append(test_dist)
-        # data['tpair'].append(tpair)
+        data['participant'].append(ID)
+        data['hemifield'].append(hemifield)
+        data['blockno'].append(block_idx+1)
+        data['trialno'].append(trial_idx+1)
+        data['jitter'].append(jitter)
+        data['bs_tilt'].append(bs_tilt)
+        data['aw_tilt'].append(ad_tilt)
+        data['eye'].append(eye)
+        data['dist'].append(test_dist)
+        data['tpair'].append(tpair)
 
-        # pd.DataFrame(data).to_csv(csv_filename, index=False)
+        pd.DataFrame(data).to_csv(csv_filename, index=False)
 
         # end of trial: increase trial & block indices
         trial_idx = trial_idx + 1
