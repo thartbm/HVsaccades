@@ -371,9 +371,9 @@ def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,0]):
 
         if task == 'saccades':
             if hemifield == 'left':
-                cfg['hw']['win'].viewPos = [ 10,-7.5]
+                cfg['hw']['win'].viewPos = [ 10,-3]
             if hemifield == 'right':
-                cfg['hw']['win'].viewPos = [-10,-7.5]
+                cfg['hw']['win'].viewPos = [-10,-3]
 
         abort = False
 
