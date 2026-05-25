@@ -466,6 +466,9 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
                 abort = True
             
             fixation.draw()
+            blindspot.draw()
+            loFusion.draw()
+            hiFusion.draw()
 
             if (time.time() - stimulus_start) > .25:
                 point_1.draw()
