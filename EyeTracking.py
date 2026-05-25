@@ -239,6 +239,10 @@ class EyeTracker:
 
         # eyetracker_config['calibration'] = dict(type='THIRTEEN_POINTS')
 
+    def setCalibrationTargets(self, calibrationTargets):
+
+        self.__calibrationTargets = np.array(calibrationTargets)
+
     def setColors(self, colors):
 
         # print(colors)
