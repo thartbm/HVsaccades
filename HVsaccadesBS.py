@@ -384,16 +384,19 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         # mult_fact depends on hemifield (left: -1, right: 1)
         # temp_pos = pol2cart(mult_fact * bs_tilt, test_dist/2, units='deg')
         temp_pos = pol2cart(        1 * bs_tilt, test_dist/2, units='deg')
-        point_1.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
-        point_2.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
+        point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
+        point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
         # temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
         temp_pos = pol2cart(        1 * ad_tilt, test_dist/2, units='deg')
-        point_3.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
-        point_4.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
+        point_3.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
+        point_4.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
 
         if tpair == 'ad':
-            point_1.pos, point_2.pos, point_3.pos, point_4.pos = point_3.pos, point_4.pos, point_1.pos, point_2.pos
+            point_2.pos, point_1.pos, point_3.pos, point_4.pos = point_3.pos, point_4.pos, point_1.pos, point_2.pos
+
+        if abs(point_1.pos[0]) > abs(point_2.pos[0]):
+            point_1.pos, point_2.pos = point_2.pos, point_1.pos
 
         # distance = (test_dist)/2
         # mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
