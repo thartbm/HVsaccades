@@ -1639,7 +1639,7 @@ def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG',
     if 'back' in colors.keys():
         fcols[1] = colors['back']
 
-    if task in ['perception', 'saccades']:
+    if task in ['perception']:
         fusion = {'hi': fusionStim(win    = win,
                                    rows    = 9,
                                    columns = 2,
@@ -1649,6 +1649,18 @@ def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG',
                                    rows    = 2,
                                    columns = 9,
                                    pos    = [0,-15],
+                                   colors = fcols)}
+
+    if task in ['saccades']:
+        fusion = {'hi': fusionStim(win    = win,
+                                   rows    = 9,
+                                   columns = 2,
+                                   pos    = [0,10],
+                                   colors = fcols),
+                  'lo': fusionStim(win    = win,
+                                   rows    = 2,
+                                   columns = 9,
+                                   pos    = [0,-10],
                                    colors = fcols)}
 
     # if task in ['distRotated','distUpturned','distUpshifted']:
