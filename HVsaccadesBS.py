@@ -361,7 +361,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         eye = conditions['eye'][cond_idx]
         tpair = conditions['tpair'][cond_idx]
 
-        jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
+        # jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
+        jitter = 0
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
         ad_pos = pol2cart(ad_pos_pol[0] + jitter, ad_pos_pol[1], units='deg')
@@ -381,11 +382,13 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
         # bs points are non-adjustable and points 1 & 2:
         # mult_fact depends on hemifield (left: -1, right: 1)
-        temp_pos = pol2cart(mult_fact * bs_tilt, test_dist/2, units='deg')
+        # temp_pos = pol2cart(mult_fact * bs_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * bs_tilt, test_dist/2, units='deg')
         point_1.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
         point_2.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
 
-        temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
+        # temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * ad_tilt, test_dist/2, units='deg')
         point_3.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
         point_4.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
 
@@ -437,7 +440,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
         # adds a little time in between trials:
         # probably looking somewhere else as well
-        fixation.pos = random.sample([-8,-6,-4,4,6,8],1) + random.sample([-6,-4,4,6,8,10],1)
+        fixation.pos = [-1*mult_fact*x for x in random.sample([4,6,8,10],1) + random.sample([4,6,8,10],1)]
         waiting_for_fixation = True
         while waiting_for_fixation:
             fixation.draw()
