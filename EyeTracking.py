@@ -1811,7 +1811,7 @@ def makeBlindSpotMarkers(win, task, ID, colors):
                                                 'ang_up' : ang_up       }
 
         print(spot_size)
-        spot_size = [max(min(1,x),x-2) for x in spot_size]
+        spot_size = [max(min(1,x),x-1.5) for x in spot_size]
         print(spot_size)
 
 
