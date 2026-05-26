@@ -1559,7 +1559,8 @@ def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG',
 
         resolution = [1920, 1080] # in pixels
         size       = [59.8, 33.6] # in cm
-        distance   = 49.53 # in cm
+        # distance   = 49.53 # in cm
+        distance   = 45 # cm
         screen     = 1  # index on the system: 0 = first monitor, 1 = second monitor, and so on
 
         tracker = 'livetrack'
