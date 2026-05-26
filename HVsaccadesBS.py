@@ -440,7 +440,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
         # adds a little time in between trials:
         # probably looking somewhere else as well
-        fixation.pos = [-1*mult_fact*x for x in random.sample([4,6,8,10],1) + random.sample([4,6,8,10],1)]
+        fixation.pos = random.sample([4,6,8,10],1) + random.sample([4,6,8,10],1)
+        fixation.pos[0] = fixation.pos[0] * mult_fact
         waiting_for_fixation = True
         while waiting_for_fixation:
             fixation.draw()
