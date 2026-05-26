@@ -172,7 +172,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     hiFusion = setup['fusion']['hi']
     loFusion = setup['fusion']['lo']
 
-    loFusion.pos = [0, -5]
+    loFusion.pos = [0, -10]
     if hemifield == 'left':
         hiFusion.pos = [10, 0]
     if hemifield == 'right':
@@ -195,13 +195,13 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     if hemifield == 'left':
         prop  = setup['blindspotmarkers']['left_prop']
         mult_fact = -1
-        win.viewPos = [10, -3]
-        tracker.setCalibrationTargets( np.array([[0,0],  [3,0],[0,-7],[3,-7],   [-10,3],[-10,13],[-10,-7],   [-20,3],[-20,13],[-20,-7]]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
+        win.viewPos = [10, -5]
+        tracker.setCalibrationTargets( np.array([[0,0],  [3,0],[0,-5],[3,-5],   [-10,5],[-10,15],[-10,-5],   [-20,5],[-20,15],[-20,-5]]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
     if hemifield == 'right':
         prop = setup['blindspotmarkers']['right_prop']
         mult_fact = 1
-        win.viewPos = [-10,-3]
-        tracker.setCalibrationTargets( np.array([[0,0],  [-3,0],[0,-7],[-3,-7],   [10,3],[10,13],[10,-7],   [20,3],[20,13],[20,-7]]) )
+        win.viewPos = [-10,-5]
+        tracker.setCalibrationTargets( np.array([[0,0],  [-3,0],[0,-5],[-3,-5],   [10,5],[10,15],[10,-5],   [20,5],[20,15],[20,-5]]) )
     # # spot_left    = left_prop['spot'] # polar coords?
     # spot_left    = left_prop['cart']
     # size_left    = left_prop['size']
@@ -519,13 +519,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
 
 
-
-
         # if cfg['eyetracking']:
         tracker.comment('stimulus off')
-
-
-
 
         EMstart = time.time()
 
@@ -533,7 +528,6 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         recording = True
 
         while recording:
-
 
             gazeCheck = tracker.gazeInFixationWindow() 
 
