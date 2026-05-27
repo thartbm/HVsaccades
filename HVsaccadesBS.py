@@ -353,6 +353,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         # print(blocks)
         # print(blocks[block_idx])
 
+        print('block: %d / %d --- trial %d / %d'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials'])))
+
         # properties of the current trial:
         cond_idx = blocks[block_idx]['trials'][trial_idx]
 
