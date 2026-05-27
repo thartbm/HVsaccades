@@ -388,7 +388,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
         # temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
-        temp_pos = pol2cart(        1 * ad_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * aw_tilt, test_dist/2, units='deg')
         point_3.pos = [aw_pos[0] + temp_pos[0], aw_pos[1] + temp_pos[1]]
         point_4.pos = [aw_pos[0] - temp_pos[0], aw_pos[1] - temp_pos[1]]
 
