@@ -196,12 +196,12 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         prop  = setup['blindspotmarkers']['left_prop']
         mult_fact = -1
         win.viewPos = [10, -5]
-        tracker.setCalibrationTargets( np.array([[0,0],  [3,0],[0,-5],[3,-5],   [-10,5],[-10,15],[-10,-5],   [-20,5],[-20,15],[-20,-5]]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
+        tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5],  [0,5],[0,17],   [-10,5],[-10,17],[-10,-7],  [-15,11],[-15,-1],   [-20,5],[-20,17],[-20,-7],  [-25,11],[-25,-1] ]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
     if hemifield == 'right':
         prop = setup['blindspotmarkers']['right_prop']
         mult_fact = 1
         win.viewPos = [-10,-5]
-        tracker.setCalibrationTargets( np.array([[0,0],  [-3,0],[0,-5],[-3,-5],   [10,5],[10,15],[10,-5],   [20,5],[20,15],[20,-5]]) )
+        tracker.setCalibrationTargets( np.array([[0,0],  [-5,0],[0,-5],[-5,-5],  [0,5],[0,17],  [10,5],[10,17],[10,-7],  [15,11],[15,-1],   [20,5],[20,17],[20,-7],  [25,11],[25,-1]]) )
     # # spot_left    = left_prop['spot'] # polar coords?
     # spot_left    = left_prop['cart']
     # size_left    = left_prop['size']
