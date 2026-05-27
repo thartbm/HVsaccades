@@ -251,8 +251,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     # print(alpha * mult_fact)
     # print(bs_dist)
 
-    ad_pos_pol = [bs_pos_pol[0] + (alpha * mult_fact), bs_dist]
-    ad_pos_cart = pol2cart(bs_pos_pol[0] + (alpha * mult_fact), bs_dist, units='deg')
+    aw_pos_pol = [bs_pos_pol[0] + (alpha * mult_fact), bs_dist]
+    aw_pos_cart = pol2cart(bs_pos_pol[0] + (alpha * mult_fact), bs_dist, units='deg')
 
     # print(ad_pos)
 
@@ -287,11 +287,11 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
 
     bs_tilt = [0, 90, 0] * 6
-    ad_tilt = [90, 0, 0] * 6
+    aw_tilt = [90, 0, 0] * 6
     eye = ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3 + ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3
-    tpair = ['bs'] * 9 + ['ad'] * 9 # target pair
+    tpair = ['BS'] * 9 + ['AW'] * 9 # target pair
 
-    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'tpair': tpair})
+    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'aw_tilt': aw_tilt, 'eye': eye, 'tpair': tpair})
 
     cond_idx = list(range(len(conditions)))
     blocks = []
@@ -357,7 +357,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         cond_idx = blocks[block_idx]['trials'][trial_idx]
 
         bs_tilt = conditions['bs_tilt'][cond_idx]
-        ad_tilt = conditions['ad_tilt'][cond_idx]
+        aw_tilt = conditions['aw_tilt'][cond_idx]
         eye = conditions['eye'][cond_idx]
         tpair = conditions['tpair'][cond_idx]
 
@@ -365,7 +365,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         jitter = 0
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
-        ad_pos = pol2cart(ad_pos_pol[0] + jitter, ad_pos_pol[1], units='deg')
+        aw_pos = pol2cart(aw_pos_pol[0] + jitter, aw_pos_pol[1], units='deg')
 
         if eye == 'both':
             point_color = col_both
@@ -389,10 +389,10 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
         # temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
         temp_pos = pol2cart(        1 * ad_tilt, test_dist/2, units='deg')
-        point_3.pos = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
-        point_4.pos = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
+        point_3.pos = [aw_pos[0] + temp_pos[0], aw_pos[1] + temp_pos[1]]
+        point_4.pos = [aw_pos[0] - temp_pos[0], aw_pos[1] - temp_pos[1]]
 
-        if tpair == 'ad':
+        if tpair == 'AW':
             point_2.pos, point_1.pos, point_3.pos, point_4.pos = point_3.pos, point_4.pos, point_1.pos, point_2.pos
 
         if abs(point_1.pos[0]) > abs(point_2.pos[0]):
@@ -431,12 +431,22 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         time.sleep(2/500)
         tracker.comment('BS tilt %d'%(bs_tilt))
         time.sleep(2/500)
-        tracker.comment('AW tilt %d'%(ad_tilt))
+        tracker.comment('AW tilt %d'%(aw_tilt))
         time.sleep(2/500)
         tracker.comment('target pair %s'%(tpair))
         time.sleep(2/500)
         tracker.comment('eye %s'%(eye))
         time.sleep(2/500)
+
+        tracker.comment('point1 %0.4f %0.4f'%(point_1.pos[0], point_1.pos[1]))
+        time.sleep(2/500)
+        tracker.comment('point2 %0.4f %0.4f'%(point_2.pos[0], point_2.pos[1]))
+        time.sleep(2/500)
+        tracker.comment('point3 %0.4f %0.4f'%(point_3.pos[0], point_3.pos[1]))
+        time.sleep(2/500)
+        tracker.comment('point4 %0.4f %0.4f'%(point_4.pos[0], point_4.pos[1]))
+        time.sleep(2/500)
+
 
 
         start_time = time.time()
@@ -652,7 +662,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         data['trialno'].append(trial_idx+1)
         data['jitter'].append(jitter)
         data['bs_tilt'].append(bs_tilt)
-        data['aw_tilt'].append(ad_tilt)
+        data['aw_tilt'].append(aw_tilt)
         data['eye'].append(eye)
         data['dist'].append(test_dist)
         data['tpair'].append(tpair)
