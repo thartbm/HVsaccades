@@ -535,9 +535,9 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
             # redo the trial:
             # cfg['blocks'][cfg['currentblock']]['trialtypes'] += [copy.deepcopy(trialtype)]
-            blocks[block_idx]['trials'] += [cond_idx]
+            blocks[block_idx]['triaevent.clearEvents(eventType='keyboard')ls'] += [cond_idx]
 
-
+        event.clearEvents(eventType='keyboard')
 
         # if cfg['eyetracking']:
         tracker.comment('stimulus off')
@@ -586,7 +586,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
         # print('out of loop')
 
-
+        event.clearEvents(eventType='keyboard')
+        
         tracker.comment('gaze returned') # not a good comment...
 
         fixation.ori=45
