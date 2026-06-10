@@ -535,8 +535,9 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
             # redo the trial:
             # cfg['blocks'][cfg['currentblock']]['trialtypes'] += [copy.deepcopy(trialtype)]
-            blocks[block_idx]['trials'] += [cond_idx]
+            blocks[block_idx]['triaevent.clearEvents(eventType='keyboard')ls'] += [cond_idx]
 
+        event.clearEvents(eventType='keyboard')
         event.clearEvents(eventType='keyboard')
 
         # if cfg['eyetracking']:
