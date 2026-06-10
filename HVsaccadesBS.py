@@ -510,7 +510,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
             k = []
             while not(k):
-                k = event.getKeys(['q','r','space']) # quit / abort during trial
+                k = event.getKeys(['r','space']) # quit / abort during trial
                 diamond.draw()
                 win.flip()
         
@@ -520,8 +520,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
                 pass
 
                 # q: quit experiment
-            if k[0] in ['q']:
-                print('quitting not implemented')
+            # if k[0] in ['q']:
+            #     print('quitting not implemented')
 
                 # r: recalibrate eye-tracker
             if k[0] in ['r']:
@@ -573,6 +573,13 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
                     # print('left fixation')
                     leftFix = True
                     leftFixTime = time.time()
+
+            k = event.getKeys(['r']) # recalibrate during saccade recording interval? hmmmmm....
+            if k and 'r' in k:
+                # recalibrate
+                # tracker.stopcollecting()
+                print('recalibrating...')
+                tracker.calibrate()
 
             fixation.draw()
             win.flip()
