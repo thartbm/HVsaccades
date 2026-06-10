@@ -538,7 +538,6 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
             blocks[block_idx]['trials'] += [cond_idx]
 
         event.clearEvents(eventType='keyboard')
-        event.clearEvents(eventType='keyboard')
 
         # if cfg['eyetracking']:
         tracker.comment('stimulus off')
