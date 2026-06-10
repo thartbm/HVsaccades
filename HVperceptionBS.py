@@ -191,7 +191,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     bs_dist = sum(np.array(bs_pos_cart)**2)**0.5
 
-    angle_var = abs(np.arctan((bs_size[1]/3)/bs_pos_cart[0])/np.pi*180)
+    angle_var = abs(np.arctan((bs_size[1]/4)/bs_pos_cart[0])/np.pi*180)
     
     margin = 2
 
@@ -329,6 +329,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
 
+        print('block: %d, trial: %d, BS tilt: %0.1f, AD tilt: %0.1f, %s, start diff: %0.1f'%(block_idx+1, trial_idx+1, bs_tilt, ad_tilt, eye, dist_diff))
+
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
         ad_pos = pol2cart(ad_pos_pol[0] + jitter, ad_pos_pol[1], units='deg')
 
@@ -451,6 +453,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             if k and 'r' in k:
                 # recalibrate
                 # tracker.stopcollecting()
+                print('recalibrating...')
                 tracker.calibrate()
                 # tracker.startcollecting()
             if k and 'space' in k:
@@ -478,6 +481,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         pd.DataFrame(data).to_csv(csv_filename, index=False)
 
+        print('recorded final distance: %0.3f dva'%(distance*2))
+
         # end of trial: increase trial & block indices
         trial_idx = trial_idx + 1
 
@@ -485,6 +490,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             # done all trials in the block... next block:
             block_idx = block_idx + 1
             trial_idx = 0
+            print('block %d done, moving on to block %d / %d'%(block_idx, block_idx+1, len(blocks)))
 
         if block_idx >= len(blocks):
             # done all the blocks... end task:
@@ -496,7 +502,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     tracker.shutdown()
 
     visual.TextStim(win,
-        'THE END\n\nThank you for participating!', 
+        'THE END\n\nThanks!', 
         height = 1, 
         wrapWidth=15,
         color = 'black').draw()
