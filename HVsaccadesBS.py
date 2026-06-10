@@ -364,7 +364,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         # jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
         jitter = 0
 
-        print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials'])bs_tilt, aw_tilt, eye, tpair))
+        print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials']), bs_tilt, aw_tilt, eye, tpair))
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
         aw_pos = pol2cart(aw_pos_pol[0] + jitter, aw_pos_pol[1], units='deg')
