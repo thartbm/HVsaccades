@@ -260,7 +260,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     cond_idx = list(range(len(conditions)))
     blocks = []
-    n_blocks = 2
+    n_blocks = 5
     for block_no in range(n_blocks):
         block_def = {}
         block_def['block_no'] = block_no
