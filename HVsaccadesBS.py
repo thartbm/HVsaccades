@@ -353,8 +353,6 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         # print(blocks)
         # print(blocks[block_idx])
 
-        print('block: %d / %d --- trial %d / %d'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials'])))
-
         # properties of the current trial:
         cond_idx = blocks[block_idx]['trials'][trial_idx]
 
@@ -365,6 +363,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
         # jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
         jitter = 0
+
+        print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials'])bs_tilt, aw_tilt, eye, tpair))
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
         aw_pos = pol2cart(aw_pos_pol[0] + jitter, aw_pos_pol[1], units='deg')
@@ -503,7 +503,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
         if abort:
             # handle abort
-            # tracker.comment('trial aborted')
+            print('trial aborted [R: recalibrate, SPACE: continue]')
+            tracker.comment('trial aborted')
             diamond.draw()
             win.flip()
 

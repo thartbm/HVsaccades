@@ -272,7 +272,6 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     block_idx = 0
     trial_idx = 0
 
-
     # collect data in a dictionary:
 
     data = { 'participant':  [],
