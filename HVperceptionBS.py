@@ -385,13 +385,18 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         # adds a little time in between trials:
         # probably looking somewhere else as well
-        fixation.pos = random.sample([-8,-6,-4,4,6,8],1) + random.sample([-8,-6,-4,4,6,8],1)
+        fixation.pos = random.sample([-5,-4,-3,3,4,5],1) + random.sample([-5,-4,-3,3,4,5],1)
         waiting_for_fixation = True
         while waiting_for_fixation:
             fixation.draw()
             win.flip()
             if tracker.gazeInFixationWindow(fixloc=fixation.pos):
                 waiting_for_fixation = False
+            k = event.getKeys(['r']) # shouldn't this be space? like after the stimulus? this is confusing...
+            # recalibrate if previous calibration failed...
+            if k and 'r' in k:
+                print('recalibrating...')
+                tracker.calibrate()
         
         fixation.pos = [0,0]
 
