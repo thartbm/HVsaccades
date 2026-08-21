@@ -476,7 +476,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         stimulus_start = time.time()
 
         tracker.comment('stimulus on')
-        while (time.time() - stimulus_start) < .75 and not abort:
+        while (time.time() - stimulus_start) < .600 and not abort:
 
             if tracker.gazeInFixationWindow():
                 pass
@@ -489,13 +489,18 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
             loFusion.draw()
             hiFusion.draw()
 
-            if (time.time() - stimulus_start) > .25:
+            if (time.time() - stimulus_start) > .15:
+                opacity = 1 - min(1, ((time.time() - stimulus_start) - .15) / .15)
+                point_3.opacity = opacity
+                point_4.opacity = opacity
+                point_3.draw()
+                point_4.draw()
+
+            if (time.time() - stimulus_start) > .30:
                 point_1.draw()
-            if (time.time() - stimulus_start) > .50:
+            if (time.time() - stimulus_start) > .45:
                 point_2.draw()
             # other pair is always there:
-            point_3.draw()
-            point_4.draw()
 
             win.flip()
 
