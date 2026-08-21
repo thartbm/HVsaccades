@@ -489,18 +489,24 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
             loFusion.draw()
             hiFusion.draw()
 
+            opacity = 0
+
             if (time.time() - stimulus_start) > .15:
                 opacity = 1 - min(1, ((time.time() - stimulus_start) - .15) / .15)
-                point_3.opacity = opacity
-                point_4.opacity = opacity
-                point_3.draw()
-                point_4.draw()
 
             if (time.time() - stimulus_start) > .30:
+                opacity = 1
                 point_1.draw()
             if (time.time() - stimulus_start) > .45:
+                opacity = 1
                 point_2.draw()
             # other pair is always there:
+
+            point_3.opacity = opacity
+            point_4.opacity = opacity
+            point_3.draw()
+            point_4.draw()
+
 
             win.flip()
 
