@@ -476,7 +476,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         stimulus_start = time.time()
 
         tracker.comment('stimulus on')
-        while (time.time() - stimulus_start) < .600 and not abort:
+        while (time.time() - stimulus_start) < .650 and not abort:
 
             if tracker.gazeInFixationWindow():
                 pass
@@ -496,9 +496,10 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
 
             if (time.time() - stimulus_start) > .30:
                 opacity = 1
-                point_1.draw()
+
             if (time.time() - stimulus_start) > .45:
-                opacity = 1
+                point_1.draw()
+            if (time.time() - stimulus_start) > .55:
                 point_2.draw()
             # other pair is always there:
 
