@@ -492,7 +492,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
             opacity = 0
 
             if (time.time() - stimulus_start) > .15:
-                opacity = 1 - min(1, ((time.time() - stimulus_start) - .15) / .15)
+                opacity = min(1, ((time.time() - stimulus_start) - .15) / .15)
 
             if (time.time() - stimulus_start) > .30:
                 opacity = 1
@@ -501,7 +501,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
                 opacity = 1
                 point_2.draw()
             # other pair is always there:
-            print(opacity)
+
             point_3.opacity = opacity
             point_4.opacity = opacity
             point_3.draw()
