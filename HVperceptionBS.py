@@ -19,6 +19,7 @@ from psychopy import visual, gui, event
 # from psychopy import core, data
 from psychopy.tools.coordinatetools import pol2cart
 # from psychopy.tools.coordinatetools import cart2pol
+from psychopy.tools import monitorunittools
 import numpy as np
 import random, os, time, copy
 # import datetime
@@ -109,6 +110,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     pyg_keyboard = key.KeyStateHandler()
     win.winHandle.push_handlers(pyg_keyboard)
+
+
+    p2d = monitorunittools.pix2deg(1, win.monitor)
+    winsize = win.monitor.getSizePix()
+    vertical_range = winsize[1] * p2d # vertical range in DVA !!!!!!
 
     colors = setup['colors']
     print(colors)
@@ -272,6 +278,29 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     block_idx = 0
     trial_idx = 0
 
+    # WE CAN ADD CONDITIIONS HERE...
+
+    sc_bs_tilt = [      0,     90,      0,      0,     90,      0,       90,       90]
+    sc_ad_tilt = [     90,      0,      0,     90,      0,      0,        0,        0]
+    sc_eye =     [ 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'contra', 'contra']
+    sc_start =   [  'min',  'min',  'min',  'max',  'max',  'max',    'min',    'max']
+
+    sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_ad_tilt': sc_ad_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
+
+    sc_staircases = []
+    for cond_idx in range(len(sc_conditions)):
+        if sc_start[cond_idx] == 'min':
+            idx = 0
+        if sc_start[cond_idx] == 'max':
+            idx = 13
+        my_sc = SimpleStaircase( steps        = list(np.arange(-3.5, 3.5, 0.5)), 
+                                 idx          = idx, 
+                                 minTrials    = 30, 
+                                 minReversals = 11, 
+                                 info         = sc_conditions.iloc[cond_idx])
+        sc_staircases.append(my_sc)
+
+
     # collect data in a dictionary:
 
     data = { 'participant':  [],
@@ -307,7 +336,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # fixation.draw()
     # win.flip()
 
-    mouse_factor = 2
+    mouse_factor = 3.5
 
     not_done = True
 
@@ -349,7 +378,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
         point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
-        distance = (test_dist+dist_diff)/2
+        # this is how it is read out, later on:
+        # distance = (mouse.getPos()[1]-(vertical_range/2))/mouse_factor
+
+        distance = (test_dist+dist_diff)/2 - (vertical_range/2)
+
+
         mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
         
 
@@ -431,8 +465,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                     point_1.draw()
                     point_2.draw()
 
+
+                # from area task:
+                # mouse.setPos([0,(-vertical_range/2)+mouse_offset])
+
                 # adjustable points are points 3 & 4:
-                distance = mouse.getPos()[1]/mouse_factor
+                distance = (mouse.getPos()[1]-(vertical_range/2))/mouse_factor
                 # print(distance) # one number
                 temp_pos = pol2cart(ad_tilt, distance, units='deg')
                 # print(ad_pos) # tuple of arrays?
@@ -519,3 +557,109 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
 
 
+
+
+class SimpleStaircase:
+    def __init__(self,steps,idx,minTrials,minReversals,info):
+        self.steps = steps
+        self.idx = idx
+        self.minTrials = minTrials
+        self.minReversals = minReversals
+        self.info = info # arbitrary properties: put a dictionary or list for multiple bits of info
+
+        self.running = True
+        self.responses = []
+
+    def getValue(self):
+        return(self.steps[self.idx])
+
+    def update(self, response):
+        self.responses.append(response)
+        self.idx += response
+        if self.idx < 0:
+            self.idx = 0
+        if self.idx >= len(self.steps):
+            self.idx = len(self.steps) - 1
+        if len(self.responses) > 1:
+            status = False
+            if sum(np.diff(self.responses) != 0) < self.minReversals:
+                status = True
+            if len(self.responses) < self.minTrials:
+                status = True
+            self.running = status
+
+class UDStaircase:
+    def __init__(self,steps,idx,minTrials,minReversals,up,down,info):
+        self.steps = steps
+        self.idx = idx
+        self.minTrials = minTrials
+        self.minReversals = minReversals
+        self.up = up
+        self.down = down
+        self.info = info # arbitrary properties: put a dictionary or list for multiple bits of info
+
+        self.running = True
+        self.responses = []
+
+    def getValue(self):
+        return(self.steps[self.idx])
+
+    def update(self, response):
+        self.responses.append(response)
+        if response == 1:
+            self.idx += self.up
+        if response == -1:
+            self.idx -= self.down
+        
+        if self.idx < 0:
+            self.idx = 0
+        if self.idx >= len(self.steps):
+            self.idx = len(self.steps) - 1
+        
+        if len(self.responses) > 1:
+            status = False
+            if sum(np.diff(self.responses) != 0) < self.minReversals:
+                status = True
+            if len(self.responses) < self.minTrials:
+                status = True
+            self.running = status
+
+class DescreasingStepStaircase:
+    def __init__(self,steps,idx,minTrials,minReversals,step,decrease,info):
+        self.steps = steps
+        self.idx = idx
+        self.minTrials = minTrials
+        self.minReversals = minReversals
+        self.step = step
+        self.decrease = decrease
+        self.info = info # arbitrary properties: put a dictionary or list for multiple bits of info
+
+        self.running = True
+        self.responses = []
+        self.reversals = 0
+
+    def getValue(self):
+        return(self.steps[self.idx])
+
+    def update(self, response):
+        self.responses.append(response)
+        if response == 1:
+            self.idx += self.step
+        if response == -1:
+            self.idx -= self.step
+        
+        if self.idx < 0:
+            self.idx = 0
+        if self.idx >= len(self.steps):
+            self.idx = len(self.steps) - 1
+        
+        if len(self.responses) > 1:
+            status = False
+            if sum(np.diff(self.responses) != 0) > self.reversals:
+                self.reversals += 1
+                self.step = max(1,self.step-self.decrease)
+            if self.reversals < self.minReversals:
+                status = True
+            if len(self.responses) < self.minTrials:
+                status = True
+            self.running = status
