@@ -280,41 +280,47 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # WE CAN ADD CONDITIIONS HERE...
 
-    sc_bs_tilt = [      0,     90,      0,      0,     90,      0,       90,       90]
-    sc_ad_tilt = [     90,      0,      0,     90,      0,      0,        0,        0]
-    sc_eye =     [ 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'contra', 'contra']
-    sc_start =   [  'min',  'min',  'min',  'max',  'max',  'max',    'min',    'max']
+    sc_bs_tilt = [      0,     90,      0,      0,     90,      0] # ,       90,       90]
+    sc_ad_tilt = [     90,      0,      0,     90,      0,      0] # ,        0,        0]
+    sc_eye =     [ 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
+    sc_start =   [  'min',  'min',  'min',  'max',  'max',  'max'] # ,    'min',    'max']
 
     sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_ad_tilt': sc_ad_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
-
+    my_steps = list(np.arange(-3.5, 4.0, 0.5))
     sc_staircases = []
     for cond_idx in range(len(sc_conditions)):
         if sc_start[cond_idx] == 'min':
             idx = 0
         if sc_start[cond_idx] == 'max':
-            idx = 13
-        my_sc = SimpleStaircase( steps        = list(np.arange(-3.5, 3.5, 0.5)), 
+            idx = 14
+        my_sc = SimpleStaircase( steps        = my_steps, 
                                  idx          = idx, 
                                  minTrials    = 30, 
-                                 minReversals = 11, 
+                                 minReversals = 10, 
                                  info         = sc_conditions.iloc[cond_idx])
         sc_staircases.append(my_sc)
 
 
     # collect data in a dictionary:
 
-    data = { 'participant':  [],
-             'hemifield':    [],
-             'blockno':      [],
-             'trialno':      [],
-             'jitter':       [],
-             'bs_tilt':      [],
-             'aw_tilt':      [],
-             'eye'    :      [],
-             'bs_dist':      [],
-             'start_diff':   [],
-             'rt':           [],
-             'final_dist':   []}
+    data =  {
+            'participant':  [],
+            'hemifield':    [],
+            'blockno':      [],
+            'trialno':      [],
+            'jitter':       [],    # ????
+            'staircase':    [],    # which staircase was used for this trial
+            'bs_tilt':      [],
+            'aw_tilt':      [],
+            'eye'    :      [],
+            'bs_dist':      [],    # should be fixed
+            'ad_dist':      [],    # variable
+            'shown_first':  [],    # which pair was shown first? (1: bs or 2: ad)
+            'response':     [],    # which pair was judged as larger? (1/left: first shown or 2/right: second shown)
+ #            'start_diff':   [],
+            'rt':           []
+ #            'final_dist':   []
+            }
 
 
     # show first instructions
@@ -336,11 +342,35 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # fixation.draw()
     # win.flip()
 
-    mouse_factor = 3.5
+    # mouse_factor = 3.5     # this is no longer needed!
 
     not_done = True
 
+    running = [sc.running for sc in sc_staircases]
+
+    do_staircases = [idx for idx in range(len(running)) if running[idx]]
+
     while not_done:
+
+        # this should be done at the end of the trial
+        # before inserting a break for people
+
+        if len(do_staircases) == 0:
+            # shuffle running staircases
+            # do those one-by-one
+            running = [sc.running for sc in sc_staircases]
+            do_staircases = [idx for idx in range(len(running)) if running[idx]]
+            random.shuffle(do_staircases)
+
+        # pop one at random:
+        this_sc = do_staircases.pop()
+        staircase = sc_staircases[this_sc]
+        
+        bs_tilt = staircase.info['sc_bs_tilt']
+        ad_tilt = staircase.info['sc_ad_tilt']
+        eye     = staircase.info['sc_eye']
+
+        
 
         # print(block_idx)
         # print(trial_idx)
