@@ -120,13 +120,40 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     print(colors)
     col_both = colors['both']
     if hemifield == 'left':
+        win.viewPos = [10,-3]
         col_ipsi, col_contra = colors['left'], colors['right']
     if hemifield == 'right':
+        win.viewPos = [-10,-3]
         col_contra, col_ipsi = colors['left'], colors['right']
 
+
+
+
+
+
     # stimuli
-    point_1 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
-    point_2 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
+    point_1 = visual.ShapeStim( win=win,
+                                units='deg',
+                                colorSpace='rgb',
+                                lineColor=None,
+                                fillColor=col_both,
+                                vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
+                                pos = [0,0],
+                                ori = 0,
+                                size = 2,
+                                )
+
+    point_2 = visual.ShapeStim( win=win,
+                                units='deg',
+                                colorSpace='rgb',
+                                lineColor=None,
+                                fillColor=col_both,
+                                vertices=[[[.5,.1],[.5,-.1],[.1,-.1],[.1,-.5],[-.1,-.5],[-.1,-.1],[-.5,-.1],[-.5,.1],[-.1,.1],[-.1,.5],[.1,.5],[.1,.1]]],
+                                pos = [0,0],
+                                ori = 45,
+                                size = 2,
+                                )
+
     point_3 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
     point_4 = visual.Circle(win, radius = .5, pos = [0,0], units = 'deg', fillColor = col_both, lineColor = None)
 
@@ -255,27 +282,27 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # eye = ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5 + ['both'] * 5 + ['ipsi'] * 5 + ['contra'] * 5
     # dist_diff = [-2] * 15 + [2] * 15
 
+    # # conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'dist_diff': dist_diff})
+
+    # bs_tilt = [0, 90, 0] * 6
+    # ad_tilt = [90, 0, 0] * 6
+    # eye = ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3 + ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3
+    # dist_diff = [-2] * 9 + [2] * 9
+
     # conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'dist_diff': dist_diff})
 
-    bs_tilt = [0, 90, 0] * 6
-    ad_tilt = [90, 0, 0] * 6
-    eye = ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3 + ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3
-    dist_diff = [-2] * 9 + [2] * 9
+    # cond_idx = list(range(len(conditions)))
+    # blocks = []
+    # n_blocks = 4
+    # for block_no in range(n_blocks):
+    #     block_def = {}
+    #     block_def['block_no'] = block_no
+    #     random.shuffle(cond_idx)
+    #     block_def['trials'] = copy.deepcopy(cond_idx)
+    #     block_def['instructions'] = 'press space to calibrate\n\nand start block ' + str(block_no+1) + ' / ' + str(n_blocks)
+    #     blocks.append(block_def)
 
-    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'ad_tilt': ad_tilt, 'eye': eye, 'dist_diff': dist_diff})
-
-    cond_idx = list(range(len(conditions)))
-    blocks = []
-    n_blocks = 4
-    for block_no in range(n_blocks):
-        block_def = {}
-        block_def['block_no'] = block_no
-        random.shuffle(cond_idx)
-        block_def['trials'] = copy.deepcopy(cond_idx)
-        block_def['instructions'] = 'press space to calibrate\n\nand start block ' + str(block_no+1) + ' / ' + str(n_blocks)
-        blocks.append(block_def)
-
-    block_idx = 0
+    # block_idx = 0
     trial_idx = 0
 
     # WE CAN ADD CONDITIIONS HERE...
@@ -306,20 +333,18 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     data =  {
             'participant':  [],
             'hemifield':    [],
-            'blockno':      [],
+            # 'blockno':      [],    # no block structure?
             'trialno':      [],
             'jitter':       [],    # ????
-            'staircase':    [],    # which staircase was used for this trial
+            'staircase':    [],    # which staircase was used for this trial (0-5 or maybe 0-7)
             'bs_tilt':      [],
             'aw_tilt':      [],
             'eye'    :      [],
             'bs_dist':      [],    # should be fixed
-            'ad_dist':      [],    # variable
+            'ad_dist':      [],    # variable by staircases
             'shown_first':  [],    # which pair was shown first? (1: bs or 2: ad)
             'response':     [],    # which pair was judged as larger? (1/left: first shown or 2/right: second shown)
- #            'start_diff':   [],
-            'rt':           []
- #            'final_dist':   []
+            'rt':           []     # not strictly necessary?
             }
 
 
@@ -350,10 +375,14 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     do_staircases = [idx for idx in range(len(running)) if running[idx]]
 
+    trial_no = 0
+
     while not_done:
 
         # this should be done at the end of the trial
         # before inserting a break for people
+
+        trial_no = trial_no + 1
 
         if len(do_staircases) == 0:
             # shuffle running staircases
@@ -370,27 +399,15 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         ad_tilt = staircase.info['sc_ad_tilt']
         eye     = staircase.info['sc_eye']
 
-        
+        # relatively unimportant, just randomize every trial:
+        tpair = random.choice(['BS', 'AW'])
 
-        # print(block_idx)
-        # print(trial_idx)
-        # print(blocks)
-        # print(blocks[block_idx])
+        jitter = 0 # distance jitter or angle jitter?
 
-        # properties of the current trial:
-        cond_idx = blocks[block_idx]['trials'][trial_idx]
-
-        bs_tilt = conditions['bs_tilt'][cond_idx]
-        ad_tilt = conditions['ad_tilt'][cond_idx]
-        eye = conditions['eye'][cond_idx]
-        dist_diff = conditions['dist_diff'][cond_idx]
-
-        jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
-
-        print('block: %d, trial: %d, BS tilt: %0.1f, AD tilt: %0.1f, %s, start diff: %0.1f'%(block_idx+1, trial_idx+1, bs_tilt, ad_tilt, eye, dist_diff))
+        print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials']), bs_tilt, aw_tilt, eye, tpair))
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
-        ad_pos = pol2cart(ad_pos_pol[0] + jitter, ad_pos_pol[1], units='deg')
+        aw_pos = pol2cart(aw_pos_pol[0] + jitter, aw_pos_pol[1], units='deg')
 
         if eye == 'both':
             point_color = col_both
@@ -404,120 +421,128 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         point_4.fillColor = point_color
 
         # bs points are non-adjustable and points 1 & 2:
-        temp_pos = pol2cart(bs_tilt, test_dist/2, units='deg')
+        # mult_fact depends on hemifield (left: -1, right: 1)
+        # temp_pos = pol2cart(mult_fact * bs_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * bs_tilt, test_dist/2, units='deg')
         point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
         point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
-        # this is how it is read out, later on:
-        # distance = (mouse.getPos()[1]-(vertical_range/2))/mouse_factor
+        # temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * aw_tilt, test_dist/2, units='deg')
+        point_3.pos = [aw_pos[0] + temp_pos[0], aw_pos[1] + temp_pos[1]]
+        point_4.pos = [aw_pos[0] - temp_pos[0], aw_pos[1] - temp_pos[1]]
 
-        distance = (test_dist+dist_diff)/2 - (vertical_range/2)
+        if tpair == 'AW':
+            point_1.pos, point_2.pos, point_3.pos, point_4.pos = point_3.pos, point_4.pos, point_1.pos, point_2.pos
+
+        if abs(point_1.pos[0]) > abs(point_2.pos[0]):
+            point_1.pos, point_2.pos = point_2.pos, point_1.pos
 
 
-        mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
+        # distance = (test_dist+dist_diff)/2 - (vertical_range/2)
+        # mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
         
+        # if trial_idx == 0:
+        #     # show instruction to start with eye-tracker calibration
+        #     visual.TextStim(win,
+        #         blocks[block_idx]['instructions'], 
+        #         height = 1, 
+        #         wrapWidth=15,
+        #         color = 'black').draw()
+        #     win.flip()
+        #     k = ['wait']
+        #     while k[0] not in ['space']:
+        #         k = event.waitKeys()
+
+        #     event.clearEvents(eventType='keyboard') # just to be sure?
+
+        #     # calibration
+        #     # tracker.openfile()
+        #     # tracker.startcollecting()
+        #     tracker.calibrate()
 
 
-
-        if trial_idx == 0:
-            # show instruction to start with eye-tracker calibration
-            visual.TextStim(win,
-                blocks[block_idx]['instructions'], 
-                height = 1, 
-                wrapWidth=15,
-                color = 'black').draw()
-            win.flip()
-            k = ['wait']
-            while k[0] not in ['space']:
-                k = event.waitKeys()
-
-            event.clearEvents(eventType='keyboard') # just to be sure?
-
-            # calibration
-            # tracker.openfile()
-            # tracker.startcollecting()
-            tracker.calibrate()
-
-        waiting_for_response = True
-
-        hiFusion.resetProperties()
-        loFusion.resetProperties()
-
+        # add some info about trial to the eye-tracker data file:
+        tracker.comment('next trial')
+        time.sleep(2/500)
 
 
         start_time = time.time()
 
         # adds a little time in between trials:
         # probably looking somewhere else as well
-        fixation.pos = random.sample([-5,-4,-3,3,4,5],1) + random.sample([-5,-4,-3,3,4,5],1)
+        fixation.pos = random.sample([4,6,8,10],1) + random.sample([4,6,8,10],1)
+        fixation.pos[0] = fixation.pos[0] * mult_fact
         waiting_for_fixation = True
         while waiting_for_fixation:
             fixation.draw()
             win.flip()
             if tracker.gazeInFixationWindow(fixloc=fixation.pos):
                 waiting_for_fixation = False
-            k = event.getKeys(['r']) # shouldn't this be space? like after the stimulus? this is confusing...
-            # recalibrate if previous calibration failed...
-            if k and 'r' in k:
-                print('recalibrating...')
-                tracker.calibrate()
         
         fixation.pos = [0,0]
 
         tracker.waitForFixation()
 
+        # STIMULUS PRESENTATION:
+        abort = False
 
-        while waiting_for_response:
+        hiFusion.resetProperties()
+        loFusion.resetProperties()
+        
+        stimulus_start = time.time()
+
+        tracker.comment('stimulus on')
+
+        while (time.time() - stimulus_start) < .50 and not abort:
+
+            if tracker.gazeInFixationWindow():
+                pass
+            else:
+                tracker.comment('fixation broken')
+                abort = True
             
+            fixation.draw()
+            blindspot.draw()
+            loFusion.draw()
+            hiFusion.draw()
+
+            opacity = 0
+
+            # if (time.time() - stimulus_start) > .15:
+            #     opacity = min(1, ((time.time() - stimulus_start) - .15) / .15)
+
+            if (time.time() - stimulus_start) > .15:
+                opacity = 1
+
+            if (time.time() - stimulus_start) > .30:
+                point_1.draw()
+            if (time.time() - stimulus_start) > .40:
+                point_2.draw()
+            # other pair is always there:
+
+            point_3.opacity = opacity
+            point_4.opacity = opacity
+            point_3.draw()
+            point_4.draw()
+
+
+            win.flip()
+
+        # stimulus presented, now collect response
+        waiting_for_response = True
+
+        while waiting_for_response and not abort:
+            
+            # NO STIMULI ANYMORE?
             # show fixation
             # show fusion stimuli
             hiFusion.draw()
             loFusion.draw()
             blindspot.draw()
-
-            t = time.time() % 1
-            draw_pair_1 = True
-            draw_pair_2 = True
-            if 0 < t < 0.2:
-                draw_pair_1 = False
-            if 0.5 < t < 0.7:
-                draw_pair_2 = False
-
-            # check fixation
-            # if fixating:
-            # - show stimuli
-            # - use mouse to adjust the distance of the adjustable pair
-            # - check for response (e.g. spacebar press)
-            
-            if tracker.gazeInFixationWindow(fixloc=fixation.pos):
-                fixation.draw()    
-                if draw_pair_1:
-                    point_1.draw()
-                    point_2.draw()
+            fixation.draw()     # only one we need?
 
 
-                # from area task:
-                # mouse.setPos([0,(-vertical_range/2)+mouse_offset])
-
-                # adjustable points are points 3 & 4:
-                distance = (mouse.getPos()[1]-(vertical_range/2))/mouse_factor
-                # print(distance) # one number
-                temp_pos = pol2cart(ad_tilt, distance, units='deg')
-                # print(ad_pos) # tuple of arrays?
-                # print(temp_pos) # tuple of numbers
-                p3p = [ad_pos[0] + temp_pos[0], ad_pos[1] + temp_pos[1]]
-                p4p = [ad_pos[0] - temp_pos[0], ad_pos[1] - temp_pos[1]]
-                # print(p3p, p4p)
-                point_3.pos = p3p
-                point_4.pos = p4p
-
-                if draw_pair_2:
-                    point_3.draw()
-                    point_4.draw()
-            else:
-                mouse.setPos([0, distance*mouse_factor]) # keep mouse at a reasonable position if not fixating
-                fixation_x.draw()
-            
             win.flip()
 
             # either way, check keyboard for recalibration key (or quitting key)
@@ -534,35 +559,36 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                 waiting_for_response = False
 
 
+        if abort:
+
+            # handle aborts?
+
         # store the collected data in the data frame
         # 
         # store the data frame as a csv:
         # data.to_csv()
+        
+
         data['participant'].append(ID)
         data['hemifield'].append(hemifield)
-        data['blockno'].append(block_idx+1)
-        data['trialno'].append(trial_idx+1)
-        data['jitter'].append(jitter)
+        # data['blockno'.append(0)    # no block structure?
+        data['trialno'].append(trial_no)
+        data['jitter'].append(jitter)    # ????
+        data['staircase'].append()    # which staircase was used for this trial (0-5 or maybe 0-7)
         data['bs_tilt'].append(bs_tilt)
-        data['aw_tilt'].append(ad_tilt)
-        data['eye'].append(eye)
-        data['bs_dist'].append(test_dist)
-        data['start_diff'].append(dist_diff)
-        data['rt'].append(rt)
-        data['final_dist'].append(distance*2) 
+        data['aw_tilt'].append(aw_tilt)
+        data['eye'    ].append(eye)
+        data['bs_dist'].append()    # should be fixed
+        data['ad_dist'].append()    # variable by staircases
+        data['shown_first'].append()    # which pair was shown first? (1: bs or 2: ad)
+        data['response'].append()    # which pair was judged as larger? (1/left: first shown or 2/right: second shown)
+        data['rt'].append()     # not strictly necessary?
+        
 
         pd.DataFrame(data).to_csv(csv_filename, index=False)
 
-        print('recorded final distance: %0.3f dva'%(distance*2))
+        # print('recorded final distance: %0.3f dva'%(distance*2))
 
-        # end of trial: increase trial & block indices
-        trial_idx = trial_idx + 1
-
-        if trial_idx >= len(blocks[block_idx]['trials']):
-            # done all trials in the block... next block:
-            block_idx = block_idx + 1
-            trial_idx = 0
-            print('block %d done, moving on to block %d / %d'%(block_idx, block_idx+1, len(blocks)))
 
         if block_idx >= len(blocks):
             # done all the blocks... end task:
