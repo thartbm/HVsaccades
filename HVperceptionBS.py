@@ -232,8 +232,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # print(alpha * mult_fact)
     # print(bs_dist)
 
-    ad_pos_pol = [bs_pos_pol[0] + (alpha * mult_fact), bs_dist]
-    ad_pos_cart = pol2cart(bs_pos_pol[0] + (alpha * mult_fact), bs_dist, units='deg')
+    aw_pos_pol = [bs_pos_pol[0] + (alpha * mult_fact), bs_dist]
+    aw_pos_cart = pol2cart(bs_pos_pol[0] + (alpha * mult_fact), bs_dist, units='deg')
 
     # print(ad_pos)
 
@@ -297,11 +297,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # WE CAN ADD CONDITIIONS HERE...
 
     sc_bs_tilt = [      0,     90,      0,      0,     90,      0] # ,       90,       90]
-    sc_ad_tilt = [     90,      0,      0,     90,      0,      0] # ,        0,        0]
+    sc_aw_tilt = [     90,      0,      0,     90,      0,      0] # ,        0,        0]
     sc_eye =     [ 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
     sc_start =   [  'min',  'min',  'min',  'max',  'max',  'max'] # ,    'min',    'max']
 
-    sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_ad_tilt': sc_ad_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
+    sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_aw_tilt': sc_ad_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
     my_steps = list(np.arange(-3.5, 4.0, 0.5))
     sc_staircases = []
     for cond_idx in range(len(sc_conditions)):
@@ -385,7 +385,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         staircase = sc_staircases[this_sc]
         
         bs_tilt = staircase.info['sc_bs_tilt']
-        ad_tilt = staircase.info['sc_ad_tilt']
+        aw_tilt = staircase.info['sc_aw_tilt']
         eye     = staircase.info['sc_eye']
 
         # relatively unimportant, just randomize every trial:
@@ -395,7 +395,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         # print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials']), bs_tilt, aw_tilt, eye, tpair))
 
-        print('trial %d, stair %d, BS %0.1f, AW %0.1f, eye %s, target %s'%(trial_no, this_sc, bs_tilt, ad_tilt, eye, tpair))
+        print('trial %d, stair %d, BS %0.1f, AW %0.1f, eye %s, target %s'%(trial_no, this_sc, bs_tilt, aw_tilt, eye, tpair))
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
         aw_pos = pol2cart(aw_pos_pol[0] + jitter, aw_pos_pol[1], units='deg')
