@@ -106,7 +106,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # unpack all this
     win = setup['win']
-    win.viewPos = [0,-5] # should also be applied to the blind spot mapping procedure!
+    # win.viewPos = [0,-5] # should also be applied to the blind spot mapping procedure!
 
     pyg_keyboard = key.KeyStateHandler()
     win.winHandle.push_handlers(pyg_keyboard)
@@ -120,15 +120,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     print(colors)
     col_both = colors['both']
     if hemifield == 'left':
-        win.viewPos = [10,-3]
+        # win.viewPos = [10,-3]
         col_ipsi, col_contra = colors['left'], colors['right']
     if hemifield == 'right':
-        win.viewPos = [-10,-3]
+        # win.viewPos = [-10,-3]
         col_contra, col_ipsi = colors['left'], colors['right']
-
-
-
-
 
 
     # stimuli
@@ -162,8 +158,6 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # if hemifield == 'right':
     #     col_contra, col_ipsi = colors['right'], colors['left']
 
-    # print(colors)
-
     hiFusion = setup['fusion']['hi']
     loFusion = setup['fusion']['lo']
 
@@ -182,33 +176,28 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     tracker = setup['tracker']
 
     # additional hardware is a mouse object:
-
     mouse = event.Mouse(visible=False, win=win) #invisible
 
     # in order to set up the stimuli, we need the blind spot marker properties:
-
     if hemifield == 'left':
         prop  = setup['blindspotmarkers']['left_prop']
         mult_fact = -1
+        win.viewPos = [10, -5]
+        tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5],  [0,5],[0,17],   [-10,5],[-10,17],[-10,-7],  [-15,11],[-15,-1],   [-20,5],[-20,17],[-20,-7],  [-25,11],[-25,-1] ]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
     if hemifield == 'right':
         prop = setup['blindspotmarkers']['right_prop']
         mult_fact = 1
+        win.viewPos = [-10,-5]
+        tracker.setCalibrationTargets( np.array([[0,0],  [-5,0],[0,-5],[-5,-5],  [0,5],[0,17],  [10,5],[10,17],[10,-7],  [15,11],[15,-1],   [20,5],[20,17],[20,-7],  [25,11],[25,-1]]) )
 
-    # # spot_left    = left_prop['spot'] # polar coords?
-    # spot_left    = left_prop['cart']
-    # size_left    = left_prop['size']
-    # # ang_up_left  = left_prop['ang_up'] # angle for distance task away from BS locations
-    # # tar_left     = left_prop['tar']  # target distance for distance task
-
-    # # spot_right   = right_prop['spot']
-    # spot_right   = right_prop['cart']
-    # size_right   = right_prop['size']
-    # # ang_up_right = right_prop['ang_up'] # angle for distance task away from BS locations
-    # # tar_right    = right_prop['tar']  # target distance for distance task
 
     bs_pos_pol = prop['spot']
     bs_pos_cart = prop['cart']
     bs_size = prop['size']
+
+
+
+    
 
     # # longest axis of the blind spot marker:
     # lax_left  = np.max(size_left)
@@ -559,7 +548,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                 waiting_for_response = False
 
 
-        if abort:
+        # if abort:
 
             # handle aborts?
 
