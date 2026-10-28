@@ -301,7 +301,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     sc_eye =     [ 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
     sc_start =   [  'min',  'min',  'min',  'max',  'max',  'max'] # ,    'min',    'max']
 
-    sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_aw_tilt': sc_ad_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
+    sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_aw_tilt': sc_aw_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
     my_steps = list(np.arange(-3.5, 4.0, 0.5))
     sc_staircases = []
     for cond_idx in range(len(sc_conditions)):
@@ -391,7 +391,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         # relatively unimportant, just randomize every trial:
         tpair = random.choice(['BS', 'AW'])
 
-        jitter = 0 # distance jitter or angle jitter?
+        jitter = 0 # distance jitter or angle jitter? it's used as angular jitter below
 
         # print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials']), bs_tilt, aw_tilt, eye, tpair))
 
