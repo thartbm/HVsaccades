@@ -393,7 +393,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
         jitter = 0 # distance jitter or angle jitter?
 
-        print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials']), bs_tilt, aw_tilt, eye, tpair))
+        # print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials']), bs_tilt, aw_tilt, eye, tpair))
+
+        print('trial %d, stair %d, BS %0.1f, AW %0.1f, eye %s, target %s'%(trial_no, this_sc, bs_tilt, ad_tilt, eye, tpair))
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
         aw_pos = pol2cart(aw_pos_pol[0] + jitter, aw_pos_pol[1], units='deg')
