@@ -183,12 +183,14 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         prop  = setup['blindspotmarkers']['left_prop']
         mult_fact = -1
         win.viewPos = [10, -5]
-        tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5],  [0,5],[0,17],   [-10,5],[-10,17],[-10,-7],  [-15,11],[-15,-1],   [-20,5],[-20,17],[-20,-7],  [-25,11],[-25,-1] ]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
+        # tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5],  [0,5],[0,17],   [-10,5],[-10,17],[-10,-7],  [-15,11],[-15,-1],   [-20,5],[-20,17],[-20,-7],  [-25,11],[-25,-1] ]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
     if hemifield == 'right':
         prop = setup['blindspotmarkers']['right_prop']
         mult_fact = 1
         win.viewPos = [-10,-5]
-        tracker.setCalibrationTargets( np.array([[0,0],  [-5,0],[0,-5],[-5,-5],  [0,5],[0,17],  [10,5],[10,17],[10,-7],  [15,11],[15,-1],   [20,5],[20,17],[20,-7],  [25,11],[25,-1]]) )
+        # tracker.setCalibrationTargets( np.array([[0,0],  [-5,0],[0,-5],[-5,-5],  [0,5],[0,17],  [10,5],[10,17],[10,-7],  [15,11],[15,-1],   [20,5],[20,17],[20,-7],  [25,11],[25,-1]]) )
+
+    tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5]   ]) ) 
 
 
     bs_pos_pol = prop['spot']
