@@ -352,6 +352,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     tracker.openfile()
     tracker.startcollecting()
+
+    tracker.calibrate()
     
     # fixation.draw()
     # win.flip()
