@@ -103,10 +103,15 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     # get everything shared from central:
     setup = localizeSetup(location=location, trackEyes=trackEyes, filefolder=eyetracking_path, filename=et_filename+str(x), task='perception', ID=ID) # data path is for the mapping data, not the eye-tracker data!
+    # setup = localizeSetup(noEyeTracker=True, location=location, trackEyes=trackEyes, filefolder=eyetracking_path, filename=et_filename+str(x), task='perception', ID=ID) # data path is for the mapping data, not the eye-tracker data!
 
     # unpack all this
     win = setup['win']
     # win.viewPos = [0,-5] # should also be applied to the blind spot mapping procedure!
+
+    tracker = setup['tracker']
+    tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5]   ]) ) 
+
 
     pyg_keyboard = key.KeyStateHandler()
     win.winHandle.push_handlers(pyg_keyboard)
@@ -173,8 +178,6 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     fixation   = setup['fixation']
     fixation_x = setup['fixation_x']
 
-    tracker = setup['tracker']
-
     # additional hardware is a mouse object:
     mouse = event.Mouse(visible=False, win=win) #invisible
 
@@ -183,14 +186,13 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         prop  = setup['blindspotmarkers']['left_prop']
         mult_fact = -1
         win.viewPos = [10, -5]
-        # tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5],  [0,5],[0,17],   [-10,5],[-10,17],[-10,-7],  [-15,11],[-15,-1],   [-20,5],[-20,17],[-20,-7],  [-25,11],[-25,-1] ]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
+        # # tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5],  [0,5],[0,17],   [-10,5],[-10,17],[-10,-7],  [-15,11],[-15,-1],   [-20,5],[-20,17],[-20,-7],  [-25,11],[-25,-1] ]) ) #   [-3,0],[0,3],[3,0],[0,-3],     [6,6],[6,-6],[-6,6],[-6,-6]]) )
     if hemifield == 'right':
         prop = setup['blindspotmarkers']['right_prop']
         mult_fact = 1
         win.viewPos = [-10,-5]
-        # tracker.setCalibrationTargets( np.array([[0,0],  [-5,0],[0,-5],[-5,-5],  [0,5],[0,17],  [10,5],[10,17],[10,-7],  [15,11],[15,-1],   [20,5],[20,17],[20,-7],  [25,11],[25,-1]]) )
+        # # tracker.setCalibrationTargets( np.array([[0,0],  [-5,0],[0,-5],[-5,-5],  [0,5],[0,17],  [10,5],[10,17],[10,-7],  [15,11],[15,-1],   [20,5],[20,17],[20,-7],  [25,11],[25,-1]]) )
 
-    tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5]   ]) ) 
 
 
     bs_pos_pol = prop['spot']
@@ -211,7 +213,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # dist_left  = 2 + lax_left  + 2
     # dist_right = 2 + lax_right + 2
 
-    test_dist = 3 + lax + 3
+    test_dist = 2.5 + lax + 2.5
 
     bs_dist = sum(np.array(bs_pos_cart)**2)**0.5
 
@@ -303,41 +305,45 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     sc_eye =     [ 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
     sc_start =   [  'min',  'min',  'min',  'max',  'max',  'max'] # ,    'min',    'max']
 
+    sc_bs_tilt = [      0,     90 ] #,      0,      0,     90,      0] # ,       90,       90]
+    sc_aw_tilt = [     90,      0 ] #,      0,     90,      0,      0] # ,        0,        0]
+    sc_eye =     [ 'ipsi', 'ipsi' ] #, 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
+    sc_start =   [  'min',  'min' ] #,  'min',  'max',  'max',  'max'] # ,    'min',    'max']
+
     sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_aw_tilt': sc_aw_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
-    my_steps = list(np.arange(-3.5, 4.0, 0.5))
+    # my_steps = list(np.arange(-4.5, 5.0, 1.0))
+    my_steps = list(np.arange(-3.5, 4.0, 1.0))
     sc_staircases = []
     for cond_idx in range(len(sc_conditions)):
         if sc_start[cond_idx] == 'min':
             idx = 0
         if sc_start[cond_idx] == 'max':
-            idx = 14
+            idx = len(my_steps) - 1
         my_sc = SimpleStaircase( steps        = my_steps, 
                                  idx          = idx, 
-                                 minTrials    = 30, 
-                                 minReversals = 10, 
+                                 minTrials    = 6, 
+                                 minReversals = 0, 
                                  info         = sc_conditions.iloc[cond_idx])
         sc_staircases.append(my_sc)
 
-
     # collect data in a dictionary:
-
     data =  {
             'participant':  [],
             'hemifield':    [],
-            # 'blockno':      [],    # no block structure?
+            # 'blockno':      [],    # no blocks
             'trialno':      [],
             'jitter':       [],    # ????
-            'staircase':    [],    # which staircase was used for this trial (0-5 or maybe 0-7)
+            'staircase':    [],    # which staircase was used for this trial (0-5) (or maybe 0-7)
             'bs_tilt':      [],
             'aw_tilt':      [],
             'eye'    :      [],
-            'bs_dist':      [],    # should be fixed
-            'ad_dist':      [],    # variable by staircases
-            'shown_first':  [],    # which pair was shown first? (1: bs or 2: ad)
-            'response':     [],    # which pair was judged as larger? (1/left: first shown or 2/right: second shown)
-            'rt':           []     # not strictly necessary?
+            'dist_diff':    [],
+            'bs_dist':      [],    # fixed
+            'aw_dist':      [],    # variable
+            'shown_second': [],    # which pair was shown second? same as target pair (BS or AW) 
+            'response':     [],    # which pair was judged as larger? (0: BS pair, 1: AW pair)
+            'rt':           []     # free data, not necessary
             }
-
 
     # show first instructions
     visual.TextStim(win,
@@ -354,11 +360,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     tracker.openfile()
     tracker.startcollecting()
-
     tracker.calibrate()
-    
-    # fixation.draw()
-    # win.flip()
+    fixation.draw()
+    win.flip()
 
     # mouse_factor = 3.5     # this is no longer needed!
 
@@ -372,11 +376,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     while not_done:
 
-        # this should be done at the end of the trial
-        # before inserting a break for people
-
         trial_no = trial_no + 1
 
+        # this should be done at the end of the trial
+        # before inserting a break for people?
+        # I mean the check whether or not all staircases are still running
         if len(do_staircases) == 0:
             # shuffle running staircases
             # do those one-by-one
@@ -388,18 +392,23 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         this_sc = do_staircases.pop()
         staircase = sc_staircases[this_sc]
         
+        # set the distance difference for this trial from the staircase:
+        dist_diff = staircase.getValue()
+
         bs_tilt = staircase.info['sc_bs_tilt']
         aw_tilt = staircase.info['sc_aw_tilt']
         eye     = staircase.info['sc_eye']
 
         # relatively unimportant, just randomize every trial:
         tpair = random.choice(['BS', 'AW'])
+        # there is no actual target here
+        # just hides the staircases from participants some more
 
         jitter = 0 # distance jitter or angle jitter? it's used as angular jitter below
 
         # print('block: %d/%d, trial %d/%d, BS: %d, AW: %d, %s, target: %s'%(block_idx+1, len(blocks), trial_idx+1, len(blocks[block_idx]['trials']), bs_tilt, aw_tilt, eye, tpair))
 
-        print('trial %d, stair %d, BS %0.1f, AW %0.1f, eye %s, target %s'%(trial_no, this_sc, bs_tilt, aw_tilt, eye, tpair))
+        print('trial %d, stair %d, D.D. %0.1f, BS %0.1f, AW %0.1f, eye %s, target %s'%(trial_no, this_sc, dist_diff, bs_tilt, aw_tilt, eye, tpair))
 
         bs_pos = pol2cart(bs_pos_pol[0] + jitter, bs_pos_pol[1], units='deg')
         aw_pos = pol2cart(aw_pos_pol[0] + jitter, aw_pos_pol[1], units='deg')
@@ -423,7 +432,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
         # temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
-        temp_pos = pol2cart(        1 * aw_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * aw_tilt, (test_dist + dist_diff)/2, units='deg')
         point_3.pos = [aw_pos[0] + temp_pos[0], aw_pos[1] + temp_pos[1]]
         point_4.pos = [aw_pos[0] - temp_pos[0], aw_pos[1] - temp_pos[1]]
 
@@ -434,27 +443,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             point_1.pos, point_2.pos = point_2.pos, point_1.pos
 
 
-        # distance = (test_dist+dist_diff)/2 - (vertical_range/2)
-        # mouse.setPos([0, distance*mouse_factor]) # set the mouse to the starting position for the adjustable pair
-        
-        # if trial_idx == 0:
-        #     # show instruction to start with eye-tracker calibration
-        #     visual.TextStim(win,
-        #         blocks[block_idx]['instructions'], 
-        #         height = 1, 
-        #         wrapWidth=15,
-        #         color = 'black').draw()
-        #     win.flip()
-        #     k = ['wait']
-        #     while k[0] not in ['space']:
-        #         k = event.waitKeys()
 
-        #     event.clearEvents(eventType='keyboard') # just to be sure?
-
-        #     # calibration
-        #     # tracker.openfile()
-        #     # tracker.startcollecting()
-        #     tracker.calibrate()
 
 
         # add some info about trial to the eye-tracker data file:
@@ -468,6 +457,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         # probably looking somewhere else as well
         fixation.pos = random.sample([4,6,8,10],1) + random.sample([4,6,8,10],1)
         fixation.pos[0] = fixation.pos[0] * mult_fact
+
         waiting_for_fixation = True
         while waiting_for_fixation:
             fixation.draw()
@@ -487,9 +477,9 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         
         stimulus_start = time.time()
 
-        tracker.comment('stimulus on')
+        # tracker.comment('stimulus on')
 
-        while (time.time() - stimulus_start) < .50 and not abort:
+        while (time.time() - stimulus_start) < .60 and not abort:
 
             if tracker.gazeInFixationWindow():
                 pass
@@ -504,15 +494,15 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
             opacity = 0
 
-            # if (time.time() - stimulus_start) > .15:
-            #     opacity = min(1, ((time.time() - stimulus_start) - .15) / .15)
-
-            if (time.time() - stimulus_start) > .15:
+            if (time.time() - stimulus_start) > .2:
+                opacity = min(1, ((time.time() - stimulus_start)) / .2)
+            else:
+            # if (time.time() - stimulus_start) > .2:
                 opacity = 1
 
             if (time.time() - stimulus_start) > .30:
                 point_1.draw()
-            if (time.time() - stimulus_start) > .40:
+            if (time.time() - stimulus_start) > .45:
                 point_2.draw()
             # other pair is always there:
 
@@ -541,53 +531,123 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
             win.flip()
 
             # either way, check keyboard for recalibration key (or quitting key)
-            k = event.getKeys(['r', 'space']) # shouldn't this be space? like after the stimulus? this is confusing...
+            k = event.getKeys(['space', 'left', 'right', 'num_left', 'num_right']) # space = no answer? maybe that should up / num_up?
             if k and 'r' in k:
-                # recalibrate
+            #     # recalibrate
                 # tracker.stopcollecting()
                 print('recalibrating...')
                 tracker.calibrate()
                 # tracker.startcollecting()
-            if k and 'space' in k:
-                # response given, move on to next trial
+            # if k and 'space' in k:
+            #     # response given, move on to next trial
+            #     rt = time.time() - start_time
+            #     waiting_for_response = False
+            if k and ('left' in k or 'num_left' in k):
+                response = -1
+                rt = time.time() - start_time
+                waiting_for_response = False   
+            if k and ('right' in k or 'num_right' in k):
+                response =  1
                 rt = time.time() - start_time
                 waiting_for_response = False
+            if k and ('space' in k):
+                abort = True
+                waiting_for_response = False
+                # response = 0
+                # rt = time.time() - start_time
+            
+
+        if not abort:
+
+            if tpair == 'BS':
+                response = -1 * response
+
+            sc_staircases[this_sc].update(-1*response)
+
+            if not sc_staircases[this_sc].running:
+                # new_steps = list(np.arange(-4.5, 5.0, 0.5))
+                new_steps = list(np.arange(-3.5, 4.0, 0.5))
+                if len(sc_staircases[this_sc].steps) < len(new_steps):
+                    # put a more detailed staircase in it's place
+                    idx = sc_staircases[this_sc].idx * 2
+                    new_sc = SimpleStaircase( steps        = new_steps, 
+                                              idx          = idx, 
+                                              minTrials    = 14,   # 14?
+                                              minReversals = 8,    #  7?
+                                              info         = sc_conditions.iloc[this_sc])
+                    sc_staircases[this_sc] = new_sc
+
+            
+            response = max(0, response) # for psychometric functions
+
+            data['participant' ].append(ID)
+            data['hemifield'   ].append(hemifield)
+            # data['blockno'].append(0)    # no block structure?
+            data['trialno'     ].append(trial_no)
+            data['jitter'      ].append(jitter)    # ????
+            data['staircase'   ].append(this_sc)    # which staircase was used for this trial (0-5 or maybe 0-7)
+            data['bs_tilt'     ].append(bs_tilt)
+            data['aw_tilt'     ].append(aw_tilt)
+            data['eye'         ].append(eye)
+            data['dist_diff'   ].append(dist_diff)    # staircased
+            data['bs_dist'     ].append(test_dist)    # should be fixed
+            data['aw_dist'     ].append(test_dist + dist_diff)    # variable by staircases
+            data['shown_second'].append(tpair)    # which pair was shown first? ('BS' or 'AW')
+            data['response'    ].append(response)    # which pair was judged as larger? (0: BS or 1: AW)
+            data['rt'          ].append(rt)     # not strictly necessary?
+            
+
+            pd.DataFrame(data).to_csv(csv_filename, index=False)
 
 
-        # if abort:
 
-            # handle aborts?
+        if abort:
 
-        # store the collected data in the data frame
-        # 
-        # store the data frame as a csv:
-        # data.to_csv()
-        
+            # store the trial as aborted in the data frame
+            data['participant' ].append(ID)
+            data['hemifield'   ].append(hemifield)
+            # data['blockno'].append(0)  
+            data['trialno'     ].append(trial_no)
+            data['jitter'      ].append(jitter) 
+            data['staircase'   ].append(this_sc)  
+            data['bs_tilt'     ].append(bs_tilt)
+            data['aw_tilt'     ].append(aw_tilt)
+            data['eye'         ].append(eye)
+            data['dist_diff'   ].append(dist_diff)
+            data['bs_dist'     ].append(test_dist)    
+            data['aw_dist'     ].append(test_dist + dist_diff)   
+            data['shown_second'].append(tpair)
+            data['response'    ].append('abort')    
+            data['rt'          ].append(np.NaN)
 
-        data['participant'].append(ID)
-        data['hemifield'].append(hemifield)
-        # data['blockno'.append(0)    # no block structure?
-        data['trialno'].append(trial_no)
-        data['jitter'].append(jitter)    # ????
-        data['staircase'].append()    # which staircase was used for this trial (0-5 or maybe 0-7)
-        data['bs_tilt'].append(bs_tilt)
-        data['aw_tilt'].append(aw_tilt)
-        data['eye'    ].append(eye)
-        data['bs_dist'].append()    # should be fixed
-        data['ad_dist'].append()    # variable by staircases
-        data['shown_first'].append()    # which pair was shown first? (1: bs or 2: ad)
-        data['response'].append()    # which pair was judged as larger? (1/left: first shown or 2/right: second shown)
-        data['rt'].append()     # not strictly necessary?
-        
-
-        pd.DataFrame(data).to_csv(csv_filename, index=False)
-
-        # print('recorded final distance: %0.3f dva'%(distance*2))
+            pd.DataFrame(data).to_csv(csv_filename, index=False)
 
 
-        if block_idx >= len(blocks):
-            # done all the blocks... end task:
+            abort_ongoing = True
+            # k = []
+            while abort_ongoing:
+
+                k = event.getKeys(['space', 'r'])
+
+                if k and 'r' in k:
+                    # recalibrate
+                    tracker.stopcollecting()
+                    print('recalibrating...')
+                    tracker.calibrate()
+                    tracker.startcollecting()
+                    abort_ongoing = False
+                if k and 'space' in k:
+                    abort_ongoing = False
+
+                fixation_x.draw()
+                blindspot.draw()
+
+                win.flip()
+
+        running = [sc.running for sc in sc_staircases]
+        if not any(running):
             not_done = False
+
 
     # end of task: stop eye-tracker recording, show end screen
     tracker.stopcollecting()
