@@ -946,9 +946,20 @@ class EyeTracker:
             # redo_text.draw()
             self.psychopyWindow.flip()
 
-            k=[]
-            while k[0] not in ['q','space']:
+            # k=[]
+            # while k[0] not in ['space']:
+            #     k = event.waitKeys()
+            
+            k = ['wait']
+            while k[0] not in ['space']:
                 k = event.waitKeys()
+
+            # wait_for_space = True
+            # while wait_for_space:
+            #     k = event.waitKeys()
+            #     if k and 'space' in k:
+            #         wait_for_space = False
+            
             event.clearEvents(eventType='keyboard')
             self.__LT_calibrate()
             

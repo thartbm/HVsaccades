@@ -110,7 +110,7 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     # win.viewPos = [0,-5] # should also be applied to the blind spot mapping procedure!
 
     tracker = setup['tracker']
-    tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[0,-5],[5,-5]   ]) ) 
+    tracker.setCalibrationTargets( np.array([[0,0],  [5,0],[-5,0],[0,5],[0,-5]   ]) ) 
 
 
     pyg_keyboard = key.KeyStateHandler()
