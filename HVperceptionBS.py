@@ -305,10 +305,10 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
     sc_eye =     [ 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
     sc_start =   [  'min',  'min',  'min',  'max',  'max',  'max'] # ,    'min',    'max']
 
-    sc_bs_tilt = [      0,     90 ] #,      0,      0,     90,      0] # ,       90,       90]
-    sc_aw_tilt = [     90,      0 ] #,      0,     90,      0,      0] # ,        0,        0]
-    sc_eye =     [ 'ipsi', 'ipsi' ] #, 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
-    sc_start =   [  'min',  'min' ] #,  'min',  'max',  'max',  'max'] # ,    'min',    'max']
+    # sc_bs_tilt = [      0,     90 ] #,      0,      0,     90,      0] # ,       90,       90]
+    # sc_aw_tilt = [     90,      0 ] #,      0,     90,      0,      0] # ,        0,        0]
+    # sc_eye =     [ 'ipsi', 'ipsi' ] #, 'ipsi', 'ipsi', 'ipsi', 'ipsi'] # , 'contra', 'contra']
+    # sc_start =   [  'min',  'min' ] #,  'min',  'max',  'max',  'max'] # ,    'min',    'max']
 
     sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_aw_tilt': sc_aw_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
     # my_steps = list(np.arange(-4.5, 5.0, 1.0))
@@ -570,11 +570,12 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
                 if len(sc_staircases[this_sc].steps) < len(new_steps):
                     # put a more detailed staircase in it's place
                     idx = sc_staircases[this_sc].idx * 2
+                    info = sc_staircases[this_sc].info
                     new_sc = SimpleStaircase( steps        = new_steps, 
                                               idx          = idx, 
                                               minTrials    = 14,   # 14?
                                               minReversals = 8,    #  7?
-                                              info         = sc_conditions.iloc[this_sc])
+                                              info         = info)
                     sc_staircases[this_sc] = new_sc
 
             
