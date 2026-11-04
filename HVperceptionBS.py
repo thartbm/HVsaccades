@@ -458,16 +458,16 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
         fixation.pos = random.sample([4,6,8,10],1) + random.sample([4,6,8,10],1)
         fixation.pos[0] = fixation.pos[0] * mult_fact
 
-        waiting_for_fixation = True
-        while waiting_for_fixation:
-            fixation.draw()
-            win.flip()
-            k = event.getKeys(['r']) # space = no answer? maybe that should up / num_up?
-            if k and ('r' in k):
-                abort = True
-                waiting_for_response = False
-            if tracker.gazeInFixationWindow(fixloc=fixation.pos):
-                waiting_for_fixation = False
+        # waiting_for_fixation = True
+        # while waiting_for_fixation:
+        #     fixation.draw()
+        #     win.flip()
+        #     k = event.getKeys(['r']) # space = no answer? maybe that should up / num_up?
+        #     if k and ('r' in k):
+        #         abort = True
+        #         waiting_for_response = False
+        #     if tracker.gazeInFixationWindow(fixloc=fixation.pos):
+        #         waiting_for_fixation = False
         
         fixation.pos = [0,0]
 
