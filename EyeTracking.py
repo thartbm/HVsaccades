@@ -937,13 +937,23 @@ class EyeTracker:
                 calErrR = self.LiveTrack.CalibrateDevice(1, len(tgtLocsXR), tgtLocsXR, tgtLocsYR, VectXR, VectYR, viewDist, np.median(GlintXR), np.median(GlintYR))
                 print('Right eye calibration accuraccy: ',str(math.sqrt(float(calErrR)/len(tgtLocsXR))), 'errors in dva')
         
+        if self.storefiles:
+            
+            cal_files = glob( os.path.join(self.filefolder, 'calibration_*.json' ) )
+            if len(cal_files):
+                idx = np.max([int(os.path.splitext(os.path.basename(x))[0].split('_')[1]) for x in cal_files]) + 1
+            else:
+                idx = 1
+
+            self.__N_calibrations = idx
+            self.comment('calibration %d'%(self.__N_calibrations))
+
+            self.savecalibration()
 
         if redoCalibration:
 
-            # redo_text = visual.TextStim(win = self.psychopyWindow,
-            #                             'not enough fixations detected\n\nadjust eye-tracker?\n\n    press  [ SPACE ]\nto redo calibration')
-            visual.TextStim(self.psychopyWindow,'not enough fixations detected\n\nadjust eye-tracker?\n\n    press  [ SPACE ]\nto redo calibration', height = 1,wrapWidth=30, color = 'black').draw()
-            # redo_text.draw()
+            # visual.TextStim(self.psychopyWindow,'not enough fixations detected\n\nadjust eye-tracker?\n\n    press  [ SPACE ]\nto redo calibration', height = 1,wrapWidth=30, color = 'black').draw()
+            visual.TextStim(self.psychopyWindow,'not enough fixations detected\n\nadjust eye-tracker?\n\n    press  [ SPACE ]\nto exit calibration', height = 1,wrapWidth=30, color = 'black').draw()
             self.psychopyWindow.flip()
 
             # k=[]
@@ -960,8 +970,11 @@ class EyeTracker:
             #     if k and 'space' in k:
             #         wait_for_space = False
             
-            event.clearEvents(eventType='keyboard')
-            self.__LT_calibrate()
+            # event.clearEvents(eventType='keyboard')
+            # self.__LT_calibrate()
+
+            # self.LiveTrack.SetResultsTypeCalibrated()
+            # return
             
         else:
 
@@ -980,21 +993,10 @@ class EyeTracker:
             # if useVideo:
             #     self.LiveTrackGS.VideoStop()
 
-            self.LiveTrack.SetResultsTypeCalibrated()
-            # self.LiveTrack.StartTracking()
+        self.LiveTrack.SetResultsTypeCalibrated()
+        # self.LiveTrack.StartTracking()
 
-            if self.storefiles:
-                
-                cal_files = glob( os.path.join(self.filefolder, 'calibration_*.json' ) )
-                if len(cal_files):
-                    idx = np.max([int(os.path.splitext(os.path.basename(x))[0].split('_')[1]) for x in cal_files]) + 1
-                else:
-                    idx = 1
 
-                self.__N_calibrations = idx
-                self.comment('calibration %d'%(self.__N_calibrations))
-
-                self.savecalibration()
 
     def __DM_calibrate(self):
         self.__N_calibrations += 1
