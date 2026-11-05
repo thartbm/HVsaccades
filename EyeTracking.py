@@ -977,7 +977,7 @@ class EyeTracker:
             # return
             
         else:
-
+            pass
             # %% plot the estimated fixation locations for the calibration
             #if trackLeftEye:
             #    [gazeXL, gazeYL] = LiveTrack.CalcGaze(0, len(tgtLocsXL), VectXL, VectYL)
