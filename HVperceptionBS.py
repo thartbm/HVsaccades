@@ -312,7 +312,8 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
     sc_conditions = pd.DataFrame({'sc_bs_tilt': sc_bs_tilt, 'sc_aw_tilt': sc_aw_tilt, 'sc_eye': sc_eye, 'sc_start': sc_start})
     # my_steps = list(np.arange(-4.5, 5.0, 1.0))
-    my_steps = list(np.arange(-3.5, 4.0, 1.0))
+    # my_steps = list(np.arange(-3.5, 4.0, 1.0))
+    my_steps = list(np.arange(-6.0, 6.5, 1.5))
     sc_staircases = []
     for cond_idx in range(len(sc_conditions)):
         if sc_start[cond_idx] == 'min':
@@ -570,10 +571,11 @@ def doHVperceptionTask(ID=None, hemifield=None, location=None):
 
             if not sc_staircases[this_sc].running:
                 # new_steps = list(np.arange(-4.5, 5.0, 0.5))
-                new_steps = list(np.arange(-3.5, 4.0, 0.5))
+                # new_steps = list(np.arange(-3.5, 4.0, 0.5))
+                new_steps = list(np.arange(-6.0, 6.5, 0.5))
                 if len(sc_staircases[this_sc].steps) < len(new_steps):
                     # put a more detailed staircase in it's place
-                    idx = sc_staircases[this_sc].idx * 2
+                    idx = sc_staircases[this_sc].idx * 3
                     info = sc_staircases[this_sc].info
                     new_sc = SimpleStaircase( steps        = new_steps, 
                                               idx          = idx, 
