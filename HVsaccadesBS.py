@@ -290,12 +290,19 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
     aw_tilt = [90, 0, 0] * 6
     eye = ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3 + ['both'] * 3 + ['ipsi'] * 3 + ['contra'] * 3
     tpair = ['BS'] * 9 + ['AW'] * 9 # target pair
+    distratio = [1] * 18
 
-    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'aw_tilt': aw_tilt, 'eye': eye, 'tpair': tpair})
+    bs_tilt   += [0] * 6
+    aw_tilt   += [0] * 6
+    eye       += ['contra'] * 6
+    tpair     += ['AW'] * 6
+    distratio += [0.70, 0.80, 0.90, 1.10, 1.20, 1.30]
+
+    conditions = pd.DataFrame({'bs_tilt': bs_tilt, 'aw_tilt': aw_tilt, 'eye': eye, 'tpair': tpair, 'AWratio': distratio})
 
     cond_idx = list(range(len(conditions)))
     blocks = []
-    n_blocks = 8
+    n_blocks = 5
     for block_no in range(n_blocks):
         block_def = {}
         block_def['block_no'] = block_no
@@ -360,6 +367,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         aw_tilt = conditions['aw_tilt'][cond_idx]
         eye = conditions['eye'][cond_idx]
         tpair = conditions['tpair'][cond_idx]
+        AWratio = conditions['AWratio'][cond_idx]
 
         # jitter = random.sample([-1,-0.5,0,0.5,1], 1)[0] * angle_var
         jitter = 0
@@ -385,12 +393,12 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         # bs points are non-adjustable and points 1 & 2:
         # mult_fact depends on hemifield (left: -1, right: 1)
         # temp_pos = pol2cart(mult_fact * bs_tilt, test_dist/2, units='deg')
-        temp_pos = pol2cart(        1 * bs_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * bs_tilt, (test_dist * 1.00 )/2, units='deg')
         point_1.pos = [bs_pos[0] + temp_pos[0], bs_pos[1] + temp_pos[1]]
         point_2.pos = [bs_pos[0] - temp_pos[0], bs_pos[1] - temp_pos[1]]
 
         # temp_pos = pol2cart(mult_fact * ad_tilt, test_dist/2, units='deg')
-        temp_pos = pol2cart(        1 * aw_tilt, test_dist/2, units='deg')
+        temp_pos = pol2cart(        1 * aw_tilt, (test_dist*AWratio)/2, units='deg')
         point_3.pos = [aw_pos[0] + temp_pos[0], aw_pos[1] + temp_pos[1]]
         point_4.pos = [aw_pos[0] - temp_pos[0], aw_pos[1] - temp_pos[1]]
 
@@ -438,6 +446,9 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         tracker.comment('target pair %s'%(tpair))
         time.sleep(2/500)
         tracker.comment('eye %s'%(eye))
+        time.sleep(2/500)
+
+        tracker.comment('AWratio %0.2f'%(AWratio))
         time.sleep(2/500)
 
         tracker.comment('point1 %0.4f %0.4f'%(point_1.pos[0], point_1.pos[1]))
