@@ -326,7 +326,8 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
              'aw_tilt':      [],
              'eye'    :      [],
              'dist'   :      [],
-             'tpair':        []
+             'tpair':        [],
+             'AWratio':      []
              }
 
 
@@ -700,6 +701,7 @@ def doHVsaccadeTask(ID=None, hemifield=None, location=None):
         data['eye'].append(eye)
         data['dist'].append(test_dist)
         data['tpair'].append(tpair)
+        data['AWratio'].append(AWratio)
 
         pd.DataFrame(data).to_csv(csv_filename, index=False)
 
