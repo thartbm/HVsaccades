@@ -434,6 +434,8 @@ convertCommentsWithCommas <- function(filename, outfile) {
 }
 
 
+# the below function only for quadrant-based tasks?
+
 conditionFromTargets <- function(first, second) {
   
   first <- gsub("[","",first,fixed=TRUE)
