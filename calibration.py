@@ -52,7 +52,8 @@ def doColorCalibration(ID=None, task=None, location=None):
     #     location = expInfo[]
 
     ## path
-    data_path = "data/%s/color/"%(task)
+    # data_path = "data/%s/color/"%(task)
+    data_path = "data/calibration/color/"
     os.makedirs(data_path, exist_ok=True)
 
     filename = ID.lower() + '_col_cal_'
@@ -278,7 +279,8 @@ def doBlindSpotMapping(ID=None,task=None,location=None,offset=[0,0]):
     #     hemifield = expInfo['hemifield']
 
     ## path
-    data_path = "data/%s/mapping/"%(task)
+    # data_path = "data/%s/mapping/"%(task)
+    data_path = "data/calibration/mapping/"
     os.makedirs(data_path, exist_ok=True)
 
     step = .01

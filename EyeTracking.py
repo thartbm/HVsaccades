@@ -1652,29 +1652,29 @@ def localizeSetup( trackEyes, filefolder, filename, location=None, glasses='RG',
     if 'back' in colors.keys():
         fcols[1] = colors['back']
 
-    if task in ['perception']:
-        fusion = {'hi': fusionStim(win    = win,
-                                   rows    = 9,
-                                   columns = 2,
-                                   pos    = [0,15],
-                                   colors = fcols),
-                  'lo': fusionStim(win    = win,
-                                   rows    = 2,
-                                   columns = 9,
-                                   pos    = [0,-15],
-                                   colors = fcols)}
+    # if task in ['perception']:
+    #     fusion = {'hi': fusionStim(win    = win,
+    #                                rows    = 9,
+    #                                columns = 2,
+    #                                pos    = [0,15],
+    #                                colors = fcols),
+    #               'lo': fusionStim(win    = win,
+    #                                rows    = 2,
+    #                                columns = 9,
+    #                                pos    = [0,-15],
+    #                                colors = fcols)}
 
-    if task in ['saccades']:
-        fusion = {'hi': fusionStim(win    = win,
-                                   rows    = 9,
-                                   columns = 2,
-                                   pos    = [0,10],
-                                   colors = fcols),
-                  'lo': fusionStim(win    = win,
-                                   rows    = 2,
-                                   columns = 9,
-                                   pos    = [0,-10],
-                                   colors = fcols)}
+    # if task in ['saccades']:
+    fusion = {'hi': fusionStim(win    = win,
+                                rows    = 9,
+                                columns = 2,
+                                pos    = [0,10],
+                                colors = fcols),
+                'lo': fusionStim(win    = win,
+                                rows    = 2,
+                                columns = 9,
+                                pos    = [0,-10],
+                                colors = fcols)}
 
     # if task in ['distRotated','distUpturned','distUpshifted']:
     #     print('rotated fusion stims')
@@ -1739,11 +1739,13 @@ def getColors(colors={}, task=None, ID=None):
         return(colors)
 
     ## colour (eye) parameters
-    all_files = glob('data/' + task + '/color/' + ID + '_col_cal*.txt')
+    # all_files = glob('data/' + task + '/color/' + ID + '_col_cal*.txt')
+    all_files = glob('data/' + 'calibration' + '/color/' + ID + '_col_cal*.txt')
     if len(all_files) == 0:
         # no color calibration done, skip
         print('NO color calibration found:')
-        print('data/' + task + '/color/' + ID + '_col_cal*.txt')
+        # print('data/' + task + '/color/' + ID + '_col_cal*.txt')
+        print('data/' + 'calibration' + '/color/' + ID + '_col_cal*.txt')
         return(colors)
 
     # find the largest color calibration file index:
@@ -1779,12 +1781,14 @@ def makeBlindSpotMarkers(win, task, ID, colors):
     if ID == None:
         return({})
 
-    main_path = '../data/' + task + '/'
+    # main_path = '../data/' + task + '/'
+    main_path = '../data/calibration/'
     
     hemifields = []
 
     ## read blindspot parameters... if any...
-    left_files = glob(os.path.join('data', task, 'mapping', ID + '_LH_blindspot*.txt' ) )
+    # left_files = glob(os.path.join('data', task, 'mapping', ID + '_LH_blindspot*.txt' ) )
+    left_files = glob(os.path.join('data', 'calibration', 'mapping', ID + '_LH_blindspot*.txt' ) )
     if len(left_files):
         idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in left_files])
         bs_file = open(left_files[idx], 'r')
@@ -1795,7 +1799,8 @@ def makeBlindSpotMarkers(win, task, ID, colors):
         spot_left_size = eval(bs_param[3])
         hemifields.append('left')
 
-    right_files = glob(os.path.join('data', task, 'mapping', ID + '_RH_blindspot*.txt' ) )
+    # right_files = glob(os.path.join('data', task, 'mapping', ID + '_RH_blindspot*.txt' ) )
+    right_files = glob(os.path.join('data', 'calibration', 'mapping', ID + '_RH_blindspot*.txt' ) )
     if len(right_files):
         idx = np.argmax([int(os.path.splitext(os.path.basename(x))[0].split('_')[3]) for x in right_files])
         bs_file = open(right_files[idx],'r')
